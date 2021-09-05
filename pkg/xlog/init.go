@@ -1,0 +1,5 @@
+package xlog
+
+func Init()  {
+	
+}

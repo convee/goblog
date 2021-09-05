@@ -1,0 +1,58 @@
+{{define "content"}}
+<div class="container">
+    <div class="content-wrap">
+        <div class="content center">
+            <div class="title">
+                <div class="more">
+                    {{range .categories}}
+                    <a href="/?category_id={{.Id}}">{{.Name}}</a>
+                    {{end}}
+                </div>
+            </div>
+            {{if .posts}}
+            {{range .posts}}
+            <div class="excerpt">
+                <header>
+                    <a class="cat" href="#">{{.CategoryName}}<i></i></a>
+                    <h2><a href="/post?id={{.Id}}">{{.Title}}</a></h2>
+                </header>
+                <div class="row">
+                    <div class="col-md-9">
+                        {{.Description}}
+                    </div>
+                </div>
+                <p class="meta">
+                    <a class="category" href="#"><i class="glyphicon glyphicon-folder-open"></i> {{.CategoryName}}</a>
+                    <a class="time" href="#"><i class="glyphicon glyphicon-time"></i> {{.UpdatedAt}}</a>
+                    <a class="views" href="#"><i class="glyphicon glyphicon-eye-open"></i> {{.Views}}</a>
+                </p>
+
+            </div>
+            {{end}}
+            {{else}}
+            <div class="text-center">
+                <h3>
+                    <stong>暂无内容</stong>
+                </h3>
+            </div>
+            {{end}}
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li>
+                        <a href="{{.pre_url}}" aria-label="Previous">
+                            <span aria-hidden="true">上一页</span>
+                        </a>
+                    </li>
+                    <li><a href="#">...</a></li>
+                    <li>
+                        <a href="{{.next_url}}" aria-label="Next">
+                            <span aria-hidden="true">下一页</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+</div>
+{{end}}

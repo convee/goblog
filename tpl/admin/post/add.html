@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Simple example - Editor.md examples</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="{{.cdn}}/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="{{.cdn}}/md/css/style.css" />
+    <link rel="stylesheet" href="{{.cdn}}/md/css/editormd.css" />
+</head>
+
+<body>
+    <div id="layout">
+        <header>
+            <h1>添加文章 <a href="/admin">返回列表</a></h1>
+        </header>
+        <form class="navbar-form nav navbar-form" action="/admin/post/save" method="POST">
+            <input type="hidden" name="id" value="{{.id}}">
+            <label for="" style="margin-left: 75px;">
+                标题：<input class="form-control" type="text" name="title" value="{{.title}}">
+                分类：<select class="form-control" name="category">
+                        {{range .categories}}
+                            <option value="{{.Id}}" {{if eq .Id .Cur}} selected {{end}}>{{.Name}}</option>
+                        {{end}}
+                    </select>
+                标签：<input class="form-control" type="text" name="tags" value="{{.tags}}">
+            </label>
+            <p style="margin-left: 75px;">
+                <label for="">
+                    描述：<textarea class="form-control" name="description" id="" cols="72" rows="3">{{.description}}</textarea>
+                </label>
+            </p>
+            <div id="test-editormd">
+                <textarea style="display:none;" name="content">{{.content}}</textarea>
+            </div>
+            <div class="btns">
+                <button id="append-btn" type="submit">提交</button>
+            </div>
+        </form>
+    </div>
+    <script src="{{.cdn}}/md/js/jquery.min.js"></script>
+    <script src="{{.cdn}}/md/editormd.min.js"></script>
+    <script type="text/javascript">
+        var testEditor;
+
+        $(function () {
+            testEditor = editormd("test-editormd", {
+                width: "90%",
+                height: 640,
+                syncScrolling: "single",
+                path: "{{.cdn}}/md/lib/"
+            });
+
+            /*
+            // or
+            testEditor = editormd({
+                id      : "test-editormd",
+                width   : "90%",
+                height  : 640,
+                path    : "../lib/"
+            });
+            */
+        });
+    </script>
+</body>
+
+</html>

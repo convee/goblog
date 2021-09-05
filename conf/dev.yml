@@ -1,0 +1,25 @@
+system:
+  addr: localhost:9090
+  host: http://localhost:9090
+  root: "/Users/convee/go/src/blog"
+  cdn: "http://localhost:9090/static"
+log:
+  stderr: true
+  level: debug
+
+redis:
+  addr: "127.0.0.1:6379"
+  max_idle: 10
+  max_active: 1
+  max_idle_timeout: 1
+
+mysql:
+  ip: "127.0.0.1"
+  port: "3306"
+  username: "root"
+  password: "root"
+  database: "blog"
+  charset: "utf8mb4"
+  max_idle: 10
+  max_open: 20
+  max_lifetime: 600

@@ -1,0 +1,5 @@
+package mongo
+
+func Init()  {
+
+}

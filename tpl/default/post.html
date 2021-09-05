@@ -1,0 +1,31 @@
+{{define "content"}}
+<div class="container">
+    <div class="content-wrap">
+        <div class="content">
+            <header class="article-header">
+                <h1 class="article-title"><a href="">{{.post.Title}}</a></h1>
+                <div class="article-meta ">
+                    <span class="item category"><a href="/?category_id={{.post.CategoryId}}">{{.post.CategoryName}}</a></span>
+                    <span class="item time ">{{.post.UpdatedAt}}</span>
+                    <span class="item tags">
+                            标签：
+                            {{range .tags}}
+                            <a href="/?tag_id={{.Id}}">{{.Name}}</a>
+                            {{end}}
+                        </span>
+                    <span class="item views"><i class="glyphicon glyphicon-eye-open"></i> {{.post.Views}}</span>
+                </div>
+            </header>
+
+            <article class="article-content">
+                <div id="test-editormd-view2">
+                    <textarea id="append-test" style="display:none;">{{.post.Content}}</textarea>
+                </div>
+
+            </article>
+
+        </div>
+
+    </div>
+</div>
+{{end}}
