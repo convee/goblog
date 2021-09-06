@@ -30,7 +30,7 @@ func PageList(w http.ResponseWriter, r *http.Request) {
 	data := make(map[string]interface{})
 	data["pages"] = pages
 	data["page"] = page
-	view.AdminRender(data, w, "admin/page/list")
+	view.AdminRender(data, w, "page/list")
 }
 
 func PageAdd(w http.ResponseWriter, r *http.Request) {
@@ -49,7 +49,7 @@ func PageAdd(w http.ResponseWriter, r *http.Request) {
 		data["title"] = page.Title
 		data["content"] = page.Content
 	}
-	view.AdminRender(data, w, "admin/page/add")
+	view.AdminRender(data, w, "page/add")
 }
 
 func PageDelete(w http.ResponseWriter, r *http.Request) {

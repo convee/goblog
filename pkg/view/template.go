@@ -33,7 +33,7 @@ func Render(data map[string]interface{}, w http.ResponseWriter, tpl string) {
 
 func AdminRender(data map[string]interface{}, w http.ResponseWriter, tpl string) {
 	var tplPaths []string
-	tplPaths = append(tplPaths, viper.GetString("system.tpl")+"/"+tpl+".html")
+	tplPaths = append(tplPaths, viper.GetString("system.root")+"/tpl/admin/"+tpl+".html")
 	t, err := template.ParseFiles(tplPaths...)
 	if err != nil {
 		log.Println("posts template err:", err)

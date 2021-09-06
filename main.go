@@ -3,7 +3,7 @@ package main
 import (
 	"blog/pkg/cache"
 	"blog/pkg/config"
-	"blog/pkg/elasticsearch"
+	"blog/pkg/es"
 	"blog/pkg/handler"
 	"blog/pkg/mongo"
 	"blog/pkg/mysql"
@@ -34,7 +34,7 @@ func main() {
 	mysql.Init()
 	cache.Init()
 	mongo.Init()
-	elasticsearch.Init()
+	es.Init()
 	addr := viper.GetString("system.addr")
 	log.Println("start serve: [", addr, "]")
 	srv := &http.Server{

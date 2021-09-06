@@ -23,3 +23,5 @@ mysql:
   max_idle: 10
   max_open: 20
   max_lifetime: 600
+es:
+  urls: "http://127.0.0.1:9200"

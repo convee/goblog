@@ -1,6 +1,7 @@
 package admin
 
 import (
+	"blog/pkg/es"
 	"blog/pkg/model"
 	"blog/pkg/mysql"
 	"blog/pkg/utils"
@@ -58,7 +59,7 @@ func PostList(w http.ResponseWriter, r *http.Request) {
 	data["page"] = page
 	data["pre_url"] = getPageUrl(categoryId, tagId, strconv.Itoa(prePage))
 	data["next_url"] = getPageUrl(categoryId, tagId, strconv.Itoa(nextPage))
-	view.AdminRender(data, w, "admin/post/list")
+	view.AdminRender(data, w, "post/list")
 }
 
 func getPageUrl(categoryId string, tagId string, page string) string {
@@ -95,7 +96,7 @@ func PostAdd(w http.ResponseWriter, r *http.Request) {
 		data["tag_ids"] = post.TagIds
 		data["tags"] = getTags(post)
 	}
-	view.AdminRender(data, w, "admin/post/add")
+	view.AdminRender(data, w, "post/add")
 }
 
 func getTags(post model.Post) string {
@@ -122,6 +123,7 @@ func PostDelete(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("post delete err %v, info:%v", err, post)
 	}
+	go es.DeletePost(es.Post{Id: post.Id})
 	http.Redirect(w, r, "/admin", http.StatusFound)
 }
 
@@ -138,6 +140,8 @@ func PostSave(w http.ResponseWriter, r *http.Request) {
 	_, err := mysql.PostSave(post)
 	if err != nil {
 		log.Printf("post save err %v, info:%v", err, post)
+	} else {
+		go es.SavePost(es.Post{Id: post.Id, Title: post.Title, Content: post.Content})
 	}
 	http.Redirect(w, r, "/admin", http.StatusFound)
 }

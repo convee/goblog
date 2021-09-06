@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"log"
 	"time"
 )
 
@@ -24,14 +25,12 @@ func Init() {
 	)
 	var err error
 	if db, err = sql.Open("mysql", dsn); err != nil {
-		fmt.Println("db open failed:", err)
-		return
+		log.Fatalln("db open failed:", err)
 	}
 	db.SetMaxIdleConns(config2.MysqlConfig.MaxIdle)                                     //设置闲置的连接数
 	db.SetMaxOpenConns(config2.MysqlConfig.MaxOpen)                                     //设置最大打开的连接数，默认值0表示不限制
 	db.SetConnMaxLifetime(time.Duration(config2.MysqlConfig.MaxLifetime) * time.Second) //设置长连接的最长使用时间（从创建时开始计算），超过该时间go会自动关闭该连接
 	if err := db.Ping(); err != nil {
-		fmt.Println("db ping failed:", err)
-		return
+		log.Fatalln("db ping failed:", err)
 	}
 }

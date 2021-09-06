@@ -11,12 +11,12 @@ import (
 
 func Login(w http.ResponseWriter, r *http.Request) {
 	data := make(map[string]interface{})
-	view.AdminRender(data, w, "admin/login")
+	view.AdminRender(data, w, "login")
 }
 
 func Register(w http.ResponseWriter, r *http.Request) {
 	data := make(map[string]interface{})
-	view.AdminRender(data, w, "admin/register")
+	view.AdminRender(data, w, "register")
 }
 
 func Logout(w http.ResponseWriter, r *http.Request) {

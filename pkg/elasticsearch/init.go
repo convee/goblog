@@ -1,5 +1,0 @@
-package elasticsearch
-
-func Init()  {
-	
-}

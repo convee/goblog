@@ -18,7 +18,7 @@ func CategoryList(w http.ResponseWriter, r *http.Request) {
 	}
 	data := make(map[string]interface{})
 	data["categories"] = categories
-	view.AdminRender(data, w, "admin/category/list")
+	view.AdminRender(data, w, "category/list")
 }
 
 func CategoryAdd(w http.ResponseWriter, r *http.Request) {

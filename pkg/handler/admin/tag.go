@@ -15,7 +15,7 @@ func TagList(w http.ResponseWriter, r *http.Request) {
 	}
 	data := make(map[string]interface{})
 	data["tags"] = tags
-	view.AdminRender(data, w, "admin/tag/list")
+	view.AdminRender(data, w, "tag/list")
 }
 
 
