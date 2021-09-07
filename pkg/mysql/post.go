@@ -43,10 +43,12 @@ func GetPosts(params PostParams) (posts []model.Post, err error) {
 	if err != nil {
 		return
 	}
+	var tags []byte
 	defer rows.Close()
 	for rows.Next() {
 		var post model.Post
-		rows.Scan(&post.Id, &post.Title, &post.CreatedAt, &post.UpdatedAt, &post.CategoryId, &post.TagIds, &post.Views, &post.Description)
+		rows.Scan(&post.Id, &post.Title, &post.CreatedAt, &post.UpdatedAt, &post.CategoryId, &tags, &post.Views, &post.Description)
+		json.Unmarshal(tags, &post.TagIds)
 		posts = append(posts, post)
 	}
 	return
@@ -57,7 +59,8 @@ func GetPost(id string) (post model.Post) {
 	row := db.QueryRow("select post.id,post.title,post.created_at,post.updated_at,post.category_id,post.tag_ids,post.views,post_content.content,post.description from post left join post_content on post.id=post_content.post_id where post.id=? limit 1", id)
 	err := row.Scan(&post.Id, &post.Title, &post.CreatedAt, &post.UpdatedAt, &post.CategoryId, &tags, &post.Views, &post.Content, &post.Description)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println("get post err ", err)
+		return
 	}
 	json.Unmarshal(tags, &post.TagIds)
 	return
@@ -123,7 +126,7 @@ func PostSave(post model.Post) (id int, err error) {
 		affected ,_ = rs.RowsAffected()
 		log.Printf("post_content %d save success affected:%d", post.Id, affected)
 	} else {
-		rs, err = conn.Exec("insert into post (title, description,category_id,tag_ids) values (?,?,?,?)", post.Title, post.Description, post.CategoryId, tagIds)
+		rs, err = conn.Exec("insert into post (title, description,category_id,tag_ids,status) values (?,?,?,?)", post.Title, post.Description, post.CategoryId, tagIds, post.Status)
 		if err != nil {
 			log.Printf("post %d insert err %v", id, err)
 			conn.Rollback()
