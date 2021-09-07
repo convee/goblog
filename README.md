@@ -14,8 +14,7 @@
 * 压测：wrk
 * markdown editor：https://github.com/pandao/editor.md
 * pprof 性能调优
-* 后台登录使用jwt：https://github.com/dgrijalva/jwt-go
-* 
+* 后台登录：cookie 
 
 ### 功能模块
 #### 后台
@@ -25,7 +24,7 @@
 * 标签管理
   
 #### 前台
-* 首页文章列表
+* 文章列表
 * 内容页面
 * 标签页面
 * 关于页面
@@ -33,21 +32,42 @@
 
 
 ### 部署流程
+* 依赖环境：
+  * * mysql 
+  * * redis 
+  * * elasticsearch
+  
 * 克隆仓库
 ```
 git clone https://github.com/convee/blog
 ```
 * 导入 sql：
 ```
-source sql/blog.sql
+create database blog;
+source blog.sql;
 ```
 * 修改配置
 ```
 路径：conf/dev.yml
-修改：mysql、redis、es 配置
+修改：项目跟路径、CDN路径、mysql、redis、es 配置
 ```
 * 下载依赖
 ```
 go get
 ```
 * 运行
+```
+go run main.go
+```
+
+* 访问首页
+
+http://localhost:9090
+
+* 访问后台
+
+http://localhost:9090/admin
+  
+用户名：convee.@admin.cn
+  
+密码：123456
