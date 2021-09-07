@@ -43,13 +43,15 @@ git clone https://github.com/convee/blog
 ```
 * 导入 sql：
 ```
-create database blog;
-source blog.sql;
+mysql -u root -p
+> create database blog;
+> use blog;
+> source blog.sql;
 ```
 * 修改配置
 ```
 路径：conf/dev.yml
-修改：项目跟路径、CDN路径、mysql、redis、es 配置
+修改：项目根路径、CDN路径、mysql、redis、es 配置
 ```
 * 下载依赖
 ```
