@@ -8,7 +8,7 @@ case "$1" in
   GOOS=linux GOARCH=amd64 go build -v -ldflags "-X main.Commit=$COMMIT"
   ;;
 'tar')
-  tar zcvf blog"$TIME".tar.gz ../blog/*
+  tar zcvf  blog"$TIME".tar.gz ./blog ./tpl ./static ./conf
   ;;
 *)
   echo "usage: $0 {build|tar}"

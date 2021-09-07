@@ -1,3 +1,4 @@
 .idea
 blog
 blog*.tar.gz
+conf/prod.yml
