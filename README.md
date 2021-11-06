@@ -39,7 +39,7 @@
   
 * 克隆仓库
 ```
-git clone https://github.com/convee/blog
+git clone https://github.com/convee/goblog
 ```
 * 导入 sql：
 ```

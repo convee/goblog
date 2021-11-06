@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"blog/pkg/es"
 	"blog/pkg/model"
 	"blog/pkg/mysql"
 	"blog/pkg/view"
@@ -17,6 +18,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	tagId := r.URL.Query().Get("tag_id")
 	perPage, _ := strconv.Atoi(r.URL.Query().Get("per_page"))
 	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
+	keyword := r.URL.Query().Get("keyword")
 	if perPage <= 0 {
 		perPage = 20
 	}
@@ -28,7 +30,14 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	if prePage <= 1 {
 		prePage = 1
 	}
+	var ids []string
+	if len(keyword) > 0 {
+		esPost := es.Post{Content: keyword}
+		_, ids = es.Search(esPost, perPage, page)
+	}
+
 	posts, err := mysql.GetPosts(mysql.PostParams{
+		Ids: ids,
 		CategoryId: categoryId,
 		TagId:      tagId,
 		PerPage:    perPage,

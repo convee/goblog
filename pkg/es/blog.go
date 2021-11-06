@@ -107,7 +107,7 @@ func DeletePost(post Post) {
 	}
 }
 
-func Search(post Post) {
+func Search(post Post, perPage int, page int) (err error, ids []string){
 	// 执行ES请求需要提供一个上下文对象
 	ctx := context.Background()
 
@@ -118,8 +118,8 @@ func Search(post Post) {
 		Index(blogIndex). // 设置索引名
 		Query(termQuery). // 设置查询条件
 		Sort("Created", true). // 设置排序字段，根据Created字段升序排序，第二个参数false表示逆序
-		From(0). // 设置分页参数 - 起始偏移量，从第0行记录开始
-		Size(10). // 设置分页参数 - 每页大小
+		//From(page). // 设置分页参数 - 起始偏移量，从第0行记录开始
+		//Size(perPage). // 设置分页参数 - 每页大小
 		Pretty(true). // 查询结果返回可读性较好的JSON格式
 		Do(ctx) // 执行请求
 
@@ -129,7 +129,6 @@ func Search(post Post) {
 	}
 
 	log.Printf("查询消耗时间 %d ms, 结果总数: %d\n", searchResult.TookInMillis, searchResult.TotalHits())
-
 	if searchResult.TotalHits() > 0 {
 		// 查询结果不为空，则遍历结果
 		var b1 Post
@@ -137,8 +136,9 @@ func Search(post Post) {
 		for _, item := range searchResult.Each(reflect.TypeOf(b1)) {
 			// 转换成Post对象
 			if t, ok := item.(Post); ok {
-				log.Println(t.Title)
+				ids = append(ids, strconv.Itoa(t.Id))
 			}
 		}
 	}
+	return nil, ids
 }

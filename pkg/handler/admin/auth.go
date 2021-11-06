@@ -43,6 +43,8 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 		Email:    email,
 		Password: string(hashPassword),
 	}
+	// 不允许注册
+	return
 	if _, err := mysql.AddUser(user); err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
 		return

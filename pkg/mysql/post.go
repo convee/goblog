@@ -10,6 +10,7 @@ import (
 )
 
 type PostParams struct {
+	Ids []string
 	CategoryId string
 	TagId      string
 	PerPage    int
@@ -21,6 +22,9 @@ func GetPosts(params PostParams) (posts []model.Post, err error) {
 
 	if len(params.CategoryId) > 0 {
 		condition = append(condition, "category_id="+params.CategoryId)
+	}
+	if len(params.Ids) > 0 {
+		condition = append(condition, "id in"+ strings.Join(params.Ids, ","))
 	}
 	if len(params.TagId) > 0 {
 		condition = append(condition, "JSON_CONTAINS(tag_ids,'"+params.TagId+"')")
