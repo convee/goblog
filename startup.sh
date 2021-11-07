@@ -7,7 +7,7 @@ start(){
       pid=`pgrep ${process}`
       if [ "${pid}"x = ""x ];then
           echo "start new process..."
-          nohup ./${process} -c configs/sandbox.yml &
+          nohup ./${process} -c conf/prod.yml &
       else
           for i in ${pid}
           do
@@ -16,7 +16,7 @@ start(){
           done
       fi
       sleep 1
-      nohup ./${process} -c configs/sandbox.yml &
+      nohup ./${process} -c conf/prod.yml &
       pid=`pgrep ${process}`
       echo "new process id: ${pid}"
 }
