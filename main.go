@@ -1,45 +1,53 @@
 package main
 
 import (
-	"blog/pkg/cache"
-	"blog/pkg/config"
-	"blog/pkg/es"
-	"blog/pkg/handler"
-	"blog/pkg/mongo"
-	"blog/pkg/mysql"
-	"blog/pkg/xlog"
 	"fmt"
-	"github.com/spf13/pflag"
-	"github.com/spf13/viper"
 	"log"
 	"net/http"
-	"os"
+
+	"github.com/convee/goblog/conf"
+	"github.com/convee/goblog/internal/pkg/es"
+	"github.com/convee/goblog/internal/pkg/mysql"
+	"github.com/convee/goblog/internal/routers"
+	logger "github.com/convee/goblog/pkg/log"
+	"github.com/convee/goblog/pkg/redis"
+
+	"github.com/spf13/pflag"
+	"github.com/spf13/viper"
 )
 
-func init() {
-	var (
-		confPath string
-	)
-	pflag.StringVarP(&confPath, "conf", "c", "./conf/dev.yml", "yaml conf path")
-	pflag.Parse()
-	viper.SetConfigFile(confPath)
-	if err := viper.ReadInConfig(); err != nil {
-		fmt.Println("load config failed:", err)
-		os.Exit(1)
-	}
-}
+var (
+	cfgFile = pflag.StringP("config", "c", "./conf/dev.yml", "config file path.")
+	//version = pflag.BoolP("version", "v", false, "show version info.")
+)
+
 func main() {
-	config.LoadConfig()
-	xlog.Init()
-	mysql.Init()
-	cache.Init()
-	mongo.Init()
-	es.Init()
+
+	pflag.Parse()
+
+	// init config
+	cfg := conf.Init(*cfgFile)
+
+	// init logger
+	logger.Init(&cfg.Logger)
+
+	// init redis
+	redis.Init(&cfg.Redis)
+
+	// init orm
+	//model.Init(&cfg.ORM)
+
+	// init mysql
+	mysql.Init(&cfg.Mysql)
+
+	// init elasticsearch
+	es.Init(&cfg.Elasticsearch)
+
 	addr := viper.GetString("system.addr")
 	log.Println("start serve: [", addr, "]")
 	srv := &http.Server{
 		Addr:    addr,
-		Handler: handler.InitRouter(),
+		Handler: routers.InitRouter(),
 	}
 	if err := srv.ListenAndServe(); err != nil {
 		fmt.Println("server run:", err)

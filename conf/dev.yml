@@ -3,25 +3,53 @@ system:
   host: http://localhost:10002
   root: "/home/convee/go/src/goblog"
   cdn: "http://localhost:10002/static"
-log:
-  stderr: true
-  level: debug
-
-redis:
-  addr: "127.0.0.1:6379"
-  max_idle: 10
-  max_active: 1
-  max_idle_timeout: 1
 
 mysql:
-  ip: "127.0.0.1"
-  port: "3306"
-  username: "convee"
-  password: "TMd6kQ0fayHZewqFUjX8."
-  database: "blog"
-  charset: "utf8mb4"
-  max_idle: 10
-  max_open: 20
-  max_lifetime: 600
+  Dsn: "convee:TMd6kQ0fayHZewqFUjX8.@tcp(localhost:3306)/blog?timeout=2s&readTimeout=5s&writeTimeout=5s&parseTime=true&loc=Local&charset=utf8,utf8mb4"
+  ShowLog: true                   # 是否打印SQL日志
+  MaxIdleConn: 10                 # 最大闲置的连接数，0意味着使用默认的大小2， 小于0表示不使用连接池
+  MaxOpenConn: 60                 # 最大打开的连接数, 需要小于数据库配置中的max_connections数
+  ConnMaxLifeTime: 4000           # 单个连接最大存活时间，建议设置比数据库超时时长(wait_timeout)稍小一些
+
 es:
+  disable: true
   urls: "http://127.0.0.1:9200"
+
+logger:
+  Development: false
+  DisableCaller: false
+  DisableStacktrace: false
+  Encoding: json                          # json or console
+  Level: info                             # 日志级别，INFO, WARN, ERROR
+  Name: goblog
+  Writers: file                        # 有2个可选项：file,console 选择file会将日志记录到logger_file指定的日志文件中，选择console会将日志输出到标准输出，当然也可以两者同时选择
+  LoggerFile: logs/access.log
+  LoggerWarnFile: logs/warn.log
+  LoggerErrorFile: logs/error.log
+  LogRollingPolicy: daily
+  LogRotateDate: 1
+  LogRotateSize: 1
+  LogBackupCount: 7
+
+orm:
+  Name: material_sandbox          # 数据库名称
+  Addr: 101.201.72.94:3306        # 如果是 docker,可以替换为 对应的服务名称，eg: db:3306
+  UserName: rps
+  Password: gj6c2U7PMlWL3oQqyRmi
+  ShowLog: true                   # 是否打印所有SQL日志
+  MaxIdleConn: 10                 # 最大闲置的连接数，0意味着使用默认的大小2， 小于0表示不使用连接池
+  MaxOpenConn: 60                 # 最大打开的连接数, 需要小于数据库配置中的max_connections数
+  ConnMaxLifeTime: 4h             # 单个连接最大存活时间，建议设置比数据库超时时长(wait_timeout)稍小一些
+  SlowThreshold: 0                # 慢查询阈值，设置后只打印慢查询日志，默认为500ms
+
+redis:
+  Addr: 127.0.0.1:6379
+  Password: ""
+  DB: 0
+  MinIdleConn: 200
+  DialTimeout: 60s
+  ReadTimeout: 500ms
+  WriteTimeout: 500ms
+  PoolSize: 100
+  PoolTimeout: 240s
+  IsTrace: true

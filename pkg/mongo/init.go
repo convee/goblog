@@ -1,5 +1,0 @@
-package mongo
-
-func Init()  {
-
-}

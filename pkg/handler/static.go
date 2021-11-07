@@ -1,7 +1,0 @@
-package handler
-
-
-func Static() {
-
-}
-

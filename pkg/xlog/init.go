@@ -1,5 +1,0 @@
-package xlog
-
-func Init()  {
-	
-}
