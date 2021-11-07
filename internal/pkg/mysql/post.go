@@ -131,7 +131,7 @@ func PostSave(post model.Post) (id int, err error) {
 		affected, _ = rs.RowsAffected()
 		log.Printf("post_content %d save success affected:%d", post.Id, affected)
 	} else {
-		rs, err = conn.Exec("insert into post (title, description,category_id,tag_ids,status) values (?,?,?,?)", post.Title, post.Description, post.CategoryId, tagIds, post.Status)
+		rs, err = conn.Exec("insert into post (title, description,category_id,tag_ids,status) values (?,?,?,?,?)", post.Title, post.Description, post.CategoryId, tagIds, post.Status)
 		if err != nil {
 			log.Printf("post %d insert err %v", id, err)
 			conn.Rollback()
