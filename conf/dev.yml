@@ -32,7 +32,7 @@ logger:
   LogBackupCount: 7
 
 orm:
-  Name: material_sandbox          # 数据库名称
+  Name: blog          # 数据库名称
   Addr: 127.0.0.1:3306        # 如果是 docker,可以替换为 对应的服务名称，eg: db:3306
   UserName: convee
   Password: TMd6kQ0fayHZewqFUjX8.

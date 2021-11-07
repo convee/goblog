@@ -17,7 +17,7 @@ dep:
 .PHONY: tar
 # pack file
 tar:
-	@tar zcvf  goblog-"${TIME}".tar.gz goblog conf/ *.sh
+	@tar zcvf  goblog-"${TIME}".tar.gz tpl/ static/ goblog conf/ *.sh
 
 .PHONY: fmt
 # make fmt
