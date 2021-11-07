@@ -1,8 +1,8 @@
 system:
-  addr: localhost:10002
-  host: http://localhost:10002
+  addr: localhost:9091
+  host: http://localhost:9091
   root: "/home/convee/go/src/goblog"
-  cdn: "http://localhost:10002/static"
+  cdn: "http://localhost:9091/static"
 
 mysql:
   Dsn: "convee:TMd6kQ0fayHZewqFUjX8.@tcp(localhost:3306)/blog?timeout=2s&readTimeout=5s&writeTimeout=5s&parseTime=true&loc=Local&charset=utf8,utf8mb4"
