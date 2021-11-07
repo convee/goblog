@@ -1,8 +1,8 @@
 system:
-  addr: localhost:9090
-  host: http://localhost:9090
-  root: "/Users/convee/go/src/blog"
-  cdn: "http://localhost:9090/static"
+  addr: localhost:10002
+  host: http://localhost:10002
+  root: "/home/convee/go/src/goblog"
+  cdn: "http://localhost:10002/static"
 log:
   stderr: true
   level: debug
@@ -16,8 +16,8 @@ redis:
 mysql:
   ip: "127.0.0.1"
   port: "3306"
-  username: "root"
-  password: "root"
+  username: "convee"
+  password: "TMd6kQ0fayHZewqFUjX8."
   database: "blog"
   charset: "utf8mb4"
   max_idle: 10
