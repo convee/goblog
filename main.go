@@ -41,7 +41,9 @@ func main() {
 	mysql.Init(&cfg.Mysql)
 
 	// init elasticsearch
-	es.Init(&cfg.Elasticsearch)
+	if !cfg.Elasticsearch.Disable {
+		es.Init(&cfg.Elasticsearch)
+	}
 
 	addr := viper.GetString("system.addr")
 	log.Println("start serve: [", addr, "]")

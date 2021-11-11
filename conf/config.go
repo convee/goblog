@@ -25,14 +25,12 @@ type Config struct {
 
 // AppConfig app config
 type AppConfig struct {
-	Name        string
-	Version     string
-	Mode        string
-	Addr        string
-	Host        string
-	Resource    string
-	FfprobePath string
-	Env         string
+	Name    string
+	Version bool
+	Mode    string
+	Addr    string
+	Host    string
+	Cdn     string
 }
 
 var (

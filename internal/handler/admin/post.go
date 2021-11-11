@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/convee/goblog/conf"
 	"github.com/convee/goblog/internal/pkg/es"
 	"github.com/convee/goblog/internal/pkg/model"
 	"github.com/convee/goblog/internal/pkg/mysql"
@@ -123,8 +124,14 @@ func PostDelete(w http.ResponseWriter, r *http.Request) {
 	_, err := mysql.PostDelete(post)
 	if err != nil {
 		log.Printf("post delete err %v, info:%v", err, post)
+		http.Redirect(w, r, "/admin", http.StatusBadRequest)
+		return
 	}
-	go es.DeletePost(es.Post{Id: post.Id})
+
+	if !conf.Conf.Elasticsearch.Disable {
+		go es.DeletePost(es.Post{Id: post.Id})
+
+	}
 	http.Redirect(w, r, "/admin", http.StatusFound)
 }
 
@@ -141,7 +148,10 @@ func PostSave(w http.ResponseWriter, r *http.Request) {
 	_, err := mysql.PostSave(post)
 	if err != nil {
 		log.Printf("post save err %v, info:%v", err, post)
-	} else {
+		http.Redirect(w, r, "/admin", http.StatusBadRequest)
+		return
+	}
+	if !conf.Conf.Elasticsearch.Disable {
 		go es.SavePost(es.Post{Id: post.Id, Title: post.Title, Content: post.Content})
 	}
 	http.Redirect(w, r, "/admin", http.StatusFound)

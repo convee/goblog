@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/convee/goblog/conf"
 	"github.com/convee/goblog/internal/pkg/es"
 	"github.com/convee/goblog/internal/pkg/model"
 	"github.com/convee/goblog/internal/pkg/mysql"
@@ -33,8 +34,11 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	}
 	var ids []string
 	if len(keyword) > 0 {
-		esPost := es.Post{Content: keyword}
-		_, ids = es.Search(esPost, perPage, page)
+		if !conf.Conf.Elasticsearch.Disable {
+			esPost := es.Post{Content: keyword}
+			_, ids = es.Search(esPost, perPage, page)
+		}
+
 	}
 
 	posts, err := mysql.GetPosts(mysql.PostParams{

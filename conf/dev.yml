@@ -1,7 +1,9 @@
-system:
+app:
+  name: blog
+  verion: true
+  mode: debug
   addr: localhost:9091
   host: http://localhost:9091
-  root: "/home/convee/go/src/goblog"
   cdn: "http://localhost:9091/static"
 
 mysql:
@@ -11,9 +13,9 @@ mysql:
   MaxOpenConn: 60                 # 最大打开的连接数, 需要小于数据库配置中的max_connections数
   ConnMaxLifeTime: 4000           # 单个连接最大存活时间，建议设置比数据库超时时长(wait_timeout)稍小一些
 
-es:
-  disable: true
-  urls: "http://127.0.0.1:9200"
+elasticsearch:
+  Disable: true
+  Urls: "http://127.0.0.1:9200"
 
 logger:
   Development: false

@@ -1,5 +1,6 @@
 package elasticsearch
 
 type Config struct {
-	Urls []string
+	Disable bool
+	Urls    []string
 }

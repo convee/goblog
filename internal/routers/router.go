@@ -6,14 +6,17 @@ import (
 	"github.com/convee/goblog/internal/handler/admin"
 	"github.com/convee/goblog/internal/handler/front"
 	"github.com/convee/goblog/internal/routers/middleware"
-
-	"github.com/spf13/viper"
 )
+
+func faviconHandler(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "static/favicon.ico")
+}
 
 func InitRouter() *http.ServeMux {
 	mux := &http.ServeMux{}
-	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(viper.GetString("system.root")+"/static"))))
+	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	mux.HandleFunc("/", front.Index)
+	mux.HandleFunc("/favicon.ico", faviconHandler)
 	mux.HandleFunc("/post", front.PostInfo)
 	mux.HandleFunc("/page", front.Page)
 	mux.HandleFunc("/tag", front.Tag)
