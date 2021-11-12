@@ -11,8 +11,6 @@ import (
 	"github.com/convee/goblog/internal/pkg/model"
 	"github.com/convee/goblog/internal/pkg/mysql"
 	"github.com/convee/goblog/internal/pkg/view"
-
-	"github.com/spf13/viper"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -83,7 +81,7 @@ func getPageUrl(categoryId string, tagId string, page string) string {
 		params = append(params, "tag_id="+tagId)
 	}
 	params = append(params, "page="+page)
-	return viper.GetString("system.host") + "?" + strings.Join(params, "&")
+	return conf.Conf.App.Host + "?" + strings.Join(params, "&")
 }
 
 func PostInfo(w http.ResponseWriter, r *http.Request) {

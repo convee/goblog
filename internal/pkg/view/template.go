@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/spf13/viper"
+	"github.com/convee/goblog/conf"
 )
 
 var funcMap = template.FuncMap{
@@ -20,25 +20,25 @@ var funcMap = template.FuncMap{
 
 func Render(data map[string]interface{}, w http.ResponseWriter, tpl string) {
 	var tplPaths []string
-	tplPaths = append(tplPaths, viper.GetString("system.root")+"/tpl/default/layout.html")
-	tplPaths = append(tplPaths, viper.GetString("system.root")+"/tpl/default/"+tpl+".html")
+	tplPaths = append(tplPaths, "tpl/default/layout.html")
+	tplPaths = append(tplPaths, "tpl/default/"+tpl+".html")
 	t, err := template.New("layout.html").ParseFiles(tplPaths...)
 	if err != nil {
 		log.Println("posts template err:", err)
 		return
 	}
-	data["cdn"] = viper.GetString("system.cdn")
+	data["cdn"] = conf.Conf.App.Cdn
 	t.Execute(w, data)
 }
 
 func AdminRender(data map[string]interface{}, w http.ResponseWriter, tpl string) {
 	var tplPaths []string
-	tplPaths = append(tplPaths, viper.GetString("system.root")+"/tpl/admin/"+tpl+".html")
+	tplPaths = append(tplPaths, "tpl/admin/"+tpl+".html")
 	t, err := template.ParseFiles(tplPaths...)
 	if err != nil {
 		log.Println("posts template err:", err)
 		return
 	}
-	data["cdn"] = viper.GetString("system.cdn")
+	data["cdn"] = conf.Conf.App.Cdn
 	t.Execute(w, data)
 }
