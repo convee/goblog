@@ -36,7 +36,8 @@ a:hover {
 /* 头部开始 */
 
 .navbar>.container .logo {
-    line-height: 60px;
+    line-height: 64px;
+    padding-left: 10px;
 }
 
 .navbar>.container .logo a {
