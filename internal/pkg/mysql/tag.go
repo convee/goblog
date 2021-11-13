@@ -24,3 +24,7 @@ func AddTag(tag model.Tag) (id int, err error) {
 	id64, err := rs.LastInsertId()
 	return int(id64), err
 }
+
+func IncrTagCount(id string) {
+	db.Exec("update tag set count=count+1 where id = ?", id)
+}

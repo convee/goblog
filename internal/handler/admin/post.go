@@ -152,6 +152,9 @@ func PostSave(w http.ResponseWriter, r *http.Request) {
 	if !conf.Conf.Elasticsearch.Disable {
 		go es.SavePost(es.Post{Id: post.Id, Title: post.Title, Content: post.Content})
 	}
+	for _, tagId := range post.TagIds {
+		go mysql.IncrTagCount(strconv.Itoa(tagId))
+	}
 	http.Redirect(w, r, "/admin", http.StatusFound)
 }
 
