@@ -38,7 +38,7 @@ func GetPosts(params PostParams) (posts []model.Post, err error) {
 		querySql += ` where ` + strings.Join(condition, " and ")
 	}
 
-	querySql += " order by updated_at desc"
+	querySql += " order by is_top desc,updated_at desc"
 
 	if params.PerPage > 0 && params.Page > 0 {
 		offset := (params.Page - 1) * params.PerPage
