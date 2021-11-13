@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -13,7 +12,6 @@ import (
 	"github.com/convee/goblog/pkg/redis"
 
 	"github.com/spf13/pflag"
-	"github.com/spf13/viper"
 )
 
 var (
@@ -45,14 +43,14 @@ func main() {
 		es.Init(&cfg.Elasticsearch)
 	}
 
-	addr := viper.GetString("system.addr")
+	addr := cfg.App.Addr
 	log.Println("start serve: [", addr, "]")
 	srv := &http.Server{
 		Addr:    addr,
 		Handler: routers.InitRouter(),
 	}
 	if err := srv.ListenAndServe(); err != nil {
-		fmt.Println("server run:", err)
+		log.Println("server run:", err)
 	}
 
 }
