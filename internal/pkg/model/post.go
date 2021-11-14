@@ -1,11 +1,13 @@
 package model
 
+import "time"
+
 type Post struct {
 	Id           int
 	Title        string
 	Views        int
-	CreatedAt    string
-	UpdatedAt    string
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
 	CategoryId   int
 	CategoryName string
 	TagIds       []int

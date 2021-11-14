@@ -6,7 +6,7 @@
                 <h1 class="article-title"><a href="">{{.post.Title}}</a></h1>
                 <div class="article-meta ">
                     <span class="item category"><a href="/?category_id={{.post.CategoryId}}">{{.post.CategoryName}}</a></span>
-                    <span class="item time ">{{.post.UpdatedAt}}</span>
+                    <span class="item time ">{{.post.UpdatedAt.Format "2006-01-02 15:04:05"}}</span>
                     <span class="item tags">
                             标签：
                             {{range .tags}}

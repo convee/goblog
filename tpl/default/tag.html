@@ -5,7 +5,7 @@
                 <div class="widget widget_sentence">
                     <ul>
                         {{range .tags}}
-                        <li><a href="/?tag_id={{.Id}}">{{.Name}} <span class="badge">{{.Count}}</span></a></li>
+                        <li><a style={{tagStyle .Count}} href="/?tag_id={{.Id}}">{{.Name}} <span class="badge">{{.Count}}</span></a></li>
                         {{end}}
                     </ul>
                 </div>
