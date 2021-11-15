@@ -2,7 +2,6 @@ package admin
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -13,6 +12,8 @@ import (
 	"github.com/convee/goblog/internal/pkg/mysql"
 	"github.com/convee/goblog/internal/pkg/utils"
 	"github.com/convee/goblog/internal/pkg/view"
+	logger "github.com/convee/goblog/pkg/log"
+	"go.uber.org/zap"
 )
 
 func PostList(w http.ResponseWriter, r *http.Request) {
@@ -121,7 +122,7 @@ func PostDelete(w http.ResponseWriter, r *http.Request) {
 	post.Id, _ = strconv.Atoi(r.URL.Query().Get("id"))
 	_, err := mysql.PostDelete(post)
 	if err != nil {
-		log.Printf("post delete err %v, info:%v", err, post)
+		logger.Error("post_delete_err", zap.Error(err))
 		http.Redirect(w, r, "/admin", http.StatusBadRequest)
 		return
 	}
@@ -145,7 +146,7 @@ func PostSave(w http.ResponseWriter, r *http.Request) {
 	post.Status = 1
 	_, err := mysql.PostSave(post)
 	if err != nil {
-		log.Printf("post save err %v, info:%v", err, post)
+		logger.Error("post_delete_err", zap.Error(err))
 		http.Redirect(w, r, "/admin", http.StatusBadRequest)
 		return
 	}

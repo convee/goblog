@@ -149,3 +149,13 @@ func PostSave(post model.Post) (id int, err error) {
 	conn.Commit()
 	return
 }
+
+func GetPostCountByTagId(id string) (int, error) {
+	var count *int
+	row := db.QueryRow("select count(*) from post where JSON_CONTAINS(tag_ids,'" + id + "')")
+	err := row.Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+	return *count, err
+}

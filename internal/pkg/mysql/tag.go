@@ -1,6 +1,10 @@
 package mysql
 
-import "github.com/convee/goblog/internal/pkg/model"
+import (
+	"github.com/convee/goblog/internal/pkg/model"
+	logger "github.com/convee/goblog/pkg/log"
+	"go.uber.org/zap"
+)
 
 func GetTags() (tags []model.Tag, err error) {
 	rows, err := db.Query("select id,name,count from tag order by count desc")
@@ -26,5 +30,10 @@ func AddTag(tag model.Tag) (id int, err error) {
 }
 
 func IncrTagCount(id string) {
-	db.Exec("update tag set count=count+1 where id = ?", id)
+	count, err := GetPostCountByTagId(id)
+	if err != nil {
+		logger.Error("incr_tag_count_err", zap.Error(err))
+		return
+	}
+	db.Exec("update tag set count=? where id = ?", count, id)
 }
