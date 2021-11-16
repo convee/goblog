@@ -17,7 +17,7 @@
 * 包管理工具 [Go Modules](https://github.com/golang/go/wiki/Modules)
 * 后台登录：cookie 
 * 使用 make 来管理 Go 工程
-* 使用 shell(startu.sh) 脚本来管理进程
+* 使用 shell(startup.sh) 脚本来管理进程
 * 使用 YAML 文件进行多环境配置
 
 ### 目录结构
@@ -34,7 +34,7 @@
 ├── logs                         # 存放日志的目录
 ├── main.go                      # 项目入口文件
 ├── pkg                          # 公共的 package
-├── tests                        # 单元测试依赖的配置文件，主要是供docker使用的一些环境配置文件
+├── tests                        # 单元测试依赖的配置文件
 └── build                        # 存放用于执行各种构建，安装，分析等操作的脚本
 ```
 
