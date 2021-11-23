@@ -55,7 +55,11 @@ func Render(data map[string]interface{}, w http.ResponseWriter, tpl string) {
 		log.Println("posts template err:", err)
 		return
 	}
+	data["name"] = conf.Conf.App.Name
 	data["cdn"] = conf.Conf.App.Cdn
+	if _, ok := data["title"]; !ok {
+		data["title"] = "Go Markdown 博客系统"
+	}
 	t.Execute(w, data)
 }
 

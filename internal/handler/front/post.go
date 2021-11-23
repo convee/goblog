@@ -104,5 +104,6 @@ func PostInfo(w http.ResponseWriter, r *http.Request) {
 	data := make(map[string]interface{})
 	data["post"] = post
 	data["tags"] = tags
+	data["title"] = post.Title
 	view.Render(data, w, "post")
 }

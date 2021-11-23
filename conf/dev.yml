@@ -1,5 +1,5 @@
 app:
-  name: blog
+  name: 柚子吧
   verion: true
   mode: debug
   addr: localhost:9091
