@@ -39,17 +39,18 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	// todo es search
 	if len(keyword) > 0 {
 		params.Keyword = keyword
-		postIdsByContent, err := mysql.GetPostIdsByContent(keyword)
+		params.Ids = make(map[string][]string)
+		postIds, err := mysql.GetPostIdsByContent(keyword)
 		if err == nil {
-			params.Ids = append(params.Ids, postIdsByContent...)
+			params.Ids["ids"] = postIds
 		}
-		postIdsByCategory, err := mysql.GetCategoryIdsByName(keyword)
+		categoryIds, err := mysql.GetCategoryIdsByName(keyword)
 		if err == nil {
-			params.Ids = append(params.Ids, postIdsByCategory...)
+			params.Ids["category_ids"] = categoryIds
 		}
-		postIdsByTag, err := mysql.GetTagIdsByName(keyword)
+		tagIds, err := mysql.GetTagIdsByName(keyword)
 		if err == nil {
-			params.Ids = append(params.Ids, postIdsByTag...)
+			params.Ids["tag_ids"] = tagIds
 		}
 	}
 

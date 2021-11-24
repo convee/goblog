@@ -11,7 +11,7 @@ import (
 )
 
 type PostParams struct {
-	Ids        []string
+	Ids        map[string][]string
 	CategoryId string
 	TagId      string
 	PerPage    int
@@ -33,8 +33,23 @@ func GetPosts(params PostParams) (posts []model.Post, err error) {
 		args = append(args, params.TagId)
 	}
 	if len(params.Keyword) > 0 {
-		condition = append(condition, "(title like ? or description like ? or id in (?))")
-		args = append(args, "%"+params.Keyword+"%", "%"+params.Keyword+"%", strings.Join(params.Ids, ","))
+		keywordSql := "title like ? or description like ?"
+		args = append(args, "%"+params.Keyword+"%", "%"+params.Keyword+"%")
+		if len(params.Ids["ids"]) > 0 {
+			keywordSql += " or id in (?)"
+			args = append(args, strings.Join(params.Ids["ids"], ","))
+		}
+		if len(params.Ids["category_ids"]) > 0 {
+			keywordSql += " or category_id in (?)"
+			args = append(args, strings.Join(params.Ids["category_ids"], ","))
+		}
+		if len(params.Ids["tag_ids"]) > 0 {
+			for _, tagId := range params.Ids["tag_ids"] {
+				keywordSql += " or JSON_CONTAINS(tag_ids,?)"
+				args = append(args, tagId)
+			}
+		}
+		condition = append(condition, "("+keywordSql+")")
 	}
 
 	querySql := "select id,title,created_at,updated_at,category_id,tag_ids,views,description from post"
