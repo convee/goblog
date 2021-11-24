@@ -21,6 +21,20 @@ func GetCategories() (categories []model.Category, err error) {
 	return
 }
 
+func GetCategoryIdsByName(name string) (categoryIds []string, err error) {
+	rs, err := db.Query("select id from category where name like ?", "%"+name+"%")
+	if err != nil {
+		return nil, err
+	}
+	defer rs.Close()
+	for rs.Next() {
+		var categoryId string
+		rs.Scan(&categoryId)
+		categoryIds = append(categoryIds, categoryId)
+	}
+	return
+}
+
 func GetCategory(id int) (category model.Category) {
 	row := db.QueryRow("select id,name from category where id=?", id)
 	row.Scan(&category.Id, &category.Name)

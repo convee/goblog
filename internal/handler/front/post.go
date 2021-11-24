@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/convee/goblog/conf"
-	"github.com/convee/goblog/internal/pkg/es"
 	"github.com/convee/goblog/internal/pkg/model"
 	"github.com/convee/goblog/internal/pkg/mysql"
 	"github.com/convee/goblog/internal/pkg/view"
@@ -30,22 +29,31 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	if prePage <= 1 {
 		prePage = 1
 	}
-	var ids []string
-	if len(keyword) > 0 {
-		if !conf.Conf.Elasticsearch.Disable {
-			esPost := es.Post{Content: keyword}
-			_, ids = es.Search(esPost, perPage, page)
-		}
-
-	}
-
-	posts, err := mysql.GetPosts(mysql.PostParams{
-		Ids:        ids,
+	params := mysql.PostParams{
 		CategoryId: categoryId,
 		TagId:      tagId,
 		PerPage:    perPage,
 		Page:       page,
-	})
+	}
+	// 关键词搜索：标题、描述、内容、分类、标签等
+	// todo es search
+	if len(keyword) > 0 {
+		params.Keyword = keyword
+		postIdsByContent, err := mysql.GetPostIdsByContent(keyword)
+		if err == nil {
+			params.Ids = append(params.Ids, postIdsByContent...)
+		}
+		postIdsByCategory, err := mysql.GetCategoryIdsByName(keyword)
+		if err == nil {
+			params.Ids = append(params.Ids, postIdsByCategory...)
+		}
+		postIdsByTag, err := mysql.GetTagIdsByName(keyword)
+		if err == nil {
+			params.Ids = append(params.Ids, postIdsByTag...)
+		}
+	}
+
+	posts, err := mysql.GetPosts(params)
 	if err != nil {
 		fmt.Println("get posts err:", err)
 		return

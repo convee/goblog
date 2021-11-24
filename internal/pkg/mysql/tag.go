@@ -20,6 +20,20 @@ func GetTags() (tags []model.Tag, err error) {
 	return
 }
 
+func GetTagIdsByName(name string) (tagIds []string, err error) {
+	rs, err := db.Query("select id from tag where name like ?", "%"+name+"%")
+	if err != nil {
+		return nil, err
+	}
+	defer rs.Close()
+	for rs.Next() {
+		var tagId string
+		rs.Scan(&tagId)
+		tagIds = append(tagIds, tagId)
+	}
+	return
+}
+
 func AddTag(tag model.Tag) (id int, err error) {
 	rs, err := db.Exec("insert into tag (name) values (?)", tag.Name)
 	if err != nil {

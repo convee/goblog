@@ -3,11 +3,12 @@ package es
 import (
 	"context"
 	"encoding/json"
-	"github.com/olivere/elastic/v7"
 	"log"
 	"reflect"
 	"strconv"
 	"time"
+
+	"github.com/olivere/elastic/v7"
 )
 
 type Post struct {
@@ -23,9 +24,9 @@ func AddPost(post Post) {
 	// 使用client创建一个新的文档
 	put1, err := esClient.Index().
 		Index(blogIndex). // 设置索引名称
-		Id(id). // 设置文档id
-		BodyJson(post). // 指定前面声明的微博内容
-		Do(ctx) // 执行请求，需要传入一个上下文对象
+		Id(id).           // 设置文档id
+		BodyJson(post).   // 指定前面声明的微博内容
+		Do(ctx)           // 执行请求，需要传入一个上下文对象
 	if err != nil {
 		log.Println("es add post err ", err)
 		return
@@ -51,8 +52,8 @@ func GetPost(post Post) {
 	// 根据id查询文档
 	get1, err := esClient.Get().
 		Index(blogIndex). // 指定索引名
-		Id(id). // 设置文档id
-		Do(ctx) // 执行请求
+		Id(id).           // 设置文档id
+		Do(ctx)           // 执行请求
 	if err != nil {
 		log.Println("es get post err ", err)
 		return
@@ -75,17 +76,17 @@ func UpdatePost(post Post) {
 	id := strconv.Itoa(post.Id)
 	ctx := context.Background()
 	_, err := esClient.Update().
-		Index(blogIndex). // 设置索引名
-		Id(id). // 文档id
+		Index(blogIndex).                           // 设置索引名
+		Id(id).                                     // 文档id
 		Doc(map[string]interface{}{"retweets": 0}). // 更新retweets=0，支持传入键值结构
-		Do(ctx) // 执行ES查询
+		Do(ctx)                                     // 执行ES查询
 	if err != nil {
 		log.Println("es update post err ", err)
 		return
 	}
 }
 
-func SavePost(post Post)  {
+func SavePost(post Post) {
 	if ExistsPost(post) {
 		UpdatePost(post)
 	} else {
@@ -107,7 +108,7 @@ func DeletePost(post Post) {
 	}
 }
 
-func Search(post Post, perPage int, page int) (err error, ids []string){
+func Search(post Post, perPage int, page int) (err error, ids []string) {
 	// 执行ES请求需要提供一个上下文对象
 	ctx := context.Background()
 
@@ -115,13 +116,13 @@ func Search(post Post, perPage int, page int) (err error, ids []string){
 	termQuery := elastic.NewTermQuery("Content", post.Content)
 
 	searchResult, err := esClient.Search().
-		Index(blogIndex). // 设置索引名
-		Query(termQuery). // 设置查询条件
+		Index(blogIndex).      // 设置索引名
+		Query(termQuery).      // 设置查询条件
 		Sort("Created", true). // 设置排序字段，根据Created字段升序排序，第二个参数false表示逆序
 		//From(page). // 设置分页参数 - 起始偏移量，从第0行记录开始
 		//Size(perPage). // 设置分页参数 - 每页大小
 		Pretty(true). // 查询结果返回可读性较好的JSON格式
-		Do(ctx) // 执行请求
+		Do(ctx)       // 执行请求
 
 	if err != nil {
 		log.Println("es search post err ", err)

@@ -16,19 +16,25 @@ type PostParams struct {
 	TagId      string
 	PerPage    int
 	Page       int
+	Keyword    string
 }
 
 func GetPosts(params PostParams) (posts []model.Post, err error) {
 	var condition []string
+	var args []interface{}
 
 	if len(params.CategoryId) > 0 {
-		condition = append(condition, "category_id="+params.CategoryId)
+		condition = append(condition, "category_id=?")
+		args = append(args, params.CategoryId)
 	}
-	if len(params.Ids) > 0 {
-		condition = append(condition, "id in"+strings.Join(params.Ids, ","))
-	}
+
 	if len(params.TagId) > 0 {
-		condition = append(condition, "JSON_CONTAINS(tag_ids,'"+params.TagId+"')")
+		condition = append(condition, "JSON_CONTAINS(tag_ids,?)")
+		args = append(args, params.TagId)
+	}
+	if len(params.Keyword) > 0 {
+		condition = append(condition, "(title like ? or description like ? or id in (?))")
+		args = append(args, "%"+params.Keyword+"%", "%"+params.Keyword+"%", strings.Join(params.Ids, ","))
 	}
 
 	querySql := "select id,title,created_at,updated_at,category_id,tag_ids,views,description from post"
@@ -44,7 +50,7 @@ func GetPosts(params PostParams) (posts []model.Post, err error) {
 		offset := (params.Page - 1) * params.PerPage
 		querySql += " limit " + strconv.Itoa(offset) + "," + strconv.Itoa(params.PerPage)
 	}
-	rows, err := db.Query(querySql)
+	rows, err := db.Query(querySql, args...)
 	if err != nil {
 		return
 	}
@@ -158,4 +164,19 @@ func GetPostCountByTagId(id string) (int, error) {
 		return 0, err
 	}
 	return *count, err
+}
+
+func GetPostIdsByContent(content string) ([]string, error) {
+	rows, err := db.Query("select post_id from post_content where content like ?", "%"+content+"%")
+	if err != nil {
+		return nil, err
+	}
+	var postIds []string
+	defer rows.Close()
+	for rows.Next() {
+		var postId string
+		rows.Scan(&postId)
+		postIds = append(postIds, postId)
+	}
+	return postIds, nil
 }
