@@ -70,7 +70,9 @@ func Signin(w http.ResponseWriter, r *http.Request) {
 	user := mysql.GetUser(email)
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
+		data := make(map[string]interface{})
+		data["msg"] = "密码不正确，请重试"
+		view.AdminRender(data, w, "401")
 		return
 	}
 	cookie := &http.Cookie{

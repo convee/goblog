@@ -12,8 +12,6 @@ import (
 	"github.com/convee/goblog/internal/pkg/mysql"
 	"github.com/convee/goblog/internal/pkg/utils"
 	"github.com/convee/goblog/internal/pkg/view"
-	logger "github.com/convee/goblog/pkg/log"
-	"go.uber.org/zap"
 )
 
 func PostList(w http.ResponseWriter, r *http.Request) {
@@ -122,8 +120,9 @@ func PostDelete(w http.ResponseWriter, r *http.Request) {
 	post.Id, _ = strconv.Atoi(r.URL.Query().Get("id"))
 	_, err := mysql.PostDelete(post)
 	if err != nil {
-		logger.Error("post_delete_err", zap.Error(err))
-		http.Redirect(w, r, "/admin", http.StatusBadRequest)
+		data := make(map[string]interface{})
+		data["msg"] = "删除失败，请重试"
+		view.AdminRender(data, w, "401")
 		return
 	}
 
@@ -146,8 +145,9 @@ func PostSave(w http.ResponseWriter, r *http.Request) {
 	post.Status = 1
 	_, err := mysql.PostSave(post)
 	if err != nil {
-		logger.Error("post_delete_err", zap.Error(err))
-		http.Redirect(w, r, "/admin", http.StatusBadRequest)
+		data := make(map[string]interface{})
+		data["msg"] = "添加或修改失败，请重试"
+		view.AdminRender(data, w, "401")
 		return
 	}
 	if !conf.Conf.Elasticsearch.Disable {

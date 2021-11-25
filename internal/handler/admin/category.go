@@ -2,7 +2,6 @@ package admin
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -45,7 +44,10 @@ func CategoryDelete(w http.ResponseWriter, r *http.Request) {
 	category.Id, _ = strconv.Atoi(r.URL.Query().Get("id"))
 	_, err := mysql.CategoryDelete(category)
 	if err != nil {
-		log.Printf("category delete err %v, info:%v", err, category)
+		data := make(map[string]interface{})
+		data["msg"] = "删除失败，请重试"
+		view.AdminRender(data, w, "401")
+		return
 	}
 	http.Redirect(w, r, "/admin/category/list", http.StatusFound)
 }
@@ -56,7 +58,10 @@ func CategorySave(w http.ResponseWriter, r *http.Request) {
 	category.Name = r.FormValue("name")
 	_, err := mysql.CategorySave(category)
 	if err != nil {
-		log.Printf("category save err %v, info:%v", err, category)
+		data := make(map[string]interface{})
+		data["msg"] = "添加或修改失败，请重试"
+		view.AdminRender(data, w, "401")
+		return
 	}
 	http.Redirect(w, r, "/admin/category", http.StatusFound)
 }
