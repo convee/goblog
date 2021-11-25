@@ -25,33 +25,38 @@
 ```shell
 ├── Makefile                     # 项目管理文件
 ├── conf                         # 配置文件统一存放目录
-├── docs                         # 框架相关文档
 ├── internal                     # 业务目录
 │   ├── handler                  # http 接口
 │   ├── pkg                      # 内部应用程序代码
-│   ├── routers                  # 业务路由
-│   └── task                     # 异步任务
+│   └── routers                  # 业务路由
 ├── logs                         # 存放日志的目录
+├── static                       # 存放静态文件的目录
+├── tpl                          # 存放模板的目录
 ├── main.go                      # 项目入口文件
 ├── pkg                          # 公共的 package
-├── tests                        # 单元测试依赖的配置文件
-└── build                        # 存放用于执行各种构建，安装，分析等操作的脚本
+├── tests                        # 单元测试
+└── startup.sh                   # 启动脚本
 ```
 
 ### 功能模块
 
 #### 后台
-* 文章管理
-* 页面管理
-* 分类管理
-* 标签管理
+* 文章管理：文章增删改查
+* 页面管理：页面增删改查，可自定义 markdown 页面
+* 分类管理：分类增删改查
+* 标签管理：标签列表
   
 #### 前台
-* 文章列表
-* 内容页面
-* 标签页面
-* 关于页面
-* 站内搜索
+* 文章列表：倒序展示文章、可置顶
+* 内容页面：markdown 内容展示
+* 标签页面：按标签文章数量排序
+* 关于页面：个人说明
+* 阅读清单：个人阅读书籍
+* 站内搜索：支持文章标题、描述、内容、分类、标签模糊搜索
+
+## 开发规范
+
+遵循: [Uber Go 语言编码规范](https://github.com/uber-go/guide/blob/master/style.md)
 
 ### 常用命令
 
@@ -79,8 +84,11 @@ cd goblog
 cd conf
 
 # 修改 mysql、redis、elasticsearch 配置
+
+# 导入初始化 sql 结构
 mysql -u root -p
 > create database blog;
+> set names utf8mb4;
 > use blog;
 > source blog.sql;
 
@@ -106,3 +114,5 @@ http://localhost:9091/admin
 用户名：convee.@admin.cn
   
 密码：123456
+
+* 演示站：https://convee.cn
