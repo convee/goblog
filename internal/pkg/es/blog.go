@@ -12,10 +12,13 @@ import (
 )
 
 type Post struct {
-	Id      int
-	Title   string    // 标题
-	Content string    // 内容
-	Created time.Time // 创建时间
+	Id          int
+	Title       string // 标题
+	Description string
+	Content     string    // 内容
+	Created     time.Time // 创建时间
+	Category    string
+	Tags        string
 }
 
 func AddPost(post Post) {

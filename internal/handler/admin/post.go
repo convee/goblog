@@ -151,7 +151,15 @@ func PostSave(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if !conf.Conf.Elasticsearch.Disable {
-		go es.SavePost(es.Post{Id: post.Id, Title: post.Title, Content: post.Content})
+		category := mysql.GetCategory(post.CategoryId)
+		go es.SavePost(es.Post{
+			Id:          post.Id,
+			Title:       post.Title,
+			Description: post.Description,
+			Content:     post.Content,
+			Tags:        tags,
+			Category:    category.Name,
+		})
 	}
 	for _, tagId := range post.TagIds {
 		go mysql.IncrTagCount(strconv.Itoa(tagId))
