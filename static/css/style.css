@@ -37,6 +37,7 @@ a:hover {
 
 .navbar>.container .logo {
     line-height: 64px;
+    font-weight: 600;
 }
 
 .navbar>.container .logo a {
