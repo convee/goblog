@@ -40,6 +40,7 @@ a:hover {
 }
 
 .navbar>.container .logo a {
+    color: #161209;
 }
 
 .navbar-default {
@@ -137,7 +138,7 @@ a:hover {
 
 .excerpt .cat {
     color: #FFF;
-    background-color: #337ab7;
+    background-color: #161209;
     padding: 3px 6px;
     font-size: 12px;
     display: inline-block;
@@ -173,6 +174,7 @@ a:hover {
 }
 
 .excerpt h2 a {
+    color: #161209;
 }
 
 .excerpt h2 a:hover {
