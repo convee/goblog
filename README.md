@@ -67,11 +67,11 @@
 
 ### 部署流程
 * 依赖环境：
-  * * mysql 
-  * * redis 
-  * * elasticsearch
   
-* 克隆仓库
+   mysql、redis、elasticsearch
+   > elasticsearch 可通过配置开启关闭，redis主要考虑到后续加缓存
+  
+* 安装部署
 
 ```
 # 下载安装，可以不用是 GOPATH
@@ -101,6 +101,23 @@ make build
 
 # 运行
 ./goblog dev.yml
+
+# 后台运行
+nohup ./goblog dev.yml &
+```
+
+* supervisord 部署
+  
+```
+[program:goblog]
+directory = /data/modules/blog
+command = /data/modules/blog/goblog -c conf/prod.yml
+autostart = true
+autorestart = true
+startsecs = 5
+user = root
+redirect_stderr = true
+stdout_logfile = /data/modules/blog/supervisor.log
 ```
 
 * 访问首页
