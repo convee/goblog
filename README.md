@@ -106,6 +106,20 @@ make build
 nohup ./goblog dev.yml &
 ```
 
+* supervisord 部署
+  
+```
+[program:goblog]
+directory = /data/modules/blog
+command = /data/modules/blog/goblog -c conf/prod.yml
+autostart = true
+autorestart = true
+startsecs = 5
+user = root
+redirect_stderr = true
+stdout_logfile = /data/modules/blog/supervisor.log
+```
+
 * 访问首页
 
 http://localhost:9091
