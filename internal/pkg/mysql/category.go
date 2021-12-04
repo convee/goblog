@@ -42,16 +42,13 @@ func GetCategory(id int) (category model.Category) {
 }
 
 func CategoryDelete(category model.Category) (id int, err error) {
-	var rs sql.Result
 	id = category.Id
 	log.Println(category)
-	rs, err = db.Exec("delete from category where id=?", id)
+	_, err = db.Exec("delete from category where id=?", id)
 	if err != nil {
 		log.Printf("category %d delete err %v", id, err)
 		return
 	}
-	affected, _ := rs.RowsAffected()
-	log.Printf("category %d delete success affected:%d", id, affected)
 	return
 }
 
@@ -61,13 +58,11 @@ func CategorySave(category model.Category) (id int, err error) {
 	if category.Id > 0 {
 		id = category.Id
 		log.Println(category)
-		rs, err = db.Exec("update category set name=? where id=?", category.Name, id)
+		_, err = db.Exec("update category set name=? where id=?", category.Name, id)
 		if err != nil {
 			log.Printf("category %d update err %v", id, err)
 			return
 		}
-		affected, _ := rs.RowsAffected()
-		log.Printf("category %d save success affected:%d", category.Id, affected)
 	} else {
 		rs, err = db.Exec("insert into category (`name`) values (?)", category.Name)
 		if err != nil {
