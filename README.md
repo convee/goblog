@@ -3,18 +3,19 @@
 
 ### 技术栈
 
-* 前端框架：bootstrap
-* 语言：go
+* 前端框架：[Bootstrap v3.3.7](http://getbootstrap.com)
+* 语言：[go](https://go.dev/)
 * 网络库：标准库 net/http
 * 配置文件解析库 [Viper](https://github.com/spf13/viper)
-* 日志库zap：https://github.com/uber-go/zap
-* elasticsearch：https://github.com/olivere/elastic/v7
-* mysql：https://github.com/go-sql-driver/mysql
-* redis：https://github.com/go-redis/redis
+* 日志库：[zap](https://github.com/uber-go/zap)
+* 搜索引擎：[elasticsearch](https://github.com/olivere/elastic/v7)
+* 数据库：[mysql](https://github.com/go-sql-driver/mysql)
+* 缓存：[redis](https://github.com/go-redis/redis)
 * 文件存储：阿里云 oss、cdn
-* markdown editor：https://github.com/pandao/editor.md
+* markdown 编辑器：[markdown editor](https://github.com/pandao/editor.md)
 * pprof 性能调优
 * 包管理工具 [Go Modules](https://github.com/golang/go/wiki/Modules)
+* 评论插件：[gitalk](https://github.com/gitalk/gitalk) 
 * 后台登录：cookie 
 * 使用 make 来管理 Go 工程
 * 使用 shell(startup.sh) 脚本来管理进程
