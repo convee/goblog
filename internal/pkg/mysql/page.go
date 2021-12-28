@@ -2,11 +2,9 @@ package mysql
 
 import (
 	"database/sql"
+	"github.com/convee/goblog/internal/pkg/model"
 	"log"
 	"strconv"
-	"strings"
-
-	"github.com/convee/goblog/internal/pkg/model"
 )
 
 type PageParams struct {
@@ -15,12 +13,7 @@ type PageParams struct {
 }
 
 func GetPages(params PageParams) (pages []model.Page, err error) {
-	var condition []string
-
 	querySql := "select id,title,content from page"
-	if len(condition) > 0 {
-		querySql += ` where ` + strings.Join(condition, " and ")
-	}
 
 	querySql += " order by id asc"
 
