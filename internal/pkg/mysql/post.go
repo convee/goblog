@@ -93,33 +93,32 @@ func GetPost(id string) (post model.Post) {
 }
 
 func IncrView(id string) {
-	db.Exec("update post set views=views+1 where id = ?", id)
+	_, err := db.Exec("update post set views=views+1 where id = ?", id)
+	if err != nil {
+		log.Printf("update post views err id:%s, err%v", id, err)
+		return
+	}
 }
 
 func PostDelete(post model.Post) (id int, err error) {
 	conn, err := db.Begin()
 	if err != nil {
 		log.Fatalln("post db conn err ", err)
+		return
 	}
-	var rs sql.Result
 	id = post.Id
-	log.Println(post)
-	rs, err = conn.Exec("delete from post where id=?", id)
+	_, err = conn.Exec("delete from post where id=?", id)
 	if err != nil {
 		log.Printf("post %d delete err %v", id, err)
 		conn.Rollback()
 		return
 	}
-	affected, _ := rs.RowsAffected()
-	log.Printf("post %d delete success affected:%d", id, affected)
-	rs, err = conn.Exec("delete from post_content where post_id=?", id)
+	_, err = conn.Exec("delete from post_content where post_id=?", id)
 	if err != nil {
 		log.Printf("post_content %d delete err %v content:", id, err)
 		conn.Rollback()
 		return
 	}
-	affected, _ = rs.RowsAffected()
-	log.Printf("post_content %d delete success affected:%d", id, affected)
 
 	conn.Commit()
 	return
@@ -128,29 +127,27 @@ func PostSave(post model.Post) (id int, err error) {
 	conn, err := db.Begin()
 	if err != nil {
 		log.Fatalln("post db conn err ", err)
+		return
 	}
 	var tagIds []byte
 	tagIds, _ = json.Marshal(post.TagIds)
 	var rs sql.Result
 	if post.Id > 0 {
 		id = post.Id
-		log.Println(post)
-		rs, err = conn.Exec("update post set title=?,description=?,category_id=?,tag_ids=? where id=?", post.Title, post.Description, post.CategoryId, tagIds, id)
+		_, err = conn.Exec("update post set title=?,description=?,category_id=?,tag_ids=? where id=?", post.Title, post.Description, post.CategoryId, tagIds, id)
 		if err != nil {
 			log.Printf("post %d update err %v", id, err)
 			conn.Rollback()
 			return
 		}
-		affected, _ := rs.RowsAffected()
-		log.Printf("post %d save success affected:%d", post.Id, affected)
-		rs, err = conn.Exec("update post_content set content=? where post_id=?", post.Content, id)
+
+		_, err = conn.Exec("update post_content set content=? where post_id=?", post.Content, id)
 		if err != nil {
 			log.Printf("post_content %d update err %v content:", id, err)
 			conn.Rollback()
 			return
 		}
-		affected, _ = rs.RowsAffected()
-		log.Printf("post_content %d save success affected:%d", post.Id, affected)
+
 	} else {
 		rs, err = conn.Exec("insert into post (title, description,category_id,tag_ids,status) values (?,?,?,?,?)", post.Title, post.Description, post.CategoryId, tagIds, post.Status)
 		if err != nil {

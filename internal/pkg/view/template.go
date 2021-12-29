@@ -57,8 +57,13 @@ func Render(data map[string]interface{}, w http.ResponseWriter, tpl string) {
 	}
 	data["name"] = conf.Conf.App.Name
 	data["cdn"] = conf.Conf.App.Cdn
+	// seo title
 	if _, ok := data["title"]; !ok {
 		data["title"] = "Go Markdown 博客系统"
+	}
+	// seo description
+	if _, ok := data["description"]; !ok {
+		data["description"] = "Go Markdown 博客系统"
 	}
 	t.Execute(w, data)
 }

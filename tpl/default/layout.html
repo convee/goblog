@@ -4,9 +4,9 @@
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{{.title}} - {{.name}}</title>
+    <title>{{.title}}|{{.name}}</title>
     <meta name="keywords" content="convee,blog,markdown,php,go,golang,git,github,it,shell,linux,柚子吧,程序员,博客,源码,架构,算法,数据结构,互联网,程序化广告,教程" />
-    <meta name="description" content="穿西装的程序员" />
+    <meta name="description" content="{{.description}}" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="{{.cdn}}/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="{{.cdn}}/css/style.css">
@@ -56,7 +56,8 @@
     </div>
 </div>
 
-
+<link rel="stylesheet" href="{{.cdn}}/css/gitalk.css">
+<script src="{{.cdn}}/js/gitalk.min.js"></script>
 <script src="{{.cdn}}/js/jquery.min.js"></script>
 <script src="{{.cdn}}/js/bootstrap.min.js"></script>
 <script src="{{.cdn}}/md/lib/marked.min.js"></script>
@@ -81,6 +82,16 @@
             sequenceDiagram : true,  // 默认不解析
         });
     });
+    const gitalk = new Gitalk({
+        clientID: 'f06fcb10638b615401a1',
+        clientSecret: '63c47044ce93a5af5e2fff498bc94317ff04d12e',
+        repo: 'goblog',      // The repository of store comments,
+        owner: 'convee',
+        admin: ['convee'],
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    })
+
+    gitalk.render('gitalk-container')
 </script>
 </body>
 
