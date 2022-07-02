@@ -2,4 +2,6 @@
 .vscode
 goblog*
 conf/prod.yml
+conf/local.yml
 logs/*
+__debug_bin

@@ -36,7 +36,7 @@ func CategoryAdd(w http.ResponseWriter, r *http.Request) {
 		data["id"] = category.Id
 		data["name"] = category.Name
 	}
-	view.AdminRender(data, w, "admin/category/add")
+	view.AdminRender(data, w, "category/add")
 }
 
 func CategoryDelete(w http.ResponseWriter, r *http.Request) {
