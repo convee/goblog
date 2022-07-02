@@ -49,7 +49,7 @@ func CategoryDelete(w http.ResponseWriter, r *http.Request) {
 		view.AdminRender(data, w, "401")
 		return
 	}
-	http.Redirect(w, r, "/admin/category/list", http.StatusFound)
+	http.Redirect(w, r, "/admin/category", http.StatusFound)
 }
 
 func CategorySave(w http.ResponseWriter, r *http.Request) {
