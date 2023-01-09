@@ -1,7 +1,7 @@
 package conf
 
 import (
-	"github.com/convee/goblog/pkg/log"
+	"github.com/convee/goblog/pkg/logger"
 	"github.com/convee/goblog/pkg/redis"
 	"github.com/convee/goblog/pkg/storage/elasticsearch"
 	"github.com/convee/goblog/pkg/storage/mysql"
@@ -16,7 +16,7 @@ type Config struct {
 	// common
 	App AppConfig
 	// component config
-	Logger        log.Config
+	Logger        logger.Config
 	ORM           orm.Config
 	Mysql         mysql.Config
 	Redis         redis.Config
@@ -25,12 +25,13 @@ type Config struct {
 
 // AppConfig app config
 type AppConfig struct {
-	Name    string
-	Version bool
-	Mode    string
-	Addr    string
-	Host    string
-	Cdn     string
+	Name            string
+	Version         bool
+	Mode            string
+	Addr            string
+	Host            string
+	Cdn             string
+	DisableDingDing bool
 }
 
 var (

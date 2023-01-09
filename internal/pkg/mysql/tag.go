@@ -2,7 +2,7 @@ package mysql
 
 import (
 	"github.com/convee/goblog/internal/pkg/model"
-	logger "github.com/convee/goblog/pkg/log"
+	"github.com/convee/goblog/pkg/logger"
 	"go.uber.org/zap"
 )
 

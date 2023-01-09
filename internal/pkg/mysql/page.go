@@ -3,7 +3,8 @@ package mysql
 import (
 	"database/sql"
 	"github.com/convee/goblog/internal/pkg/model"
-	"log"
+	"github.com/convee/goblog/pkg/logger"
+	"go.uber.org/zap"
 	"strconv"
 )
 
@@ -23,12 +24,17 @@ func GetPages(params PageParams) (pages []model.Page, err error) {
 	}
 	rows, err := db.Query(querySql)
 	if err != nil {
+		logger.Error("GetPagesError", zap.Error(err))
+		return
+	}
+	if rows.Err() != nil {
+		logger.Error("GetPagesError", zap.Error(rows.Err()))
 		return
 	}
 	defer rows.Close()
 	for rows.Next() {
 		var page model.Page
-		rows.Scan(&page.Id, &page.Title, &page.Content)
+		_ = rows.Scan(&page.Id, &page.Title, &page.Content)
 		pages = append(pages, page)
 	}
 	return
@@ -36,9 +42,13 @@ func GetPages(params PageParams) (pages []model.Page, err error) {
 
 func GetPage(id string) (page model.Page) {
 	row := db.QueryRow("select id,title,content from page  where id=? limit 1", id)
+	if row.Err() != nil {
+		logger.Error("GetPageError", zap.Error(row.Err()))
+		return
+	}
 	err := row.Scan(&page.Id, &page.Title, &page.Content)
 	if err != nil {
-		log.Fatalln(err)
+		logger.Error("GetPageError", zap.Error(err))
 		return
 	}
 	return
@@ -46,10 +56,9 @@ func GetPage(id string) (page model.Page) {
 
 func PageDelete(page model.Page) (id int, err error) {
 	id = page.Id
-	log.Println(page)
 	_, err = db.Exec("delete from page where id=?", id)
 	if err != nil {
-		log.Printf("page %d delete err %v", id, err)
+		logger.Error("PageDeleteError", zap.Error(err))
 		return
 	}
 	return
@@ -59,16 +68,15 @@ func PageSave(page model.Page) (id int, err error) {
 	var rs sql.Result
 	if page.Id > 0 {
 		id = page.Id
-		log.Println(page)
 		_, err = db.Exec("update page set title=?,content=? where id=?", page.Title, page.Content, id)
 		if err != nil {
-			log.Printf("page %d update err %v", id, err)
+			logger.Error("PageSaveError", zap.Error(err))
 			return
 		}
 	} else {
 		rs, err = db.Exec("insert into page (title, content) values (?,?)", page.Title, page.Content)
 		if err != nil {
-			log.Printf("page %d insert err %v", id, err)
+			logger.Error("PageSaveError", zap.Error(err))
 			return
 		}
 		id64, _ := rs.LastInsertId()

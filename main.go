@@ -1,31 +1,28 @@
 package main
 
 import (
+	"context"
+	"github.com/convee/goblog/pkg/logger"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/convee/goblog/conf"
 	"github.com/convee/goblog/internal/pkg/es"
 	"github.com/convee/goblog/internal/pkg/mysql"
 	"github.com/convee/goblog/internal/routers"
-	logger "github.com/convee/goblog/pkg/log"
 	"github.com/convee/goblog/pkg/redis"
+	"github.com/convee/goblog/pkg/shutdown"
 
 	"github.com/spf13/pflag"
 )
 
 var (
-	cfgFile = pflag.StringP("config", "c", "./conf/dev.yml", "config file path.")
+	cfgFile = pflag.StringP("config", "c", "./conf/local.yml", "config file path.")
 	//version = pflag.BoolP("version", "v", false, "show version info.")
 )
 
 func main() {
-
-	defer func() {
-		if err := recover(); err != nil {
-			log.Println(err)
-		}
-	}()
 
 	pflag.Parse()
 
@@ -55,8 +52,23 @@ func main() {
 		Addr:    addr,
 		Handler: routers.InitRouter(),
 	}
-	if err := srv.ListenAndServe(); err != nil {
-		log.Println("server run:", err)
-	}
+	go func() {
+		if err := srv.ListenAndServe(); err != nil {
+			log.Println("server run:", err)
+		}
+	}()
+
+	shutdown.NewHook().Close(
+		// 关闭 http server
+		func() {
+			ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+			defer cancel()
+			if err := srv.Shutdown(ctx); err != nil {
+				log.Println("http server closed err", err)
+			} else {
+				log.Println("http server closed")
+			}
+		},
+	)
 
 }

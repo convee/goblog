@@ -1,4 +1,4 @@
-package log
+package logger
 
 // Config  log config
 type Config struct {
