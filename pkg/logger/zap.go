@@ -1,12 +1,11 @@
 package logger
 
 import (
+	"github.com/convee/goblog/pkg/utils"
 	"io"
 	"os"
 	"strings"
 	"time"
-
-	"github.com/convee/goblog/pkg/utils"
 
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"go.uber.org/zap"
@@ -47,19 +46,9 @@ func getLoggerLevel(cfg *Config) zapcore.Level {
 	return level
 }
 
-// zapLogger logger struct
-type zapLogger struct {
-	sugarLogger *zap.SugaredLogger
-}
-
 // newZapLogger new zap logger
 func newZapLogger(cfg *Config) (*zap.Logger, error) {
 	return buildLogger(cfg), nil
-}
-
-// newLogger new logger
-func newLogger(cfg *Config) (Logger, error) {
-	return &zapLogger{sugarLogger: buildLogger(cfg).Sugar()}, nil
 }
 
 func buildLogger(cfg *Config) *zap.Logger {
@@ -203,62 +192,4 @@ func getLogWriterWithTime(cfg *Config, filename string) io.Writer {
 		panic(err)
 	}
 	return hook
-}
-
-// Debug logger
-func (l *zapLogger) Debug(args ...interface{}) {
-	l.sugarLogger.Debug(args...)
-}
-
-// Info logger
-func (l *zapLogger) Info(args ...interface{}) {
-	l.sugarLogger.Info(args...)
-}
-
-// Warn logger
-func (l *zapLogger) Warn(args ...interface{}) {
-	l.sugarLogger.Warn(args...)
-}
-
-// Error logger
-func (l *zapLogger) Error(args ...interface{}) {
-	l.sugarLogger.Error(args...)
-}
-
-func (l *zapLogger) Fatal(args ...interface{}) {
-	l.sugarLogger.Fatal(args...)
-}
-
-func (l *zapLogger) Debugf(format string, args ...interface{}) {
-	l.sugarLogger.Debugf(format, args...)
-}
-
-func (l *zapLogger) Infof(format string, args ...interface{}) {
-	l.sugarLogger.Infof(format, args...)
-}
-
-func (l *zapLogger) Warnf(format string, args ...interface{}) {
-	l.sugarLogger.Warnf(format, args...)
-}
-
-func (l *zapLogger) Errorf(format string, args ...interface{}) {
-	l.sugarLogger.Errorf(format, args...)
-}
-
-func (l *zapLogger) Fatalf(format string, args ...interface{}) {
-	l.sugarLogger.Fatalf(format, args...)
-}
-
-func (l *zapLogger) Panicf(format string, args ...interface{}) {
-	l.sugarLogger.Panicf(format, args...)
-}
-
-func (l *zapLogger) WithFields(fields Fields) Logger {
-	var f = make([]interface{}, 0)
-	for k, v := range fields {
-		f = append(f, k)
-		f = append(f, v)
-	}
-	newLogger := l.sugarLogger.With(f...)
-	return &zapLogger{newLogger}
 }

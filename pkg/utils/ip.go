@@ -5,7 +5,6 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/gin-gonic/gin"
 	tnet "github.com/toolkits/net"
 )
 
@@ -49,39 +48,4 @@ func GetInternalIP() string {
 		}
 	}
 	return ""
-}
-
-// GetRealIP get user real ip
-func GetRealIP(ctx *gin.Context) (ip string) {
-	var header = ctx.Request.Header
-	var index int
-	if ip = header.Get("X-Forwarded-For"); ip != "" {
-		index = strings.IndexByte(ip, ',')
-		if index < 0 {
-			return ip
-		}
-		if ip = ip[:index]; ip != "" {
-			return ip
-		}
-	}
-	if ip = header.Get("X-Real-Ip"); ip != "" {
-		index = strings.IndexByte(ip, ',')
-		if index < 0 {
-			return ip
-		}
-		if ip = ip[:index]; ip != "" {
-			return ip
-		}
-	}
-	if ip = header.Get("Proxy-Forwarded-For"); ip != "" {
-		index = strings.IndexByte(ip, ',')
-		if index < 0 {
-			return ip
-		}
-		if ip = ip[:index]; ip != "" {
-			return ip
-		}
-	}
-	ip, _, _ = net.SplitHostPort(ctx.Request.RemoteAddr)
-	return ip
 }
