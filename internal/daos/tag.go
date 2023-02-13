@@ -1,7 +1,7 @@
-package mysql
+package daos
 
 import (
-	"github.com/convee/goblog/internal/pkg/model"
+	"github.com/convee/goblog/internal/model"
 	"github.com/convee/goblog/pkg/logger"
 	"go.uber.org/zap"
 )

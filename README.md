@@ -1,4 +1,5 @@
 ## Go Markdown 博客系统
+
 > 基于 Go 语言实现的 Markdown 博客系统
 
 ### 技术栈
@@ -15,8 +16,8 @@
 * markdown 编辑器：[markdown editor](https://github.com/pandao/editor.md)
 * pprof 性能调优
 * 包管理工具 [Go Modules](https://github.com/golang/go/wiki/Modules)
-* 评论插件：[gitalk](https://github.com/gitalk/gitalk) 
-* 后台登录：cookie 
+* 评论插件：[gitalk](https://github.com/gitalk/gitalk)
+* 后台登录：cookie
 * 使用 make 来管理 Go 工程
 * 使用 shell(startup.sh) 脚本来管理进程
 * 使用 YAML 文件进行多环境配置
@@ -45,12 +46,14 @@
 ### 功能模块
 
 #### 后台
+
 * 文章管理：文章增删改查
 * 页面管理：页面增删改查，可自定义 markdown 页面
 * 分类管理：分类增删改查
 * 标签管理：标签列表
-  
+
 #### 前台
+
 * 文章列表：倒序展示文章、可置顶
 * 内容页面：markdown 内容展示
 * 标签页面：按标签文章数量排序
@@ -70,11 +73,12 @@
 - make tar 打包文件
 
 ### 部署流程
+
 * 依赖环境：
-  
-   mysql、redis、elasticsearch
-   > elasticsearch 可通过配置开启关闭，redis主要考虑到后续加缓存
-  
+
+  mysql、redis、elasticsearch
+  > elasticsearch 可通过配置开启关闭，redis主要考虑到后续加缓存
+
 * 安装部署
 
 ```
@@ -111,7 +115,7 @@ nohup ./goblog dev.yml &
 ```
 
 * supervisord 部署
-  
+
 ```
 [program:goblog]
 directory = /data/modules/blog
@@ -131,9 +135,9 @@ http://localhost:9091
 * 访问后台
 
 http://localhost:9091/admin
-  
+
 用户名：admin@convee.cn
-  
+
 密码：123456
 
 * 演示站：https://convee.cn

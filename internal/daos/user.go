@@ -1,6 +1,8 @@
-package mysql
+package daos
 
-import "github.com/convee/goblog/internal/pkg/model"
+import (
+	"github.com/convee/goblog/internal/model"
+)
 
 func GetUser(email string) (user model.User) {
 	row := db.QueryRow("select email,password from user where email=?", email)

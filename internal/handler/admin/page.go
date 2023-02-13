@@ -2,24 +2,24 @@ package admin
 
 import (
 	"fmt"
+	"github.com/convee/artgo"
+	"github.com/convee/goblog/internal/daos"
+	"github.com/convee/goblog/internal/model"
+	"github.com/convee/goblog/internal/view"
 	"net/http"
 	"strconv"
-
-	"github.com/convee/goblog/internal/pkg/model"
-	"github.com/convee/goblog/internal/pkg/mysql"
-	"github.com/convee/goblog/internal/pkg/view"
 )
 
-func PageList(w http.ResponseWriter, r *http.Request) {
-	perPage, _ := strconv.Atoi(r.URL.Query().Get("per_page"))
-	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
+func PageList(c *artgo.Context) {
+	perPage, _ := strconv.Atoi(c.Query("per_page"))
+	page, _ := strconv.Atoi(c.Query("page"))
 	if perPage <= 0 {
 		perPage = 20
 	}
 	if page <= 1 {
 		page = 1
 	}
-	pages, err := mysql.GetPages(mysql.PageParams{
+	pages, err := daos.GetPages(daos.PageParams{
 		PerPage: perPage,
 		Page:    page,
 	})
@@ -30,17 +30,17 @@ func PageList(w http.ResponseWriter, r *http.Request) {
 	data := make(map[string]interface{})
 	data["pages"] = pages
 	data["page"] = page
-	view.AdminRender(data, w, "page/list")
+	view.AdminRender(data, c, "page/list")
 }
 
-func PageAdd(w http.ResponseWriter, r *http.Request) {
+func PageAdd(c *artgo.Context) {
 	data := make(map[string]interface{})
-	id := r.FormValue("id")
+	id := c.PostForm("id")
 	var page model.Page
 	if len(id) > 0 {
-		page = mysql.GetPage(id)
+		page = daos.GetPage(id)
 	}
-	categories, _ := mysql.GetCategories()
+	categories, _ := daos.GetCategories()
 	data["categories"] = categories
 
 	if page.Id > 0 {
@@ -49,33 +49,33 @@ func PageAdd(w http.ResponseWriter, r *http.Request) {
 		data["title"] = page.Title
 		data["content"] = page.Content
 	}
-	view.AdminRender(data, w, "page/add")
+	view.AdminRender(data, c, "page/add")
 }
 
-func PageDelete(w http.ResponseWriter, r *http.Request) {
+func PageDelete(c *artgo.Context) {
 	var page model.Page
-	page.Id, _ = strconv.Atoi(r.URL.Query().Get("id"))
-	_, err := mysql.PageDelete(page)
+	page.Id, _ = strconv.Atoi(c.Query("id"))
+	_, err := daos.PageDelete(page)
 	if err != nil {
 		data := make(map[string]interface{})
 		data["msg"] = "删除失败，请重试"
-		view.AdminRender(data, w, "401")
+		view.AdminRender(data, c, "401")
 		return
 	}
-	http.Redirect(w, r, "/admin", http.StatusFound)
+	c.Redirect(http.StatusFound, "/admin")
 }
 
-func PageSave(w http.ResponseWriter, r *http.Request) {
+func PageSave(c *artgo.Context) {
 	var page model.Page
-	page.Id, _ = strconv.Atoi(r.FormValue("id"))
-	page.Title = r.FormValue("title")
-	page.Content = r.FormValue("content")
-	_, err := mysql.PageSave(page)
+	page.Id, _ = strconv.Atoi(c.PostForm("id"))
+	page.Title = c.PostForm("title")
+	page.Content = c.PostForm("content")
+	_, err := daos.PageSave(page)
 	if err != nil {
 		data := make(map[string]interface{})
 		data["msg"] = "添加或修改失败，请重试"
-		view.AdminRender(data, w, "401")
+		view.AdminRender(data, c, "401")
 		return
 	}
-	http.Redirect(w, r, "/admin/page", http.StatusFound)
+	c.Redirect(http.StatusFound, "/admin/page")
 }

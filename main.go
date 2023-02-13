@@ -2,14 +2,14 @@ package main
 
 import (
 	"context"
+	"github.com/convee/goblog/internal/daos"
+	"github.com/convee/goblog/internal/es"
 	"github.com/convee/goblog/pkg/logger"
 	"log"
 	"net/http"
 	"time"
 
 	"github.com/convee/goblog/conf"
-	"github.com/convee/goblog/internal/pkg/es"
-	"github.com/convee/goblog/internal/pkg/mysql"
 	"github.com/convee/goblog/internal/routers"
 	"github.com/convee/goblog/pkg/redis"
 	"github.com/convee/goblog/pkg/shutdown"
@@ -39,7 +39,7 @@ func main() {
 	//model.Init(&cfg.ORM)
 
 	// init mysql
-	mysql.Init(&cfg.Mysql)
+	daos.Init(&cfg.Mysql)
 
 	// init elasticsearch
 	if !cfg.Elasticsearch.Disable {

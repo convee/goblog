@@ -1,33 +1,35 @@
 <!DOCTYPE html>
 <html lang="zh">
-    <head>
-        <meta charset="utf-8" />
-        <title>Chnage mode - Editor.md examples</title>
-        <link rel="stylesheet" href="css/style.css" />
-        <link rel="stylesheet" href="../css/editormd.css" />
-        <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
-        <style>
-            #codes textarea {display: none;}
-        </style>
-    </head>
-    <body>
-        <div id="layout">
-            <header>
-                <h1>Chnage mode</h1>
-                <p>Become to the code editor</p>
-                <p>Modes : <select id="modes">
-                    <option value="">select modes</option>
-                </select>&nbsp;&nbsp;Themes : 
-                    <select id="themes">
-                        <option selected="selected" value="">select themes</option>
-                    </select>
-                </p>
-            </header>
-            <div class="btns">
-                <button id="get-code-btn">Get code source</button>
-                <button id="fullscreen-btn">Fullscreen (Press F11 into, ESC exit)</button>
-            </div>
-            <div id="codes">
+<head>
+    <meta charset="utf-8"/>
+    <title>Chnage mode - Editor.md examples</title>
+    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="../css/editormd.css"/>
+    <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon"/>
+    <style>
+        #codes textarea {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div id="layout">
+    <header>
+        <h1>Chnage mode</h1>
+        <p>Become to the code editor</p>
+        <p>Modes : <select id="modes">
+            <option value="">select modes</option>
+        </select>&nbsp;&nbsp;Themes :
+            <select id="themes">
+                <option selected="selected" value="">select themes</option>
+            </select>
+        </p>
+    </header>
+    <div class="btns">
+        <button id="get-code-btn">Get code source</button>
+        <button id="fullscreen-btn">Fullscreen (Press F11 into, ESC exit)</button>
+    </div>
+    <div id="codes">
             <textarea id="html-code">&lt;!DOCTYPE html&gt;
 &lt;html lang="zh"&gt;
     &lt;head&gt;
@@ -67,7 +69,7 @@
         &lt;/script&gt;
     &lt;/body&gt;
 &lt;/html&gt;</textarea>
-<textarea id="javascript-code">$(function() {
+        <textarea id="javascript-code">$(function() {
     var testEditor = editormd("test-editormd", {
         width            : "90%",
         height           : 720,
@@ -82,7 +84,7 @@
         path             : '../lib/'
     });
 });</textarea>
-<textarea id="xml-code">&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+        <textarea id="xml-code">&lt;?xml version="1.0" encoding="utf-8" ?&gt;
 &lt;root&gt;
 	&lt;photo url="https://pandao.github.io/editor.md/examples/images/7.jpg"&gt;
 		&lt;title&gt;李健首张专辑《似水流年》封面&lt;/title&gt;
@@ -100,7 +102,7 @@
 		&lt;height&gt;360&lt;/height&gt;
 	&lt;/photo&gt;
 &lt;/root&gt;</textarea>
-<textarea id="ruby-code">#!/usr/bin/ruby
+        <textarea id="ruby-code">#!/usr/bin/ruby
 
 puts "Hello World!";
  
@@ -119,7 +121,7 @@ puts "I still need " +
      "to visit the " +
      "following cities:",
      cities - visited</textarea>
-<textarea id="json-code">{
+        <textarea id="json-code">{
     "employees": [
         {
             "firstName" : "Bill",
@@ -149,7 +151,7 @@ puts "I still need " +
         }
     ],
 }</textarea>
-<textarea id="php-code">&lt;?php
+        <textarea id="php-code">&lt;?php
     $app = new Phalcon\Mvc\Micro();
 
     //Set a route with the name "show-post"
@@ -210,7 +212,7 @@ puts "I still need " +
 
     $app->handle();
 ?&gt;</textarea>
-<textarea id="cpp-code">#include "dialog.h"
+        <textarea id="cpp-code">#include "dialog.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
@@ -221,7 +223,7 @@ int main(int argc, char *argv[])
 
     return a.exec();
 }</textarea>
-<textarea id="java-code">package com.demo.blog;
+        <textarea id="java-code">package com.demo.blog;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
@@ -258,7 +260,7 @@ public class BlogController extends Controller {
 	}
 }
 </textarea>
-<textarea id="actionscript-code">package com.flite
+        <textarea id="actionscript-code">package com.flite
 {
 	import flash.net.*;
 	import flash.events.*;
@@ -333,7 +335,7 @@ use warnings;
 
 print "Hello, World...\n";
 </textarea>
-           <textarea id="go-code">package main
+        <textarea id="go-code">package main
 
 import (
     "github.com/astaxie/beego"
@@ -361,7 +363,7 @@ def hello_world():
 
 if __name__ == '__main__':
     app.run()</textarea>
-           <textarea id="css-code">    body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,
+        <textarea id="css-code">    body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,
     th,td,hr,button,article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section {
         margin:0;padding:0;
     }
@@ -414,95 +416,91 @@ if __name__ == '__main__':
     ul {
         list-style: none;
     }</textarea></div>
-            <div id="test-editormd">
-                <textarea style="display:none;"></textarea>
-            </div>
-        </div>
-        <script src="js/jquery.min.js"></script>
-        <script src="../editormd.js"></script>
-        <script type="text/javascript">
-            var testEditor;
-            
-            function getCodeValue() {
-                return (localStorage.modeName) ? $("#"+localStorage.modeName.replace("text/", "").replace("c/c++", "cpp")+"-code").val() : $("#html-code").val();
+    <div id="test-editormd">
+        <textarea style="display:none;"></textarea>
+    </div>
+</div>
+<script src="js/jquery.min.js"></script>
+<script src="../editormd.js"></script>
+<script type="text/javascript">
+    var testEditor;
+
+    function getCodeValue() {
+        return (localStorage.modeName) ? $("#" + localStorage.modeName.replace("text/", "").replace("c/c++", "cpp") + "-code").val() : $("#html-code").val();
+    }
+
+    $(function () {
+        testEditor = editormd("test-editormd", {
+            width: "90%",
+            height: 720,
+            watch: false,
+            toolbar: false,
+            codeFold: true,
+            searchReplace: true,
+            placeholder: "Enjoy coding!",
+            value: getCodeValue(),
+            theme: (localStorage.theme) ? localStorage.theme : "default",
+            mode: (localStorage.mode) ? localStorage.mode : "text/html",
+            path: '../lib/'
+        });
+
+        $("#get-code-btn").bind("click", function () {
+            alert(testEditor.getValue());
+        });
+
+        $("#fullscreen-btn").bind("click", function () {
+            testEditor.fullscreen();
+        });
+
+        var select = $("#themes");
+
+        for (var i = 0, len = editormd.themes.length; i < len; i++) {
+            var theme = editormd.themes[i];
+            var selected = (localStorage.theme == theme) ? " selected=\"selected\"" : "";
+            select.append("<option value=\"" + theme + "\"" + selected + ">" + theme + "</option>");
+        }
+
+        select.change(function () {
+            var theme = $(this).val();
+
+            if (theme == "") {
+                alert("theme == \"\"");
+                return false;
             }
-            
-            $(function() {
-                testEditor = editormd("test-editormd", {
-                    width            : "90%",
-                    height           : 720,
-                    watch            : false,
-                    toolbar          : false,
-                    codeFold         : true,
-                    searchReplace    : true,
-                    placeholder      : "Enjoy coding!",
-                    value            : getCodeValue(),
-                    theme            : (localStorage.theme) ? localStorage.theme : "default",
-                    mode             : (localStorage.mode) ? localStorage.mode : "text/html",
-                    path             : '../lib/'
-                });
 
-                $("#get-code-btn").bind("click", function() {
-                    alert(testEditor.getValue());
-                });
+            localStorage.theme = theme;
+            testEditor.setTheme(theme);
+        });
 
-                $("#fullscreen-btn").bind("click", function() {
-                    testEditor.fullscreen();
-                });
-                
-                var select = $("#themes");
-                
-                for (var i = 0, len = editormd.themes.length; i < len; i ++)
-                {                    
-                    var theme    = editormd.themes[i];
-                    var selected = (localStorage.theme == theme) ? " selected=\"selected\"" : "";
-                    select.append("<option value=\"" + theme + "\"" + selected + ">" + theme + "</option>");
-                }
-                
-                select.change(function(){
-                    var theme = $(this).val();
-                    
-                    if (theme == "")
-                    {
-                        alert("theme == \"\"");
-                        return false;
-                    }
-                    
-                    localStorage.theme = theme;
-                    testEditor.setTheme(theme);
-                });   
-                
-                var modesSelect = $("#modes");
-                var modeNames = ["text/html", "javascript", "php", "text/xml", "text/json", "java", "actionscript", "perl", "go", "python", "c/c++", "css", "ruby"];
-                var modes     = ["text/html", "javascript", "php", "text/xml", "text/json", "clike", "javascript", "perl", "go", "python", "clike", "css", "ruby"];
-                
-                for (var i = 0, len = modes.length; i < len; i ++)
-                {                    
-                    var mode    = modes[i];
-                    var selected = (localStorage.modeName == modeNames[i]) ? " selected=\"selected\"" : "";
-                    modesSelect.append("<option value=\"" + mode + "\"" + selected + " name=\"" + modeNames[i] + "\"" + selected + ">" + modeNames[i] + "</option>");
-                }
-                
-                modesSelect.change(function(){
-                    var mode = $(this).val();
-                    var modeName = $(this).find("option:selected").attr("name");
-                    
-                    if (mode == "")
-                    {
-                        alert("mode == \"\"");
-                        return false;
-                    }
-                    
-                    localStorage.mode     = mode;
-                    localStorage.modeName = modeName;
-                    
-                    var code = getCodeValue();
-                    
-                    testEditor.setCodeMirrorOption("mode", mode);
-                    //testEditor.setCodeMirrorOption("value", code);
-                    testEditor.setValue(code);
-                });  
-            });
-        </script>
-    </body>
+        var modesSelect = $("#modes");
+        var modeNames = ["text/html", "javascript", "php", "text/xml", "text/json", "java", "actionscript", "perl", "go", "python", "c/c++", "css", "ruby"];
+        var modes = ["text/html", "javascript", "php", "text/xml", "text/json", "clike", "javascript", "perl", "go", "python", "clike", "css", "ruby"];
+
+        for (var i = 0, len = modes.length; i < len; i++) {
+            var mode = modes[i];
+            var selected = (localStorage.modeName == modeNames[i]) ? " selected=\"selected\"" : "";
+            modesSelect.append("<option value=\"" + mode + "\"" + selected + " name=\"" + modeNames[i] + "\"" + selected + ">" + modeNames[i] + "</option>");
+        }
+
+        modesSelect.change(function () {
+            var mode = $(this).val();
+            var modeName = $(this).find("option:selected").attr("name");
+
+            if (mode == "") {
+                alert("mode == \"\"");
+                return false;
+            }
+
+            localStorage.mode = mode;
+            localStorage.modeName = modeName;
+
+            var code = getCodeValue();
+
+            testEditor.setCodeMirrorOption("mode", mode);
+            //testEditor.setCodeMirrorOption("value", code);
+            testEditor.setValue(code);
+        });
+    });
+</script>
+</body>
 </html>

@@ -1,10 +1,9 @@
-package mysql
+package daos
 
 import (
 	"database/sql"
+	"github.com/convee/goblog/internal/model"
 	"log"
-
-	"github.com/convee/goblog/internal/pkg/model"
 )
 
 func GetCategories() (categories []model.Category, err error) {

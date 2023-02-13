@@ -2,33 +2,33 @@ package admin
 
 import (
 	"fmt"
+	"github.com/convee/artgo"
+	"github.com/convee/goblog/internal/daos"
+	"github.com/convee/goblog/internal/model"
+	"github.com/convee/goblog/internal/view"
 	"net/http"
 	"strconv"
-
-	"github.com/convee/goblog/internal/pkg/model"
-	"github.com/convee/goblog/internal/pkg/mysql"
-	"github.com/convee/goblog/internal/pkg/view"
 )
 
-func CategoryList(w http.ResponseWriter, r *http.Request) {
-	categories, err := mysql.GetCategories()
+func CategoryList(c *artgo.Context) {
+	categories, err := daos.GetCategories()
 	if err != nil {
 		fmt.Println("get categories err:", err)
 		return
 	}
 	data := make(map[string]interface{})
 	data["categories"] = categories
-	view.AdminRender(data, w, "category/list")
+	view.AdminRender(data, c, "category/list")
 }
 
-func CategoryAdd(w http.ResponseWriter, r *http.Request) {
+func CategoryAdd(c *artgo.Context) {
 	data := make(map[string]interface{})
-	id, _ := strconv.Atoi(r.FormValue("id"))
+	id, _ := strconv.Atoi(c.PostForm("id"))
 	var category model.Category
 	if id > 0 {
-		category = mysql.GetCategory(id)
+		category = daos.GetCategory(id)
 	}
-	categories, _ := mysql.GetCategories()
+	categories, _ := daos.GetCategories()
 	data["categories"] = categories
 
 	if category.Id > 0 {
@@ -36,32 +36,32 @@ func CategoryAdd(w http.ResponseWriter, r *http.Request) {
 		data["id"] = category.Id
 		data["name"] = category.Name
 	}
-	view.AdminRender(data, w, "category/add")
+	view.AdminRender(data, c, "category/add")
 }
 
-func CategoryDelete(w http.ResponseWriter, r *http.Request) {
+func CategoryDelete(c *artgo.Context) {
 	var category model.Category
-	category.Id, _ = strconv.Atoi(r.URL.Query().Get("id"))
-	_, err := mysql.CategoryDelete(category)
+	category.Id, _ = strconv.Atoi(c.Query("id"))
+	_, err := daos.CategoryDelete(category)
 	if err != nil {
 		data := make(map[string]interface{})
 		data["msg"] = "删除失败，请重试"
-		view.AdminRender(data, w, "401")
+		view.AdminRender(data, c, "401")
 		return
 	}
-	http.Redirect(w, r, "/admin/category", http.StatusFound)
+	c.Redirect(http.StatusFound, "/admin/category")
 }
 
-func CategorySave(w http.ResponseWriter, r *http.Request) {
+func CategorySave(c *artgo.Context) {
 	var category model.Category
-	category.Id, _ = strconv.Atoi(r.FormValue("id"))
-	category.Name = r.FormValue("name")
-	_, err := mysql.CategorySave(category)
+	category.Id, _ = strconv.Atoi(c.PostForm("id"))
+	category.Name = c.PostForm("name")
+	_, err := daos.CategorySave(category)
 	if err != nil {
 		data := make(map[string]interface{})
 		data["msg"] = "添加或修改失败，请重试"
-		view.AdminRender(data, w, "401")
+		view.AdminRender(data, c, "401")
 		return
 	}
-	http.Redirect(w, r, "/admin/category", http.StatusFound)
+	c.Redirect(http.StatusFound, "/admin/category")
 }

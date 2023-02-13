@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html lang="zh">
-    <head>
-        <meta charset="utf-8" />
-        <title>识别和解析 HTML 标签 - Editor.md examples</title>
-        <link rel="stylesheet" href="css/style.css" />
-        <link rel="stylesheet" href="../css/editormd.css" />
-        <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
-    </head>
-    <body>
-        <div id="layout">
-            <header>
-                <h1>识别和解析HTML标签</h1>
-                <p>HTML tags (filter) decode, You can increase safety by filtering the danger label.</p>
-                <p>注：虽然此功能能极大地扩展 Markdown 语法，但也面临着安全上的风险，所以默认是不开启的。</p>
-                <p>Update: 可以通过设置 `settings.htmlDecode = "style,script,iframe|on*"`来实现过滤指定标签及属性的解析，提高安全性；</p>
-            </header>
-            <div class="btns">
-                <button class="filter-btn" exp="true">Unfilter</button>
-                <button class="filter-btn" exp="style,script,iframe|*">Filter style,script,iframe|*</button>
-                <button class="filter-btn" exp="style,script,iframe|on*">Filter style,script,iframe|on*</button>
-                <button class="filter-btn" exp="style,script,iframe|onclick,title,onmouseover,onmouseout,style">Filter style,script,iframe|onclick,title,onmouseover,onmouseout,style</button>
-            </div>
-            <div id="test-editormd">
+<head>
+    <meta charset="utf-8"/>
+    <title>识别和解析 HTML 标签 - Editor.md examples</title>
+    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="../css/editormd.css"/>
+    <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon"/>
+</head>
+<body>
+<div id="layout">
+    <header>
+        <h1>识别和解析HTML标签</h1>
+        <p>HTML tags (filter) decode, You can increase safety by filtering the danger label.</p>
+        <p>注：虽然此功能能极大地扩展 Markdown 语法，但也面临着安全上的风险，所以默认是不开启的。</p>
+        <p>Update: 可以通过设置 `settings.htmlDecode = "style,script,iframe|on*"`来实现过滤指定标签及属性的解析，提高安全性；</p>
+    </header>
+    <div class="btns">
+        <button class="filter-btn" exp="true">Unfilter</button>
+        <button class="filter-btn" exp="style,script,iframe|*">Filter style,script,iframe|*</button>
+        <button class="filter-btn" exp="style,script,iframe|on*">Filter style,script,iframe|on*</button>
+        <button class="filter-btn" exp="style,script,iframe|onclick,title,onmouseover,onmouseout,style">Filter
+            style,script,iframe|onclick,title,onmouseover,onmouseout,style
+        </button>
+    </div>
+    <div id="test-editormd">
                 <textarea style="display:none;">#### 开启识别和解析 HTML 标签
 
 配置项：
@@ -90,30 +92,30 @@ alert("script");
 李健《最好不相见》
 
 &lt;iframe height=498 width=510 src="http://player.youku.com/embed/XMzA0MzIwMDgw" frameborder=0 allowfullscreen&gt;&lt;/iframe&gt;</textarea>
-            </div>
-        </div>
+    </div>
+</div>
 
-        <script src="js/jquery.min.js"></script>
-        <script src="../editormd.js"></script>
-        <script type="text/javascript">
-            var testEditor;
-            
-            $(function() {
-                testEditor = editormd("test-editormd", {
-                    width: "90%",
-                    height: 720,
-                    path : '../lib/',
-                    htmlDecode : true,   // Decode all html tags & attributes
-                    // Expression : tagName,tagName,...|attrName,attrName,...
-                    //htmlDecode : "style,script,iframe,sub,sup|on*"  // Filter tags, and all on* attributes
-                    //htmlDecode : "style,script,iframe,sub,sup|*"    // Filter tags, and all attributes
-                    //htmlDecode : "style,script,iframe,sub,sup,embed|onclick,title,onmouseover,onmouseout,style" // Filter tags, and your custom attributes
-                });
-                
-                $(".filter-btn").click(function(){
-                    testEditor.config("htmlDecode", $(this).attr("exp"));
-                });
-            });
-        </script>
-    </body>
+<script src="js/jquery.min.js"></script>
+<script src="../editormd.js"></script>
+<script type="text/javascript">
+    var testEditor;
+
+    $(function () {
+        testEditor = editormd("test-editormd", {
+            width: "90%",
+            height: 720,
+            path: '../lib/',
+            htmlDecode: true,   // Decode all html tags & attributes
+            // Expression : tagName,tagName,...|attrName,attrName,...
+            //htmlDecode : "style,script,iframe,sub,sup|on*"  // Filter tags, and all on* attributes
+            //htmlDecode : "style,script,iframe,sub,sup|*"    // Filter tags, and all attributes
+            //htmlDecode : "style,script,iframe,sub,sup,embed|onclick,title,onmouseover,onmouseout,style" // Filter tags, and your custom attributes
+        });
+
+        $(".filter-btn").click(function () {
+            testEditor.config("htmlDecode", $(this).attr("exp"));
+        });
+    });
+</script>
+</body>
 </html>

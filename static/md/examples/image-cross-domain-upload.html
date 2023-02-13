@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh">
-    <head>
-        <meta charset="utf-8" />
-        <title>图片跨域上传示例 - Editor.md examples</title>
-        <link rel="stylesheet" href="css/style.css" />
-        <link rel="stylesheet" href="../css/editormd.css" />
-        <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
-    </head>
-    <body>
-        <div id="layout" style="height: 2000px;background: #f6f6f6;">
-            <header>
-                <h1>图片跨域上传示例</h1>
-                <p>Image cross-domain upload example.</p>
-            </header>
-            <div id="test-editormd">
+<head>
+    <meta charset="utf-8"/>
+    <title>图片跨域上传示例 - Editor.md examples</title>
+    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="../css/editormd.css"/>
+    <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon"/>
+</head>
+<body>
+<div id="layout" style="height: 2000px;background: #f6f6f6;">
+    <header>
+        <h1>图片跨域上传示例</h1>
+        <p>Image cross-domain upload example.</p>
+    </header>
+    <div id="test-editormd">
                 <textarea style="display:none;">#### Settings
 
 ```javascript
@@ -76,34 +76,34 @@ exit;
     //console.log(imageDialog, window.parent.document, window.parent, query);
 &lt;/script&gt;
 ```</textarea>
-            </div>
-        </div>        
-        <script src="js/jquery.min.js"></script>
-        <script src="../editormd.js"></script>
-        <script type="text/javascript">
-            $(function() {
-                var testEditor = editormd("test-editormd", {
-                    width             : "90%",
-                    height            : 640,
-                    markdown          : "",
-                    path              : '../lib/',
-                    imageUpload       : true,
-                    imageFormats      : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
-                    imageUploadURL    : "http://www.ipandao.com/editor.md/examples/php/cross-domain-upload.php?test=dfdf",
-                    crossDomainUpload : true,
-                    uploadCallbackURL : "http://localhost/editor.md/examples/php/upload_callback.html?test=dfdf"
-                    
-                    /*
-                     跨域时，上传的图片服务器后台只需要返回一个跳转 URL 并跳转到原页面同域下的 callback 页面，结构如下：
-                     {
-                        success   : 0 | 1,   // 0 表示上传失败，1 表示上传成功
-                        message   : "提示的信息，上传成功或上传失败及错误信息等。",
-                        dialog_id : $_GET['dialog_id'],
-                        url       : "远程图片地址"    // 上传成功时才返回
-                     }
-                     */
-                });
-            });
-        </script>
-    </body>
+    </div>
+</div>
+<script src="js/jquery.min.js"></script>
+<script src="../editormd.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var testEditor = editormd("test-editormd", {
+            width: "90%",
+            height: 640,
+            markdown: "",
+            path: '../lib/',
+            imageUpload: true,
+            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL: "http://www.ipandao.com/editor.md/examples/php/cross-domain-upload.php?test=dfdf",
+            crossDomainUpload: true,
+            uploadCallbackURL: "http://localhost/editor.md/examples/php/upload_callback.html?test=dfdf"
+
+            /*
+             跨域时，上传的图片服务器后台只需要返回一个跳转 URL 并跳转到原页面同域下的 callback 页面，结构如下：
+             {
+                success   : 0 | 1,   // 0 表示上传失败，1 表示上传成功
+                message   : "提示的信息，上传成功或上传失败及错误信息等。",
+                dialog_id : $_GET['dialog_id'],
+                url       : "远程图片地址"    // 上传成功时才返回
+             }
+             */
+        });
+    });
+</script>
+</body>
 </html>

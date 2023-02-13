@@ -1,15 +1,16 @@
 {{define "content"}}
-    <div class="container">
-        <div class="panel">
-            <div class="text-center">
-                <div class="widget widget_sentence">
-                    <ul>
-                        {{range .tags}}
-                        <li><a style={{tagStyle .Count}} href="/?tag_id={{.Id}}">{{.Name}} <span class="badge">{{.Count}}</span></a></li>
-                        {{end}}
-                    </ul>
-                </div>
+<div class="container">
+    <div class="panel">
+        <div class="text-center">
+            <div class="widget widget_sentence">
+                <ul>
+                    {{range .tags}}
+                    <li><a style={{tagStyle .Count}} href="/?tag_id={{.Id}}">{{.Name}} <span
+                            class="badge">{{.Count}}</span></a></li>
+                    {{end}}
+                </ul>
             </div>
         </div>
     </div>
+</div>
 {{end}}

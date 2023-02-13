@@ -1,8 +1,8 @@
-package mysql
+package daos
 
 import (
 	"database/sql"
-	"github.com/convee/goblog/internal/pkg/model"
+	"github.com/convee/goblog/internal/model"
 	"github.com/convee/goblog/pkg/logger"
 	"go.uber.org/zap"
 	"strconv"

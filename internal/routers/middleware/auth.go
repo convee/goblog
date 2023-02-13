@@ -1,12 +1,16 @@
 package middleware
 
-import "net/http"
+import (
+	"github.com/convee/artgo"
+	"net/http"
+)
 
-func AuthWithCookie(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if cookie, err := r.Cookie("email"); err != nil || cookie.Value == "" {
-			http.Redirect(w, r, "/admin/login", http.StatusFound)
+func AuthWithCookie() artgo.HandlerFunc {
+	return func(c *artgo.Context) {
+		if cookie, err := c.Req.Cookie("email"); err != nil || cookie.Value == "" {
+			c.Redirect(http.StatusFound, "/login")
+			return
 		}
-		next.ServeHTTP(w, r)
-	})
+		c.Next()
+	}
 }

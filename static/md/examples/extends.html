@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh">
-    <head>
-        <meta charset="utf-8" />
-        <title>Expanded Editor.md - Editor.md examples</title>
-        <link rel="stylesheet" href="css/style.css" />
-        <link rel="stylesheet" href="../css/editormd.css" />
-        <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
-    </head>
-    <body>
-        <div id="layout">
-            <header>
-                <h1>Expanded Editor.md</h1>
-                <p>Expanded of member methods and properties</p>
-            </header>
-            <div id="test-editormd">                
+<head>
+    <meta charset="utf-8"/>
+    <title>Expanded Editor.md - Editor.md examples</title>
+    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="../css/editormd.css"/>
+    <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon"/>
+</head>
+<body>
+<div id="layout">
+    <header>
+        <h1>Expanded Editor.md</h1>
+        <p>Expanded of member methods and properties</p>
+    </header>
+    <div id="test-editormd">
                 <textarea style="display:none;">### Expanded Editor.md
 
 ```javascript
@@ -81,73 +81,73 @@ $(function() {
 });
 ```
 </textarea>
-            </div>
-        </div>        
-        <script src="js/jquery.min.js"></script>
-        <script src="../editormd.js"></script>
-        <script type="text/javascript">
-            var testEditor;
-            
-            function EditormdExtend() {
+    </div>
+</div>
+<script src="js/jquery.min.js"></script>
+<script src="../editormd.js"></script>
+<script type="text/javascript">
+    var testEditor;
 
-                this.extend("methodC", function() {
-                    console.log("methodC");
-                });
+    function EditormdExtend() {
 
-                // or
-                testEditor.extend("methodA", function() {
-                    console.log("methodA");
-                });
+        this.extend("methodC", function () {
+            console.log("methodC");
+        });
 
-                // one by one setting
-                this.set("propertyA", "propertyA");
-                this.set("methodE", function() {
-                    console.log("mothodE", this);
-                });
+        // or
+        testEditor.extend("methodA", function () {
+            console.log("methodA");
+        });
 
-                // mutil
-                this.extend({
-                    propertyA : "propertyAAAA", // override, you can override other default method.
-                    propertyB : "propertyB",
-                    methodD : function() {
-                        console.log("methodD");
-                    }
-                });
+        // one by one setting
+        this.set("propertyA", "propertyA");
+        this.set("methodE", function () {
+            console.log("mothodE", this);
+        });
 
-                this.methodB = function() {
-                    console.log("methodB");
-                };
-
-                testEditor.methodA();
-                testEditor.methodB();
-                this.methodC();
-                this.methodE();
-                editormd.methodOne();
-
-                console.log(this, this.propertyA);
+        // mutil
+        this.extend({
+            propertyA: "propertyAAAA", // override, you can override other default method.
+            propertyB: "propertyB",
+            methodD: function () {
+                console.log("methodD");
             }
-            
-            editormd.fn.customMethod = function() {
-                console.log("customMethod", this);
-            };
-            
-            $(function() {
-                editormd.methodOne = function() {
-                    console.log("editormd.methodOne");
-                };
-                
-                testEditor = editormd("test-editormd", {
-                    width  : "90%",
-                    height : 720,
-                    path   : '../lib/',
-                    onload : function() {
-                        this.customMethod();
-                        $.proxy(EditormdExtend, this)();
-                    }
-                });
-                
-                editormd.methodOne();
-            });
-        </script>
-    </body>
+        });
+
+        this.methodB = function () {
+            console.log("methodB");
+        };
+
+        testEditor.methodA();
+        testEditor.methodB();
+        this.methodC();
+        this.methodE();
+        editormd.methodOne();
+
+        console.log(this, this.propertyA);
+    }
+
+    editormd.fn.customMethod = function () {
+        console.log("customMethod", this);
+    };
+
+    $(function () {
+        editormd.methodOne = function () {
+            console.log("editormd.methodOne");
+        };
+
+        testEditor = editormd("test-editormd", {
+            width: "90%",
+            height: 720,
+            path: '../lib/',
+            onload: function () {
+                this.customMethod();
+                $.proxy(EditormdExtend, this)();
+            }
+        });
+
+        editormd.methodOne();
+    });
+</script>
+</body>
 </html>

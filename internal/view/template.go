@@ -2,9 +2,9 @@ package view
 
 import (
 	"fmt"
+	"github.com/convee/artgo"
 	"html/template"
 	"log"
-	"net/http"
 	"time"
 
 	"github.com/convee/goblog/conf"
@@ -46,7 +46,7 @@ var funcMap = template.FuncMap{
 	},
 }
 
-func Render(data map[string]interface{}, w http.ResponseWriter, tpl string) {
+func Render(data map[string]interface{}, c *artgo.Context, tpl string) {
 	var tplPaths []string
 	tplPaths = append(tplPaths, "tpl/default/layout.html")
 	tplPaths = append(tplPaths, "tpl/default/"+tpl+".html")
@@ -65,17 +65,12 @@ func Render(data map[string]interface{}, w http.ResponseWriter, tpl string) {
 	if _, ok := data["description"]; !ok {
 		data["description"] = "Go Markdown 博客系统"
 	}
-	t.Execute(w, data)
+	t.Execute(c.Writer, data)
 }
 
-func AdminRender(data map[string]interface{}, w http.ResponseWriter, tpl string) {
+func AdminRender(data map[string]interface{}, c *artgo.Context, tpl string) {
 	var tplPaths []string
 	tplPaths = append(tplPaths, "tpl/admin/"+tpl+".html")
-	t, err := template.ParseFiles(tplPaths...)
-	if err != nil {
-		log.Println("posts template err:", err)
-		return
-	}
 	data["cdn"] = conf.Conf.App.Cdn
-	t.Execute(w, data)
+	_ = c.Render(data, tplPaths...)
 }

@@ -1,6 +1,5 @@
 package utils
 
-
 func RemoveDuplicateElement(slice []string) []string {
 	result := make([]string, 0, len(slice))
 	temp := map[string]struct{}{}
@@ -12,7 +11,6 @@ func RemoveDuplicateElement(slice []string) []string {
 	}
 	return result
 }
-
 
 func StrInArray(str string, strArr []string) bool {
 	for _, v := range strArr {

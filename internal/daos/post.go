@@ -1,13 +1,12 @@
-package mysql
+package daos
 
 import (
 	"database/sql"
 	"encoding/json"
+	"github.com/convee/goblog/internal/model"
 	"log"
 	"strconv"
 	"strings"
-
-	"github.com/convee/goblog/internal/pkg/model"
 )
 
 type PostParams struct {

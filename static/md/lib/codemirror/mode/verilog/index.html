@@ -8,25 +8,28 @@
 <script src="../../lib/codemirror.js"></script>
 <script src="../../addon/edit/matchbrackets.js"></script>
 <script src="verilog.js"></script>
-<style type="text/css">.CodeMirror {border-top: 1px solid black; border-bottom: 1px solid black;}</style>
+<style type="text/css">.CodeMirror {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}</style>
 <div id=nav>
-  <a href="http://codemirror.net"><h1>CodeMirror</h1><img id=logo src="../../doc/logo.png"></a>
+    <a href="http://codemirror.net"><h1>CodeMirror</h1><img id=logo src="../../doc/logo.png"></a>
 
-  <ul>
-    <li><a href="../../index.html">Home</a>
-    <li><a href="../../doc/manual.html">Manual</a>
-    <li><a href="https://github.com/codemirror/codemirror">Code</a>
-  </ul>
-  <ul>
-    <li><a href="../index.html">Language modes</a>
-    <li><a class=active href="#">Verilog/SystemVerilog</a>
-  </ul>
+    <ul>
+        <li><a href="../../index.html">Home</a>
+        <li><a href="../../doc/manual.html">Manual</a>
+        <li><a href="https://github.com/codemirror/codemirror">Code</a>
+    </ul>
+    <ul>
+        <li><a href="../index.html">Language modes</a>
+        <li><a class=active href="#">Verilog/SystemVerilog</a>
+    </ul>
 </div>
 
 <article>
-<h2>SystemVerilog mode</h2>
+    <h2>SystemVerilog mode</h2>
 
-<div><textarea id="code" name="code">
+    <div><textarea id="code" name="code">
 // Literals
 1'b0
 1'bx
@@ -97,24 +100,26 @@ endclass
 
 </textarea></div>
 
-<script>
-  var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-    lineNumbers: true,
-    matchBrackets: true,
-    mode: {
-      name: "verilog",
-      noIndentKeywords: ["package"]
-    }
-  });
-</script>
+    <script>
+        var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            lineNumbers: true,
+            matchBrackets: true,
+            mode: {
+                name: "verilog",
+                noIndentKeywords: ["package"]
+            }
+        });
+    </script>
 
-<p>
-Syntax highlighting and indentation for the Verilog and SystemVerilog languages (IEEE 1800).
-<h2>Configuration options:</h2>
-  <ul>
-    <li><strong>noIndentKeywords</strong> - List of keywords which should not cause identation to increase. E.g. ["package", "module"]. Default: None</li>
-  </ul>
-</p>
+    <p>
+        Syntax highlighting and indentation for the Verilog and SystemVerilog languages (IEEE 1800).
+    <h2>Configuration options:</h2>
+    <ul>
+        <li><strong>noIndentKeywords</strong> - List of keywords which should not cause identation to increase. E.g.
+            ["package", "module"]. Default: None
+        </li>
+    </ul>
+    </p>
 
-<p><strong>MIME types defined:</strong> <code>text/x-verilog</code> and <code>text/x-systemverilog</code>.</p>
+    <p><strong>MIME types defined:</strong> <code>text/x-verilog</code> and <code>text/x-systemverilog</code>.</p>
 </article>

@@ -5,12 +5,13 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{{.title}}|{{.name}}</title>
-    <meta name="keywords" content="convee,blog,markdown,php,go,golang,git,github,it,shell,linux,柚子吧,程序员,博客,源码,架构,算法,数据结构,互联网,程序化广告,教程" />
-    <meta name="description" content="{{.description}}" />
+    <meta name="keywords"
+          content="convee,blog,markdown,php,go,golang,git,github,it,shell,linux,柚子吧,程序员,博客,源码,架构,算法,数据结构,互联网,程序化广告,教程"/>
+    <meta name="description" content="{{.description}}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="{{.cdn}}/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="{{.cdn}}/css/style.css">
-    <link rel="stylesheet" href="{{.cdn}}/md/css/editormd.preview.css" />
+    <link rel="stylesheet" href="{{.cdn}}/md/css/editormd.preview.css"/>
 </head>
 
 <body>
@@ -71,15 +72,15 @@
 
 <script src="{{.cdn}}/md/editormd.js"></script>
 <script type="text/javascript">
-    $(function() {
+    $(function () {
         var testEditormdView2;
         testEditormdView2 = editormd.markdownToHTML("test-editormd-view2", {
-            htmlDecode      : "style,script,iframe",  // you can filter tags decode
-            emoji           : true,
-            taskList        : true,
-            tex             : true,  // 默认不解析
-            flowChart       : true,  // 默认不解析
-            sequenceDiagram : true,  // 默认不解析
+            htmlDecode: "style,script,iframe",  // you can filter tags decode
+            emoji: true,
+            taskList: true,
+            tex: true,  // 默认不解析
+            flowChart: true,  // 默认不解析
+            sequenceDiagram: true,  // 默认不解析
         });
     });
     const gitalk = new Gitalk({

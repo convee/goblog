@@ -1,18 +1,17 @@
 package front
 
 import (
-	"net/http"
-
-	"github.com/convee/goblog/internal/pkg/mysql"
-	"github.com/convee/goblog/internal/pkg/view"
+	"github.com/convee/artgo"
+	"github.com/convee/goblog/internal/daos"
+	"github.com/convee/goblog/internal/view"
 )
 
-func Page(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Query().Get("id")
-	page := mysql.GetPage(id)
+func Page(c *artgo.Context) {
+	id := c.Query("id")
+	page := daos.GetPage(id)
 	data := make(map[string]interface{})
 	data["title"] = page.Title
 	data["description"] = page.Title
 	data["page"] = page
-	view.Render(data, w, "page")
+	view.Render(data, c, "page")
 }

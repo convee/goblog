@@ -1,44 +1,48 @@
 package routers
 
 import (
+	"github.com/convee/artgo"
 	"github.com/convee/goblog/internal/handler/admin"
 	"github.com/convee/goblog/internal/handler/front"
 	"github.com/convee/goblog/internal/routers/middleware"
 	"net/http"
 )
 
-func faviconHandler(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "static/favicon.ico")
-}
+func InitRouter() *artgo.Engine {
+	r := artgo.New()
+	r.Use(middleware.Logger())
+	r.Use(middleware.Recover())
 
-func InitRouter() *http.ServeMux {
-	mux := &http.ServeMux{}
-	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-	mux.Handle("/", middleware.RecoverWrap(http.HandlerFunc(front.Index)))
-	mux.Handle("/favicon.ico", middleware.RecoverWrap(http.HandlerFunc(faviconHandler)))
-	mux.Handle("/post", middleware.RecoverWrap(http.HandlerFunc(front.PostInfo)))
-	mux.Handle("/page", middleware.RecoverWrap(http.HandlerFunc(front.Page)))
-	mux.Handle("/tag", middleware.RecoverWrap(http.HandlerFunc(front.Tag)))
+	r.Static("/static/", "static")
+	r.GET("/", front.Index)
+	r.GET("/favicon.ico", func(c *artgo.Context) {
+		http.ServeFile(c.Writer, c.Req, "static/favicon.ico")
+	})
+	r.GET("/post", front.PostInfo)
+	r.GET("/page", front.Page)
+	r.GET("/tag", front.Tag)
 
-	mux.Handle("/admin/login", middleware.RecoverWrap(http.HandlerFunc(admin.Login)))
-	mux.Handle("/admin/register", middleware.RecoverWrap(http.HandlerFunc(admin.Register)))
-	mux.Handle("/admin/signin", middleware.RecoverWrap(http.HandlerFunc(admin.Signin)))
-	mux.Handle("/admin/signup", middleware.RecoverWrap(http.HandlerFunc(admin.Signup)))
+	r.GET("/login", admin.Login)
+	r.GET("/register", admin.Register)
+	r.POST("/signin", admin.Signin)
+	r.POST("/signup", admin.Signup)
 
-	mux.Handle("/admin/logout", middleware.RecoverWrap(middleware.AuthWithCookie(http.HandlerFunc(admin.Logout))))
-	mux.Handle("/admin", middleware.RecoverWrap(middleware.AuthWithCookie(http.HandlerFunc(admin.PostList))))
-	mux.Handle("/admin/post/add", middleware.RecoverWrap(middleware.AuthWithCookie(http.HandlerFunc(admin.PostAdd))))
-	mux.Handle("/admin/post/save", middleware.RecoverWrap(middleware.AuthWithCookie(http.HandlerFunc(admin.PostSave))))
-	mux.Handle("/admin/post/delete", middleware.RecoverWrap(middleware.AuthWithCookie(http.HandlerFunc(admin.PostDelete))))
-	mux.Handle("/admin/page", middleware.RecoverWrap(middleware.AuthWithCookie(http.HandlerFunc(admin.PageList))))
-	mux.Handle("/admin/page/add", middleware.RecoverWrap(middleware.AuthWithCookie(http.HandlerFunc(admin.PageAdd))))
-	mux.Handle("/admin/page/save", middleware.RecoverWrap(middleware.AuthWithCookie(http.HandlerFunc(admin.PageSave))))
-	mux.Handle("/admin/page/delete", middleware.RecoverWrap(middleware.AuthWithCookie(http.HandlerFunc(admin.PageDelete))))
-	mux.Handle("/admin/category", middleware.RecoverWrap(middleware.AuthWithCookie(http.HandlerFunc(admin.CategoryList))))
-	mux.Handle("/admin/category/add", middleware.RecoverWrap(middleware.AuthWithCookie(http.HandlerFunc(admin.CategoryAdd))))
-	mux.Handle("/admin/category/save", middleware.RecoverWrap(middleware.AuthWithCookie(http.HandlerFunc(admin.CategorySave))))
-	mux.Handle("/admin/category/delete", middleware.RecoverWrap(middleware.AuthWithCookie(http.HandlerFunc(admin.CategoryDelete))))
-	mux.Handle("/admin/tag", middleware.RecoverWrap(middleware.AuthWithCookie(http.HandlerFunc(admin.TagList))))
+	adminGroup := r.Group("/admin")
+	adminGroup.Use(middleware.AuthWithCookie())
+	adminGroup.POST("/logout", admin.Logout)
+	adminGroup.GET("/", admin.PostList)
+	adminGroup.GET("/post/add", admin.PostAdd)
+	adminGroup.POST("/post/save", admin.PostSave)
+	adminGroup.POST("/post/delete", admin.PostDelete)
+	adminGroup.GET("/page", admin.PageList)
+	adminGroup.GET("/page/add", admin.PageAdd)
+	adminGroup.POST("/page/save", admin.PageSave)
+	adminGroup.POST("/page/delete", admin.PageDelete)
+	adminGroup.GET("/category", admin.CategoryList)
+	adminGroup.GET("/category/add", admin.CategoryAdd)
+	adminGroup.POST("/category/save", admin.CategorySave)
+	adminGroup.POST("/category/delete", admin.CategoryDelete)
+	adminGroup.GET("/tag", admin.TagList)
 
-	return mux
+	return r
 }

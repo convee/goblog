@@ -2,19 +2,18 @@ package admin
 
 import (
 	"fmt"
-	"net/http"
-
-	"github.com/convee/goblog/internal/pkg/mysql"
-	"github.com/convee/goblog/internal/pkg/view"
+	"github.com/convee/artgo"
+	"github.com/convee/goblog/internal/daos"
+	"github.com/convee/goblog/internal/view"
 )
 
-func TagList(w http.ResponseWriter, r *http.Request) {
-	tags, err := mysql.GetTags()
+func TagList(c *artgo.Context) {
+	tags, err := daos.GetTags()
 	if err != nil {
 		fmt.Println("get ags err:", err)
 		return
 	}
 	data := make(map[string]interface{})
 	data["tags"] = tags
-	view.AdminRender(data, w, "tag/list")
+	view.AdminRender(data, c, "tag/list")
 }

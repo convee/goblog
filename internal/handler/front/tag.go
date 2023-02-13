@@ -1,17 +1,16 @@
 package front
 
 import (
-	"net/http"
-
-	"github.com/convee/goblog/internal/pkg/mysql"
-	"github.com/convee/goblog/internal/pkg/view"
+	"github.com/convee/artgo"
+	"github.com/convee/goblog/internal/daos"
+	"github.com/convee/goblog/internal/view"
 )
 
-func Tag(w http.ResponseWriter, r *http.Request) {
-	tags, _ := mysql.GetTags()
+func Tag(c *artgo.Context) {
+	tags, _ := daos.GetTags()
 	data := make(map[string]interface{})
 	data["title"] = "标签"
 	data["description"] = "柚子吧的博客标签"
 	data["tags"] = tags
-	view.Render(data, w, "tag")
+	view.Render(data, c, "tag")
 }

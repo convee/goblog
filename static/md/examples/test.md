@@ -11,16 +11,27 @@
 [TOC]
 
 # Heading 1
-## Heading 2               
+
+## Heading 2
+
 ### Heading 3
+
 #### Heading 4
+
 ##### Heading 5
+
 ###### Heading 6
+
 # Heading 1 link [Heading link](https://github.com/pandao/editor.md "Heading link")
+
 ## Heading 2 link [Heading link](https://github.com/pandao/editor.md "Heading link")
+
 ### Heading 3 link [Heading link](https://github.com/pandao/editor.md "Heading link")
+
 #### Heading 4 link [Heading link](https://github.com/pandao/editor.md "Heading link") Heading link [Heading link](https://github.com/pandao/editor.md "Heading link")
+
 ##### Heading 5 link [Heading link](https://github.com/pandao/editor.md "Heading link")
+
 ###### Heading 6 link [Heading link](https://github.com/pandao/editor.md "Heading link")
 
 #### 标题（用底线的形式）Heading (underline)
@@ -32,6 +43,7 @@ This is an H2
 -------------
 
 ### 字符效果和横线等
+
                 
 ----
 
@@ -46,14 +58,15 @@ This is an H2
 
 > 即更长的单词或短语的缩写形式，前提是开启识别HTML标签时，已默认开启
 
-The <abbr title="Hyper Text Markup Language">HTML</abbr> specification is maintained by the <abbr title="World Wide Web Consortium">W3C</abbr>.
+The <abbr title="Hyper Text Markup Language">HTML</abbr> specification is maintained by
+the <abbr title="World Wide Web Consortium">W3C</abbr>.
 
 ### 引用 Blockquotes
 
 > 引用文本 Blockquotes
 
 引用的行内混合 Blockquotes
-                    
+
 > 引用：如果想要插入空白换行`即<br />标签`，在插入处先键入两个以上的空格然后回车即可，[普通链接](http://localhost/)。
 
 ### 锚点与链接 Links
@@ -64,13 +77,13 @@ The <abbr title="Hyper Text Markup Language">HTML</abbr> specification is mainta
 
 直接链接：<https://github.com>
 
-[锚点链接][anchor-id] 
+[锚点链接][anchor-id]
 
 [anchor-id]: http://www.this-anchor-link.com/
 
 [mailto:test.test@gmail.com](mailto:test.test@gmail.com)
 
-GFM a-tail link @pandao  邮箱地址自动链接 test.test@gmail.com  www@vip.qq.com
+GFM a-tail link @pandao 邮箱地址自动链接 test.test@gmail.com www@vip.qq.com
 
 > @pandao
 
@@ -87,7 +100,7 @@ GFM a-tail link @pandao  邮箱地址自动链接 test.test@gmail.com  www@vip.q
     <?php
         echo "Hello world!";
     ?>
-    
+
 预格式化文本：
 
     | First Header  | Second Header |
@@ -181,11 +194,11 @@ Image:
 ### 列表 Lists
 
 #### 无序列表（减号）Unordered Lists (-)
-                
+
 - 列表一
 - 列表二
 - 列表三
-     
+
 #### 无序列表（星号）Unordered Lists (*)
 
 * 列表一
@@ -193,7 +206,7 @@ Image:
 * 列表三
 
 #### 无序列表（加号和嵌套）Unordered Lists (+)
-                
+
 + 列表一
 + 列表二
     + 列表二-1
@@ -205,7 +218,7 @@ Image:
     * 列表三
 
 #### 有序列表 Ordered Lists (-)
-                
+
 1. 第一行
 2. 第二行
 3. 第三行
@@ -221,9 +234,9 @@ Image:
 - [ ] GFM task list 4
     - [ ] GFM task list 4-1
     - [ ] GFM task list 4-2
-                
+
 ----
-                    
+
 ### 绘制表格 Tables
 
 | 项目        | 价格   |  数量  |
@@ -231,11 +244,11 @@ Image:
 | 计算机      | $1600   |   5     |
 | 手机        |   $12   |   12   |
 | 管线        |    $1    |  234  |
-                    
+
 First Header  | Second Header
 ------------- | -------------
 Content Cell  | Content Cell
-Content Cell  | Content Cell 
+Content Cell  | Content Cell
 
 | First Header  | Second Header |
 | ------------- | ------------- |
@@ -258,17 +271,18 @@ Content Cell  | Content Cell
 | Computer  | $1600 |
 | Phone     |   $12 |
 | Pipe      |    $1 |
+
                 
 ----
 
 #### 特殊符号 HTML Entities Codes
 
-&copy; &  &uml; &trade; &iexcl; &pound;
-&amp; &lt; &gt; &yen; &euro; &reg; &plusmn; &para; &sect; &brvbar; &macr; &laquo; &middot; 
+&copy; & &uml; &trade; &iexcl; &pound;
+&amp; &lt; &gt; &yen; &euro; &reg; &plusmn; &para; &sect; &brvbar; &macr; &laquo; &middot;
 
-X&sup2; Y&sup3; &frac34; &frac14;  &times;  &divide;   &raquo;
+X&sup2; Y&sup3; &frac34; &frac14; &times; &divide; &raquo;
 
-18&ordm;C  &quot;  &apos;
+18&ordm;C &quot; &apos;
 
 [========]
 
@@ -281,17 +295,17 @@ X&sup2; Y&sup3; &frac34; &frac14;  &times;  &divide;   &raquo;
 - [x] :smiley: @mentions, :smiley: #refs, [links](), **formatting**, and <del>tags</del> supported :editormd-logo:;
 - [x] list syntax required (any unordered or ordered list supported) :editormd-logo-3x:;
 - [x] [ ] :smiley: this is a complete item :smiley:;
-- [ ] []this is an incomplete item [test link](#) :fa-star: @pandao; 
+- [ ] []this is an incomplete item [test link](#) :fa-star: @pandao;
 - [ ] [ ]this is an incomplete item :fa-star: :fa-gear:;
     - [ ] :smiley: this is an incomplete item [test link](#) :fa-star: :fa-gear:;
     - [ ] :smiley: this is  :fa-star: :fa-gear: an incomplete item [test link](#);
- 
+
 #### 反斜杠 Escape
 
 \*literal asterisks\*
 
 [========]
-            
+
 ### 科学公式 TeX(KaTeX)
 
 $$E=mc^2$$
@@ -301,7 +315,7 @@ $$E=mc^2$$
 $$x > y$$
 
 $$\(\sqrt{3x-1}+(1+x)^2\)$$
-                    
+
 $$\sin(\alpha)^{\theta}=\sum_{i=0}^{n}(x^i + \cos(f))$$
 
 多行公式：
@@ -352,9 +366,9 @@ cond(no)->op
 ```
 
 [========]
-                    
+
 ### 绘制序列图 Sequence Diagram
-                    
+
 ```seq
 Andrew->China: Says Hello 
 Note right of China: China thinks\nabout it 

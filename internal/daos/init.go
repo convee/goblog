@@ -1,4 +1,4 @@
-package mysql
+package daos
 
 import (
 	"database/sql"

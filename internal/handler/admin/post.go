@@ -2,23 +2,24 @@ package admin
 
 import (
 	"fmt"
+	"github.com/convee/artgo"
+	"github.com/convee/goblog/internal/daos"
+	"github.com/convee/goblog/internal/es"
+	"github.com/convee/goblog/internal/model"
+	"github.com/convee/goblog/internal/utils"
+	"github.com/convee/goblog/internal/view"
 	"net/http"
 	"strconv"
 	"strings"
 
 	"github.com/convee/goblog/conf"
-	"github.com/convee/goblog/internal/pkg/es"
-	"github.com/convee/goblog/internal/pkg/model"
-	"github.com/convee/goblog/internal/pkg/mysql"
-	"github.com/convee/goblog/internal/pkg/utils"
-	"github.com/convee/goblog/internal/pkg/view"
 )
 
-func PostList(w http.ResponseWriter, r *http.Request) {
-	categoryId := r.URL.Query().Get("category_id")
-	tagId := r.URL.Query().Get("tag_id")
-	perPage, _ := strconv.Atoi(r.URL.Query().Get("per_page"))
-	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
+func PostList(c *artgo.Context) {
+	categoryId := c.Query("category_id")
+	tagId := c.Query("tag_id")
+	perPage, _ := strconv.Atoi(c.Query("per_page"))
+	page, _ := strconv.Atoi(c.Query("page"))
 	if perPage <= 0 {
 		perPage = 20
 	}
@@ -30,7 +31,7 @@ func PostList(w http.ResponseWriter, r *http.Request) {
 	if prePage <= 1 {
 		prePage = 1
 	}
-	posts, err := mysql.GetPosts(mysql.PostParams{
+	posts, err := daos.GetPosts(daos.PostParams{
 		CategoryId: categoryId,
 		TagId:      tagId,
 		PerPage:    perPage,
@@ -40,7 +41,7 @@ func PostList(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("get posts err:", err)
 		return
 	}
-	categories, err := mysql.GetCategories()
+	categories, err := daos.GetCategories()
 	if err != nil {
 		fmt.Println("get categories err:", err)
 		return
@@ -58,7 +59,7 @@ func PostList(w http.ResponseWriter, r *http.Request) {
 	data["page"] = page
 	data["pre_url"] = getPageUrl(categoryId, tagId, strconv.Itoa(prePage))
 	data["next_url"] = getPageUrl(categoryId, tagId, strconv.Itoa(nextPage))
-	view.AdminRender(data, w, "post/list")
+	view.AdminRender(data, c, "post/list")
 }
 
 func getPageUrl(categoryId string, tagId string, page string) string {
@@ -73,14 +74,14 @@ func getPageUrl(categoryId string, tagId string, page string) string {
 	return conf.Conf.App.Host + "?" + strings.Join(params, "&")
 }
 
-func PostAdd(w http.ResponseWriter, r *http.Request) {
+func PostAdd(c *artgo.Context) {
 	data := make(map[string]interface{})
-	id := r.FormValue("id")
+	id := c.PostForm("id")
 	var post model.Post
 	if len(id) > 0 {
-		post = mysql.GetPost(id)
+		post = daos.GetPost(id)
 	}
-	categories, _ := mysql.GetCategories()
+	categories, _ := daos.GetCategories()
 	data["categories"] = categories
 
 	if post.Id > 0 {
@@ -95,13 +96,13 @@ func PostAdd(w http.ResponseWriter, r *http.Request) {
 		data["tag_ids"] = post.TagIds
 		data["tags"] = getTags(post)
 	}
-	view.AdminRender(data, w, "post/add")
+	view.AdminRender(data, c, "post/add")
 }
 
 func getTags(post model.Post) string {
 	var tags []string
 	if len(post.TagIds) > 0 {
-		allTags, _ := mysql.GetTags()
+		allTags, _ := daos.GetTags()
 
 		tagsById := make(map[int]model.Tag)
 		for _, tag := range allTags {
@@ -115,14 +116,14 @@ func getTags(post model.Post) string {
 	return strings.Join(tags, ",")
 }
 
-func PostDelete(w http.ResponseWriter, r *http.Request) {
+func PostDelete(c *artgo.Context) {
 	var post model.Post
-	post.Id, _ = strconv.Atoi(r.URL.Query().Get("id"))
-	_, err := mysql.PostDelete(post)
+	post.Id, _ = strconv.Atoi(c.Req.URL.Query().Get("id"))
+	_, err := daos.PostDelete(post)
 	if err != nil {
 		data := make(map[string]interface{})
 		data["msg"] = "删除失败，请重试"
-		view.AdminRender(data, w, "401")
+		view.AdminRender(data, c, "401")
 		return
 	}
 
@@ -130,28 +131,28 @@ func PostDelete(w http.ResponseWriter, r *http.Request) {
 		go es.DeletePost(es.Post{Id: post.Id})
 
 	}
-	http.Redirect(w, r, "/admin", http.StatusFound)
+	c.Redirect(http.StatusFound, "/admin")
 }
 
-func PostSave(w http.ResponseWriter, r *http.Request) {
+func PostSave(c *artgo.Context) {
 	var post model.Post
-	post.Id, _ = strconv.Atoi(r.FormValue("id"))
-	post.Title = r.FormValue("title")
-	post.Description = r.FormValue("description")
-	post.Content = r.FormValue("content")
-	post.CategoryId, _ = strconv.Atoi(r.FormValue("category"))
-	tags := r.FormValue("tags")
+	post.Id, _ = strconv.Atoi(c.PostForm("id"))
+	post.Title = c.PostForm("title")
+	post.Description = c.PostForm("description")
+	post.Content = c.PostForm("content")
+	post.CategoryId, _ = strconv.Atoi(c.PostForm("category"))
+	tags := c.PostForm("tags")
 	post.TagIds = getTagIds(tags)
 	post.Status = 1
-	_, err := mysql.PostSave(post)
+	_, err := daos.PostSave(post)
 	if err != nil {
 		data := make(map[string]interface{})
 		data["msg"] = "添加或修改失败，请重试"
-		view.AdminRender(data, w, "401")
+		view.AdminRender(data, c, "401")
 		return
 	}
 	if !conf.Conf.Elasticsearch.Disable {
-		category := mysql.GetCategory(post.CategoryId)
+		category := daos.GetCategory(post.CategoryId)
 		go es.SavePost(es.Post{
 			Id:          post.Id,
 			Title:       post.Title,
@@ -162,15 +163,15 @@ func PostSave(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 	for _, tagId := range post.TagIds {
-		go mysql.IncrTagCount(strconv.Itoa(tagId))
+		go daos.IncrTagCount(strconv.Itoa(tagId))
 	}
-	http.Redirect(w, r, "/admin", http.StatusFound)
+	c.Redirect(http.StatusFound, "/admin")
 }
 
 func getTagIds(tags string) (tagIds []int) {
 	tagNames := strings.Split(tags, ",")
 	tagNames = utils.RemoveDuplicateElement(tagNames)
-	allTags, _ := mysql.GetTags()
+	allTags, _ := daos.GetTags()
 	var allTagNames []string
 	allTagByName := make(map[string]model.Tag)
 	for _, tag := range allTags {
@@ -183,7 +184,7 @@ func getTagIds(tags string) (tagIds []int) {
 		} else {
 			var newTag model.Tag
 			newTag.Name = tagName
-			newTagId, _ := mysql.AddTag(newTag)
+			newTagId, _ := daos.AddTag(newTag)
 			if newTagId > 0 {
 				tagIds = append(tagIds, newTagId)
 			}

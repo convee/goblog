@@ -1,27 +1,31 @@
 <!DOCTYPE html>
 <html lang="zh">
-    <head>
-        <meta charset="utf-8" />
-        <title>Emoji - Editor.md examples</title>
-        <link rel="stylesheet" href="css/style.css" />
-        <link rel="stylesheet" href="../css/editormd.css" />
-        <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
-        <style>
-        </style>
-    </head>
-    <body>
-        <div id="layout">
-            <header>
-                <h1>Emoji 表情</h1>
-                <p>Supports:</p>
-                <ul style="margin: 10px 0 0 18px;">
-                    <li>Github emoji : <a href="http://www.emoji-cheat-sheet.com/" target="_blank">http://www.emoji-cheat-sheet.com/</a></li>
-                    <li>Twitter Emoji(Twemoji) : <a href="http://twitter.github.io/twemoji/preview.html" target="_blank">http://twitter.github.io/twemoji/preview.html</a></li>
-                    <li>FontAwesome icon font emoji : <a href="http://fortawesome.github.io/Font-Awesome/icons/" target="_blank">http://fortawesome.github.io/Font-Awesome/icons/</a></li>
-                    <li>Editor.md logo icon font emoji</li>
-                </ul>
-            </header>
-            <div id="test-editormd">                
+<head>
+    <meta charset="utf-8"/>
+    <title>Emoji - Editor.md examples</title>
+    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="../css/editormd.css"/>
+    <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon"/>
+    <style>
+    </style>
+</head>
+<body>
+<div id="layout">
+    <header>
+        <h1>Emoji 表情</h1>
+        <p>Supports:</p>
+        <ul style="margin: 10px 0 0 18px;">
+            <li>Github emoji : <a href="http://www.emoji-cheat-sheet.com/" target="_blank">http://www.emoji-cheat-sheet.com/</a>
+            </li>
+            <li>Twitter Emoji(Twemoji) : <a href="http://twitter.github.io/twemoji/preview.html" target="_blank">http://twitter.github.io/twemoji/preview.html</a>
+            </li>
+            <li>FontAwesome icon font emoji : <a href="http://fortawesome.github.io/Font-Awesome/icons/"
+                                                 target="_blank">http://fortawesome.github.io/Font-Awesome/icons/</a>
+            </li>
+            <li>Editor.md logo icon font emoji</li>
+        </ul>
+    </header>
+    <div id="test-editormd">
                 <textarea style="display:none;">### Emoji 表情 :smiley:
 
 [TOC]
@@ -154,38 +158,38 @@ This is an H1 :editormd-logo-4x: @pandao
     - [ ] :smiley: this is an incomplete item [test link](#);
 
 </textarea>
-            </div>
-        </div>        
-        <script src="js/jquery.min.js"></script>
-        <script src="../editormd.js"></script>
-        <script type="text/javascript">
-            var testEditor;
-            
-            $(function() {
+    </div>
+</div>
+<script src="js/jquery.min.js"></script>
+<script src="../editormd.js"></script>
+<script type="text/javascript">
+    var testEditor;
 
-                // You can custom Emoji's graphics files url path
-                editormd.emoji     = {
-                    path  : "http://www.emoji-cheat-sheet.com/graphics/emojis/",
-                    ext   : ".png"
-                };
-    
-                // Twitter Emoji (Twemoji)  graphics files url path    
-                editormd.twemoji = {
-                    path : "http://twemoji.maxcdn.com/72x72/",
-                    ext  : ".png"
-                };
-                
-                testEditor = editormd("test-editormd", {
-                    width  : "90%",
-                    height : 720,
-                    toc : true,
-                    
-                    emoji : true,       // Support Github emoji, Twitter Emoji(Twemoji), fontAwesome, Editor.md logo emojis.
-                    
-                    taskList : true,
-                    path   : '../lib/'
-                });
-            });
-        </script>
-    </body>
+    $(function () {
+
+        // You can custom Emoji's graphics files url path
+        editormd.emoji = {
+            path: "http://www.emoji-cheat-sheet.com/graphics/emojis/",
+            ext: ".png"
+        };
+
+        // Twitter Emoji (Twemoji)  graphics files url path
+        editormd.twemoji = {
+            path: "http://twemoji.maxcdn.com/72x72/",
+            ext: ".png"
+        };
+
+        testEditor = editormd("test-editormd", {
+            width: "90%",
+            height: 720,
+            toc: true,
+
+            emoji: true,       // Support Github emoji, Twitter Emoji(Twemoji), fontAwesome, Editor.md logo emojis.
+
+            taskList: true,
+            path: '../lib/'
+        });
+    });
+</script>
+</body>
 </html>

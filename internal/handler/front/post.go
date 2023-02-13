@@ -2,22 +2,22 @@ package front
 
 import (
 	"fmt"
-	"net/http"
+	"github.com/convee/artgo"
+	"github.com/convee/goblog/internal/daos"
+	"github.com/convee/goblog/internal/model"
+	"github.com/convee/goblog/internal/view"
 	"strconv"
 	"strings"
 
 	"github.com/convee/goblog/conf"
-	"github.com/convee/goblog/internal/pkg/model"
-	"github.com/convee/goblog/internal/pkg/mysql"
-	"github.com/convee/goblog/internal/pkg/view"
 )
 
-func Index(w http.ResponseWriter, r *http.Request) {
-	categoryId := r.URL.Query().Get("category_id")
-	tagId := r.URL.Query().Get("tag_id")
-	perPage, _ := strconv.Atoi(r.URL.Query().Get("per_page"))
-	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
-	keyword := r.URL.Query().Get("keyword")
+func Index(c *artgo.Context) {
+	categoryId := c.Query("category_id")
+	tagId := c.Query("tag_id")
+	perPage, _ := strconv.Atoi(c.Query("per_page"))
+	page, _ := strconv.Atoi(c.Query("page"))
+	keyword := c.Query("keyword")
 	if perPage <= 0 {
 		perPage = 20
 	}
@@ -29,7 +29,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	if prePage <= 1 {
 		prePage = 1
 	}
-	params := mysql.PostParams{
+	params := daos.PostParams{
 		CategoryId: categoryId,
 		TagId:      tagId,
 		PerPage:    perPage,
@@ -40,26 +40,26 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	if len(keyword) > 0 {
 		params.Keyword = keyword
 		params.Ids = make(map[string][]string)
-		postIds, err := mysql.GetPostIdsByContent(keyword)
+		postIds, err := daos.GetPostIdsByContent(keyword)
 		if err == nil {
 			params.Ids["ids"] = postIds
 		}
-		categoryIds, err := mysql.GetCategoryIdsByName(keyword)
+		categoryIds, err := daos.GetCategoryIdsByName(keyword)
 		if err == nil {
 			params.Ids["category_ids"] = categoryIds
 		}
-		tagIds, err := mysql.GetTagIdsByName(keyword)
+		tagIds, err := daos.GetTagIdsByName(keyword)
 		if err == nil {
 			params.Ids["tag_ids"] = tagIds
 		}
 	}
 
-	posts, err := mysql.GetPosts(params)
+	posts, err := daos.GetPosts(params)
 	if err != nil {
 		fmt.Println("get posts err:", err)
 		return
 	}
-	categories, err := mysql.GetCategories()
+	categories, err := daos.GetCategories()
 	if err != nil {
 		fmt.Println("get categories err:", err)
 		return
@@ -71,14 +71,13 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	for index, post := range posts {
 		posts[index].CategoryName = categoryMap[post.CategoryId].Name
 	}
-	//allTags, _ := mysql.GetTags()
 	data := make(map[string]interface{})
 	data["posts"] = posts
 	data["categories"] = categories
 	data["page"] = page
 	data["pre_url"] = getPageUrl(categoryId, tagId, strconv.Itoa(prePage))
 	data["next_url"] = getPageUrl(categoryId, tagId, strconv.Itoa(nextPage))
-	view.Render(data, w, "index")
+	view.Render(data, c, "index")
 }
 
 func getPageUrl(categoryId string, tagId string, page string) string {
@@ -93,12 +92,11 @@ func getPageUrl(categoryId string, tagId string, page string) string {
 	return conf.Conf.App.Host + "?" + strings.Join(params, "&")
 }
 
-func PostInfo(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	id := r.URL.Query().Get("id")
-	post := mysql.GetPost(id)
-	category := mysql.GetCategory(post.CategoryId)
-	allTags, _ := mysql.GetTags()
+func PostInfo(c *artgo.Context) {
+	id := c.Query("id")
+	post := daos.GetPost(id)
+	category := daos.GetCategory(post.CategoryId)
+	allTags, _ := daos.GetTags()
 	tagIds := post.TagIds
 	tagsById := make(map[int]model.Tag)
 	for _, tag := range allTags {
@@ -108,12 +106,12 @@ func PostInfo(w http.ResponseWriter, r *http.Request) {
 	for _, tagId := range tagIds {
 		tags = append(tags, tagsById[tagId])
 	}
-	mysql.IncrView(id)
+	daos.IncrView(id)
 	post.CategoryName = category.Name
 	data := make(map[string]interface{})
 	data["post"] = post
 	data["tags"] = tags
 	data["title"] = post.Title
 	data["description"] = post.Description
-	view.Render(data, w, "post")
+	view.Render(data, c, "post")
 }

@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="zh">
-    <head>
-        <meta charset="utf-8" />
-        <title>Toolbar auto fixed - Editor.md examples</title>
-        <link rel="stylesheet" href="css/style.css" />
-        <link rel="stylesheet" href="../css/editormd.css" />
-        <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
-    </head>
-    <body>
-        <div id="layout" style="height:3000px;">
-            <header>
-                <h1>工具栏自动固定定位的开启与禁用</h1>
-                <p>Enable / disable toolbar auto fixed position.</p>
-            </header>
-            <div class="btns">
-                <button id="enable-btn">Enable</button>
-                <button id="disable-btn">Disable</button>
-            </div>
-            <div id="test-editormd">
+<head>
+    <meta charset="utf-8"/>
+    <title>Toolbar auto fixed - Editor.md examples</title>
+    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="../css/editormd.css"/>
+    <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon"/>
+</head>
+<body>
+<div id="layout" style="height:3000px;">
+    <header>
+        <h1>工具栏自动固定定位的开启与禁用</h1>
+        <p>Enable / disable toolbar auto fixed position.</p>
+    </header>
+    <div class="btns">
+        <button id="enable-btn">Enable</button>
+        <button id="disable-btn">Disable</button>
+    </div>
+    <div id="test-editormd">
                 <textarea style="display:none;">### Hello world!
 
 codemirror
@@ -91,32 +91,32 @@ VictorQueiroz	0	4 months ago
 sml-codemirror-mode
 Bower Distribution of the Sparqlification Mapping Language (SML) Syntax Highlighting Mode for CodeMirror
 </textarea>
-            </div>
-        </div>
-        <script src="js/jquery.min.js"></script>
-        <script src="../editormd.js"></script>
-        <script type="text/javascript">
-			var testEditor;
+    </div>
+</div>
+<script src="js/jquery.min.js"></script>
+<script src="../editormd.js"></script>
+<script type="text/javascript">
+    var testEditor;
 
-            $(function() {
-                testEditor = editormd("test-editormd", {
-                    width  : "90%",
-                    height : 1600,
-                    path   : "../lib/"
-                });
-                
-                $("#enable-btn").bind("click", function() {
-                    testEditor.setToolbarAutoFixed(true);
-                    // or
-                    //testEditor.config("toolbarAutoFixed", true);
-                });
-                
-                $("#disable-btn").bind("click", function() {
-                    testEditor.setToolbarAutoFixed(false);
-                    // or
-                    //testEditor.config("toolbarAutoFixed", false);
-                });
-            });
-        </script>
-    </body>
+    $(function () {
+        testEditor = editormd("test-editormd", {
+            width: "90%",
+            height: 1600,
+            path: "../lib/"
+        });
+
+        $("#enable-btn").bind("click", function () {
+            testEditor.setToolbarAutoFixed(true);
+            // or
+            //testEditor.config("toolbarAutoFixed", true);
+        });
+
+        $("#disable-btn").bind("click", function () {
+            testEditor.setToolbarAutoFixed(false);
+            // or
+            //testEditor.config("toolbarAutoFixed", false);
+        });
+    });
+</script>
+</body>
 </html>
