@@ -3,7 +3,7 @@ package front
 import (
 	"github.com/convee/artgo"
 	"github.com/convee/goblog/internal/daos"
-	"github.com/convee/goblog/internal/view"
+	"github.com/convee/goblog/internal/pkg"
 )
 
 func Page(c *artgo.Context) {
@@ -13,5 +13,5 @@ func Page(c *artgo.Context) {
 	data["title"] = page.Title
 	data["description"] = page.Title
 	data["page"] = page
-	view.Render(data, c, "page")
+	pkg.Render(data, c, "page")
 }

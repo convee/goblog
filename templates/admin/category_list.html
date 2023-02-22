@@ -45,21 +45,21 @@
         <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
             <div class="sb-sidenav-menu">
                 <div class="nav">
-                    <div class="sb-sidenav-menu-heading">Core</div>
+                    <div class="sb-sidenav-menu-heading">Golang博客系统</div>
                     <a class="nav-link" href="/admin">
-                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        <div class="sb-nav-link-icon"></div>
                         文章列表
                     </a>
                     <a class="nav-link" href="/admin/page">
-                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        <div class="sb-nav-link-icon"></div>
                         页面列表
                     </a>
                     <a class="nav-link" href="/admin/category">
-                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        <div class="sb-nav-link-icon"></div>
                         分类列表
                     </a>
                     <a class="nav-link" href="/admin/tag">
-                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        <div class="sb-nav-link-icon"></div>
                         标签列表
                     </a>
                 </div>
@@ -69,27 +69,28 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">标签列表</h1>
+                <h1 class="mt-4">分类列表</h1>
 
                 <div class="card mb-4">
                     <div class="card-header">
+                        <a class="navbar-brand" href="/admin/category/add">添加分类</a>
                     </div>
                     <div class="card-body">
                         <table id="datatablesSimple">
                             <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>标签</th>
-                                <th>文章数量</th>
+                                <th>分类</th>
+                                <th>操作</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {{range .tags}}
+                            {{range .categories}}
                             <tr>
                                 <td>{{.Id}}</td>
                                 <td>{{.Name}}</td>
-                                <td>{{.Count}}</td>
-
+                                <td><a href="/admin/category/add?id={{.Id}}">编辑</a>|<a
+                                        href="/admin/category/delete?id={{.Id}}">删除</a></td>
                             </tr>
                             {{end}}
                             </tbody>

@@ -3,7 +3,7 @@ package admin
 import (
 	"github.com/convee/artgo"
 	"github.com/convee/goblog/internal/daos"
-	"github.com/convee/goblog/internal/view"
+	"github.com/convee/goblog/internal/pkg"
 	"net/http"
 
 	"golang.org/x/crypto/bcrypt"
@@ -11,12 +11,12 @@ import (
 
 func Login(c *artgo.Context) {
 	data := make(map[string]interface{})
-	view.AdminRender(data, c, "login")
+	pkg.AdminRender(data, c, "login")
 }
 
 func Register(c *artgo.Context) {
 	data := make(map[string]interface{})
-	view.AdminRender(data, c, "register")
+	pkg.AdminRender(data, c, "register")
 }
 
 func Logout(c *artgo.Context) {
@@ -46,7 +46,7 @@ func Signin(c *artgo.Context) {
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
 		data := make(map[string]interface{})
 		data["msg"] = "密码不正确，请重试"
-		view.AdminRender(data, c, "401")
+		pkg.AdminRender(data, c, "401")
 		return
 	}
 	cookie := &http.Cookie{

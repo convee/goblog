@@ -5,7 +5,7 @@ import (
 	"github.com/convee/artgo"
 	"github.com/convee/goblog/internal/daos"
 	"github.com/convee/goblog/internal/model"
-	"github.com/convee/goblog/internal/view"
+	"github.com/convee/goblog/internal/pkg"
 	"net/http"
 	"strconv"
 )
@@ -18,7 +18,7 @@ func CategoryList(c *artgo.Context) {
 	}
 	data := make(map[string]interface{})
 	data["categories"] = categories
-	view.AdminRender(data, c, "category/list")
+	pkg.AdminRender(data, c, "category_list")
 }
 
 func CategoryAdd(c *artgo.Context) {
@@ -36,7 +36,7 @@ func CategoryAdd(c *artgo.Context) {
 		data["id"] = category.Id
 		data["name"] = category.Name
 	}
-	view.AdminRender(data, c, "category/add")
+	pkg.AdminRender(data, c, "category_add")
 }
 
 func CategoryDelete(c *artgo.Context) {
@@ -46,7 +46,7 @@ func CategoryDelete(c *artgo.Context) {
 	if err != nil {
 		data := make(map[string]interface{})
 		data["msg"] = "删除失败，请重试"
-		view.AdminRender(data, c, "401")
+		pkg.AdminRender(data, c, "401")
 		return
 	}
 	c.Redirect(http.StatusFound, "/admin/category")
@@ -60,7 +60,7 @@ func CategorySave(c *artgo.Context) {
 	if err != nil {
 		data := make(map[string]interface{})
 		data["msg"] = "添加或修改失败，请重试"
-		view.AdminRender(data, c, "401")
+		pkg.AdminRender(data, c, "401")
 		return
 	}
 	c.Redirect(http.StatusFound, "/admin/category")

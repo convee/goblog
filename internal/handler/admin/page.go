@@ -5,7 +5,7 @@ import (
 	"github.com/convee/artgo"
 	"github.com/convee/goblog/internal/daos"
 	"github.com/convee/goblog/internal/model"
-	"github.com/convee/goblog/internal/view"
+	"github.com/convee/goblog/internal/pkg"
 	"net/http"
 	"strconv"
 )
@@ -30,7 +30,7 @@ func PageList(c *artgo.Context) {
 	data := make(map[string]interface{})
 	data["pages"] = pages
 	data["page"] = page
-	view.AdminRender(data, c, "page/list")
+	pkg.AdminRender(data, c, "page_list")
 }
 
 func PageAdd(c *artgo.Context) {
@@ -49,7 +49,7 @@ func PageAdd(c *artgo.Context) {
 		data["title"] = page.Title
 		data["content"] = page.Content
 	}
-	view.AdminRender(data, c, "page/add")
+	pkg.AdminRender(data, c, "page_add")
 }
 
 func PageDelete(c *artgo.Context) {
@@ -59,7 +59,7 @@ func PageDelete(c *artgo.Context) {
 	if err != nil {
 		data := make(map[string]interface{})
 		data["msg"] = "删除失败，请重试"
-		view.AdminRender(data, c, "401")
+		pkg.AdminRender(data, c, "401")
 		return
 	}
 	c.Redirect(http.StatusFound, "/admin")
@@ -74,7 +74,7 @@ func PageSave(c *artgo.Context) {
 	if err != nil {
 		data := make(map[string]interface{})
 		data["msg"] = "添加或修改失败，请重试"
-		view.AdminRender(data, c, "401")
+		pkg.AdminRender(data, c, "401")
 		return
 	}
 	c.Redirect(http.StatusFound, "/admin/page")

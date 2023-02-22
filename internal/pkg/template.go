@@ -1,16 +1,17 @@
-package view
+package pkg
 
 import (
 	"fmt"
 	"github.com/convee/artgo"
 	"html/template"
 	"log"
+	"net/http"
 	"time"
 
 	"github.com/convee/goblog/conf"
 )
 
-var funcMap = template.FuncMap{
+var FuncMap = template.FuncMap{
 	"noescape": func(s string) template.HTML {
 		return template.HTML(s)
 	},
@@ -48,9 +49,9 @@ var funcMap = template.FuncMap{
 
 func Render(data map[string]interface{}, c *artgo.Context, tpl string) {
 	var tplPaths []string
-	tplPaths = append(tplPaths, "tpl/default/layout.html")
-	tplPaths = append(tplPaths, "tpl/default/"+tpl+".html")
-	t, err := template.New("layout.html").Funcs(funcMap).ParseFiles(tplPaths...)
+	tplPaths = append(tplPaths, "templates/default/layout.html")
+	tplPaths = append(tplPaths, "templates/default/"+tpl+".html")
+	t, err := template.New("layout.html").Funcs(FuncMap).ParseFiles(tplPaths...)
 	if err != nil {
 		log.Println("posts template err:", err)
 		return
@@ -68,9 +69,7 @@ func Render(data map[string]interface{}, c *artgo.Context, tpl string) {
 	t.Execute(c.Writer, data)
 }
 
-func AdminRender(data map[string]interface{}, c *artgo.Context, tpl string) {
-	var tplPaths []string
-	tplPaths = append(tplPaths, "tpl/admin/"+tpl+".html")
+func AdminRender(data map[string]interface{}, c *artgo.Context, template string) {
 	data["cdn"] = conf.Conf.App.Cdn
-	_ = c.Render(data, tplPaths...)
+	c.HTML(http.StatusOK, template+".html", data)
 }

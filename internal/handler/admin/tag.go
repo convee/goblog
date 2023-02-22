@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/convee/artgo"
 	"github.com/convee/goblog/internal/daos"
-	"github.com/convee/goblog/internal/view"
+	"github.com/convee/goblog/internal/pkg"
 )
 
 func TagList(c *artgo.Context) {
@@ -15,5 +15,5 @@ func TagList(c *artgo.Context) {
 	}
 	data := make(map[string]interface{})
 	data["tags"] = tags
-	view.AdminRender(data, c, "tag/list")
+	pkg.AdminRender(data, c, "tag_list")
 }

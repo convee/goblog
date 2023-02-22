@@ -6,8 +6,8 @@ import (
 	"github.com/convee/goblog/internal/daos"
 	"github.com/convee/goblog/internal/es"
 	"github.com/convee/goblog/internal/model"
-	"github.com/convee/goblog/internal/utils"
-	"github.com/convee/goblog/internal/view"
+	"github.com/convee/goblog/internal/pkg"
+	"github.com/convee/goblog/pkg/utils"
 	"net/http"
 	"strconv"
 	"strings"
@@ -59,7 +59,7 @@ func PostList(c *artgo.Context) {
 	data["page"] = page
 	data["pre_url"] = getPageUrl(categoryId, tagId, strconv.Itoa(prePage))
 	data["next_url"] = getPageUrl(categoryId, tagId, strconv.Itoa(nextPage))
-	view.AdminRender(data, c, "post/list")
+	pkg.AdminRender(data, c, "post_list")
 }
 
 func getPageUrl(categoryId string, tagId string, page string) string {
@@ -96,7 +96,7 @@ func PostAdd(c *artgo.Context) {
 		data["tag_ids"] = post.TagIds
 		data["tags"] = getTags(post)
 	}
-	view.AdminRender(data, c, "post/add")
+	pkg.AdminRender(data, c, "post_add")
 }
 
 func getTags(post model.Post) string {
@@ -123,7 +123,7 @@ func PostDelete(c *artgo.Context) {
 	if err != nil {
 		data := make(map[string]interface{})
 		data["msg"] = "删除失败，请重试"
-		view.AdminRender(data, c, "401")
+		pkg.AdminRender(data, c, "401")
 		return
 	}
 
@@ -148,7 +148,7 @@ func PostSave(c *artgo.Context) {
 	if err != nil {
 		data := make(map[string]interface{})
 		data["msg"] = "添加或修改失败，请重试"
-		view.AdminRender(data, c, "401")
+		pkg.AdminRender(data, c, "401")
 		return
 	}
 	if !conf.Conf.Elasticsearch.Disable {

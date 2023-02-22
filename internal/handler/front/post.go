@@ -5,7 +5,7 @@ import (
 	"github.com/convee/artgo"
 	"github.com/convee/goblog/internal/daos"
 	"github.com/convee/goblog/internal/model"
-	"github.com/convee/goblog/internal/view"
+	"github.com/convee/goblog/internal/pkg"
 	"strconv"
 	"strings"
 
@@ -77,7 +77,7 @@ func Index(c *artgo.Context) {
 	data["page"] = page
 	data["pre_url"] = getPageUrl(categoryId, tagId, strconv.Itoa(prePage))
 	data["next_url"] = getPageUrl(categoryId, tagId, strconv.Itoa(nextPage))
-	view.Render(data, c, "index")
+	pkg.Render(data, c, "index")
 }
 
 func getPageUrl(categoryId string, tagId string, page string) string {
@@ -113,5 +113,5 @@ func PostInfo(c *artgo.Context) {
 	data["tags"] = tags
 	data["title"] = post.Title
 	data["description"] = post.Description
-	view.Render(data, c, "post")
+	pkg.Render(data, c, "post")
 }
