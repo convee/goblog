@@ -67,7 +67,7 @@ require (
 )
 
 require (
-	github.com/convee/artgo v0.0.0-20221023095843-9d87d9157886
+	github.com/convee/artgo v1.0.0 // indirect
 	github.com/jonboulle/clockwork v0.3.0 // indirect
 	github.com/lestrrat-go/strftime v1.0.6 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.6 // indirect
