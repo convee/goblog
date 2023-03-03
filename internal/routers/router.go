@@ -46,15 +46,15 @@ func InitRouter() *artgo.Engine {
 	adminGroup.GET("/", admin.PostList)
 	adminGroup.GET("/post/add", admin.PostAdd)
 	adminGroup.POST("/post/save", admin.PostSave)
-	adminGroup.POST("/post/delete", admin.PostDelete)
+	adminGroup.GET("/post/delete", admin.PostDelete)
 	adminGroup.GET("/page", admin.PageList)
 	adminGroup.GET("/page/add", admin.PageAdd)
 	adminGroup.POST("/page/save", admin.PageSave)
-	adminGroup.POST("/page/delete", admin.PageDelete)
+	adminGroup.GET("/page/delete", admin.PageDelete)
 	adminGroup.GET("/category", admin.CategoryList)
 	adminGroup.GET("/category/add", admin.CategoryAdd)
 	adminGroup.POST("/category/save", admin.CategorySave)
-	adminGroup.POST("/category/delete", admin.CategoryDelete)
+	adminGroup.GET("/category/delete", admin.CategoryDelete)
 	adminGroup.GET("/tag", admin.TagList)
 
 	return r

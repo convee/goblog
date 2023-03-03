@@ -118,7 +118,7 @@ func getTags(post model.Post) string {
 
 func PostDelete(c *artgo.Context) {
 	var post model.Post
-	post.Id, _ = strconv.Atoi(c.Req.URL.Query().Get("id"))
+	post.Id, _ = strconv.Atoi(c.Query("id"))
 	_, err := daos.PostDelete(post)
 	if err != nil {
 		data := make(map[string]interface{})

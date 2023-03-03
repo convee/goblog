@@ -50,9 +50,10 @@ func Signin(c *artgo.Context) {
 		return
 	}
 	cookie := &http.Cookie{
-		Name:  "email",
-		Value: email,
-		Path:  "/",
+		Name:     "email",
+		Value:    email,
+		Path:     "/",
+		HttpOnly: true,
 	}
 	c.SetCookie(cookie)
 	c.Redirect(http.StatusFound, "/admin")

@@ -4,6 +4,7 @@ go 1.17
 
 require (
 	github.com/alicebob/miniredis/v2 v2.30.0
+	github.com/convee/artgo v1.0.0
 	github.com/fsnotify/fsnotify v1.6.0
 	github.com/go-redis/redis/extra/redisotel/v8 v8.11.5
 	github.com/go-redis/redis/v8 v8.11.5
@@ -67,7 +68,6 @@ require (
 )
 
 require (
-	github.com/convee/artgo v1.0.0 // indirect
 	github.com/jonboulle/clockwork v0.3.0 // indirect
 	github.com/lestrrat-go/strftime v1.0.6 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.6 // indirect

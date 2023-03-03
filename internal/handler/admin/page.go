@@ -62,7 +62,7 @@ func PageDelete(c *artgo.Context) {
 		pkg.AdminRender(data, c, "401")
 		return
 	}
-	c.Redirect(http.StatusFound, "/admin")
+	c.Redirect(http.StatusFound, "/admin/page")
 }
 
 func PageSave(c *artgo.Context) {
