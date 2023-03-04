@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/alicebob/miniredis/v2 v2.30.0
-	github.com/convee/artgo v1.0.0
+	github.com/convee/artgo v1.1.0
 	github.com/fsnotify/fsnotify v1.6.0
 	github.com/go-redis/redis/extra/redisotel/v8 v8.11.5
 	github.com/go-redis/redis/v8 v8.11.5
@@ -68,12 +68,16 @@ require (
 )
 
 require (
+	github.com/go-playground/locales v0.14.1 // indirect
+	github.com/go-playground/universal-translator v0.18.1 // indirect
+	github.com/go-playground/validator/v10 v10.11.2 // indirect
+	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/jonboulle/clockwork v0.3.0 // indirect
+	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/lestrrat-go/strftime v1.0.6 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.6 // indirect
-	github.com/rogpeppe/go-internal v1.8.0 // indirect
+	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
-	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 )
 
 //replace github.com/convee/artgo => ../artgo
