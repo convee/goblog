@@ -40,13 +40,11 @@ func PageAdd(c *artgo.Context) {
 	if len(id) > 0 {
 		page = daos.GetPage(id)
 	}
-	categories, _ := daos.GetCategories()
-	data["categories"] = categories
-
 	if page.Id > 0 {
 
 		data["id"] = page.Id
 		data["title"] = page.Title
+		data["ident"] = page.Ident
 		data["content"] = page.Content
 	}
 	pkg.AdminRender(data, c, "page_add")
@@ -69,6 +67,7 @@ func PageSave(c *artgo.Context) {
 	var page model.Page
 	page.Id, _ = strconv.Atoi(c.PostForm("id"))
 	page.Title = c.PostForm("title")
+	page.Ident = c.PostForm("ident")
 	page.Content = c.PostForm("content")
 	_, err := daos.PageSave(page)
 	if err != nil {

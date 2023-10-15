@@ -93,7 +93,7 @@ func getPageUrl(categoryId string, tagId string, page string) string {
 }
 
 func PostInfo(c *artgo.Context) {
-	id := c.Query("id")
+	id := c.Param("id")
 	post := daos.GetPost(id)
 	category := daos.GetCategory(post.CategoryId)
 	allTags, _ := daos.GetTags()

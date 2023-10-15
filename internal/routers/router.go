@@ -29,8 +29,8 @@ func InitRouter() *artgo.Engine {
 	r.GET("/favicon.ico", func(c *artgo.Context) {
 		http.ServeFile(c.Writer, c.Req, "static/favicon.ico")
 	})
-	r.GET("/post", front.PostInfo)
-	r.GET("/page", front.Page)
+	r.GET("/post/:id", front.PostInfo)
+	r.GET("/page/:ident", front.Page)
 	r.GET("/tag", front.Tag)
 
 	// 后台登录路由，不需要校验登录态

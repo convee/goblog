@@ -18,7 +18,7 @@ import (
 )
 
 var (
-	cfgFile = pflag.StringP("config", "c", "./conf/local.yml", "config file path.")
+	cfgFile = pflag.StringP("config", "c", "./conf/dev.yml", "config file path.")
 	//version = pflag.BoolP("version", "v", false, "show version info.")
 )
 

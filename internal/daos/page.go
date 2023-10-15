@@ -14,7 +14,7 @@ type PageParams struct {
 }
 
 func GetPages(params PageParams) (pages []model.Page, err error) {
-	querySql := "select id,title,content from page"
+	querySql := "select id,title,ident,content from page"
 
 	querySql += " order by id asc"
 
@@ -34,14 +34,28 @@ func GetPages(params PageParams) (pages []model.Page, err error) {
 	defer rows.Close()
 	for rows.Next() {
 		var page model.Page
-		_ = rows.Scan(&page.Id, &page.Title, &page.Content)
+		_ = rows.Scan(&page.Id, &page.Title, &page.Ident, &page.Content)
 		pages = append(pages, page)
 	}
 	return
 }
 
 func GetPage(id string) (page model.Page) {
-	row := db.QueryRow("select id,title,content from page  where id=? limit 1", id)
+	row := db.QueryRow("select id,title,ident,content from page  where id=? limit 1", id)
+	if row.Err() != nil {
+		logger.Error("GetPageError", zap.Error(row.Err()))
+		return
+	}
+	err := row.Scan(&page.Id, &page.Title, &page.Ident, &page.Content)
+	if err != nil {
+		logger.Error("GetPageError", zap.Error(err))
+		return
+	}
+	return
+}
+
+func GetPageByIdent(ident string) (page model.Page) {
+	row := db.QueryRow("select id,title,content from page  where ident=? limit 1", ident)
 	if row.Err() != nil {
 		logger.Error("GetPageError", zap.Error(row.Err()))
 		return
@@ -68,13 +82,13 @@ func PageSave(page model.Page) (id int, err error) {
 	var rs sql.Result
 	if page.Id > 0 {
 		id = page.Id
-		_, err = db.Exec("update page set title=?,content=? where id=?", page.Title, page.Content, id)
+		_, err = db.Exec("update page set title=?,content=?,ident=? where id=?", page.Title, page.Content, page.Ident, id)
 		if err != nil {
 			logger.Error("PageSaveError", zap.Error(err))
 			return
 		}
 	} else {
-		rs, err = db.Exec("insert into page (title, content) values (?,?)", page.Title, page.Content)
+		rs, err = db.Exec("insert into page (title, ident, content) values (?,?,?)", page.Title, page.Ident, page.Content)
 		if err != nil {
 			logger.Error("PageSaveError", zap.Error(err))
 			return

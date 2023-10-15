@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8"/>
-    <title>Simple example - Editor.md examples</title>
+    <title>Dashboard - Admin</title>
     <link rel="stylesheet" type="text/css" media="screen" href="{{.cdn}}/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="{{.cdn}}/md/css/style.css"/>
     <link rel="stylesheet" href="{{.cdn}}/md/css/editormd.css"/>
@@ -18,6 +18,9 @@
         <input type="hidden" name="id" value="{{.id}}">
         <label style="margin-left: 75px;">
             标题：<input class="form-control" type="text" name="title" value="{{.title}}">
+        </label>
+        <label style="margin-left: 75px;">
+            标识：<input class="form-control" type="text" name="ident" value="{{.ident}}">
         </label>
         <div id="test-editormd">
             <textarea style="display:none;" name="content">{{.content}}</textarea>

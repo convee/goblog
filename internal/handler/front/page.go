@@ -7,8 +7,9 @@ import (
 )
 
 func Page(c *artgo.Context) {
-	id := c.Query("id")
-	page := daos.GetPage(id)
+	ident := c.Param("ident")
+
+	page := daos.GetPageByIdent(ident)
 	data := make(map[string]interface{})
 	data["title"] = page.Title
 	data["description"] = page.Title
