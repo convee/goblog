@@ -1,0 +1,31 @@
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: blog
+      MYSQL_USER: goblog
+      MYSQL_PASSWORD: ${GOBLOG_MYSQL_PASSWORD:?set GOBLOG_MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${GOBLOG_MYSQL_ROOT_PASSWORD:?set GOBLOG_MYSQL_ROOT_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$${MYSQL_ROOT_PASSWORD} --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./blog.sql:/docker-entrypoint-initdb.d/001-blog.sql:ro
+
+  goblog:
+    build:
+      context: .
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      GOBLOG_MYSQL_DSN: "goblog:${GOBLOG_MYSQL_PASSWORD}@tcp(mysql:3306)/blog?timeout=2s&readTimeout=5s&writeTimeout=5s&parseTime=true&loc=Local&charset=utf8mb4"
+      GOBLOG_SESSION_SECRET: ${GOBLOG_SESSION_SECRET:?set a random secret of at least 32 bytes}
+    ports:
+      - "9091:9091"
+
+volumes:
+  mysql-data:

@@ -6,7 +6,7 @@ import (
 )
 
 // log is A global variable so that log functions can be directly accessed
-var log *zap.Logger
+var log = zap.NewNop()
 
 // Fields Type to pass when we want to call WithFields for structured logging
 type Fields map[string]interface{}

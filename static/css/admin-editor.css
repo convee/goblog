@@ -1,0 +1,61 @@
+.admin-editor {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 16px 48px;
+}
+
+.admin-editor__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.admin-editor__header h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.admin-editor .form-group {
+    margin-bottom: 16px;
+}
+
+.admin-editor label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.admin-editor .form-control {
+    min-height: 44px;
+    font-size: 16px;
+}
+
+.admin-editor textarea.form-control {
+    min-height: 96px;
+}
+
+.admin-editor__help {
+    display: block;
+    margin-top: 6px;
+    color: #5f6b7a;
+}
+
+.admin-editor__actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.admin-editor__actions .btn {
+    min-height: 44px;
+    min-width: 96px;
+}
+
+@media (max-width: 600px) {
+    .admin-editor__header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}

@@ -1,7 +1,16 @@
 .idea
 .vscode
 goblog*
+/bin/
+/dist/
+.goblog.pid
+.planning/
+conf/config.yml
 conf/prod.yml
 conf/local.yml
 logs/*
 __debug_bin
+.env
+coverage.out
+playwright-report/
+test-results/

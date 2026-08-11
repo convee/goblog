@@ -12,6 +12,9 @@ import (
 // InitRouter 自定义 http 服务器
 func InitRouter() *artgo.Engine {
 	r := artgo.New()
+	// 安全响应头与请求体上限应早于业务处理执行。
+	r.Use(middleware.SecurityHeaders())
+	r.Use(middleware.LimitRequestBody())
 	// 日志中间件，记录全局请求响应日志
 	r.Use(middleware.Logger())
 	// Recover 中间件，捕获 http server 协程panic错误信息
@@ -26,6 +29,8 @@ func InitRouter() *artgo.Engine {
 
 	// 前台路由
 	r.GET("/", front.Index)
+	r.GET("/healthz", front.Health)
+	r.GET("/readyz", front.Ready)
 	r.GET("/favicon.ico", func(c *artgo.Context) {
 		http.ServeFile(c.Writer, c.Req, "static/favicon.ico")
 	})
@@ -35,27 +40,25 @@ func InitRouter() *artgo.Engine {
 
 	// 后台登录路由，不需要校验登录态
 	r.GET("/login", admin.Login)
-	r.GET("/register", admin.Register)
 	r.POST("/signin", admin.Signin)
-	r.POST("/signup", admin.Signup)
 
-	// 后台管理页面路由，继承AuthWithCookie中间件，校验登录态
+	// 后台管理页面路由。每个处理器都由认证和 CSRF 包装器保护，
+	// 避免依赖 artgo v1.1.0 无法短路的中间件循环。
 	adminGroup := r.Group("/admin")
-	adminGroup.Use(middleware.AuthWithCookie())
-	adminGroup.POST("/logout", admin.Logout)
-	adminGroup.GET("/", admin.PostList)
-	adminGroup.GET("/post/add", admin.PostAdd)
-	adminGroup.POST("/post/save", admin.PostSave)
-	adminGroup.GET("/post/delete", admin.PostDelete)
-	adminGroup.GET("/page", admin.PageList)
-	adminGroup.GET("/page/add", admin.PageAdd)
-	adminGroup.POST("/page/save", admin.PageSave)
-	adminGroup.GET("/page/delete", admin.PageDelete)
-	adminGroup.GET("/category", admin.CategoryList)
-	adminGroup.GET("/category/add", admin.CategoryAdd)
-	adminGroup.POST("/category/save", admin.CategorySave)
-	adminGroup.GET("/category/delete", admin.CategoryDelete)
-	adminGroup.GET("/tag", admin.TagList)
+	adminGroup.POST("/logout", middleware.AdminOnly(admin.Logout))
+	adminGroup.GET("/", middleware.AdminOnly(admin.PostList))
+	adminGroup.GET("/post/add", middleware.AdminOnly(admin.PostAdd))
+	adminGroup.POST("/post/save", middleware.AdminOnly(admin.PostSave))
+	adminGroup.POST("/post/delete", middleware.AdminOnly(admin.PostDelete))
+	adminGroup.GET("/page", middleware.AdminOnly(admin.PageList))
+	adminGroup.GET("/page/add", middleware.AdminOnly(admin.PageAdd))
+	adminGroup.POST("/page/save", middleware.AdminOnly(admin.PageSave))
+	adminGroup.POST("/page/delete", middleware.AdminOnly(admin.PageDelete))
+	adminGroup.GET("/category", middleware.AdminOnly(admin.CategoryList))
+	adminGroup.GET("/category/add", middleware.AdminOnly(admin.CategoryAdd))
+	adminGroup.POST("/category/save", middleware.AdminOnly(admin.CategorySave))
+	adminGroup.POST("/category/delete", middleware.AdminOnly(admin.CategoryDelete))
+	adminGroup.GET("/tag", middleware.AdminOnly(admin.TagList))
 
 	return r
 }

@@ -5,8 +5,7 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{{.title}}|{{.name}}</title>
-    <meta name="keywords"
-          content="convee,blog,markdown,php,go,golang,git,github,it,shell,linux,柚子吧,程序员,博客,源码,架构,算法,数据结构,互联网,程序化广告,教程"/>
+    <meta name="keywords" content="{{.keywords}}"/>
     <meta name="description" content="{{.description}}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="{{.cdn}}/css/bootstrap.min.css"/>
@@ -15,85 +14,50 @@
 </head>
 
 <body>
+<a class="skip-link" href="#main-content">跳到正文</a>
 <header>
     <nav class="navbar navbar-default" id="navbar">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                        data-target="#header-navbar" aria-expanded="false">
-                    <span class="sr-only"></span>
+                        data-target="#header-navbar" aria-controls="header-navbar" aria-expanded="false">
+                    <span class="sr-only">展开导航</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
                 <h1 class="logo">
-                    <a href="/">柚子吧</a>
+                    <a href="/">{{.name}}</a>
                 </h1>
             </div>
             <div class="collapse navbar-collapse" id="header-navbar">
                 <form class="navbar-form nav navbar-form navbar-right search-nav" action="/" method="GET">
                     <div class="input-group">
-                        <input type="text" name="keyword" class="form-control" placeholder="请输入关键字" maxlength="20"
-                               autocomplete="off">
+                        <label class="sr-only" for="site-search">搜索文章</label>
+                        <input id="site-search" type="search" name="keyword" class="form-control" placeholder="搜索文章"
+                               maxlength="100" value="{{.keyword}}" autocomplete="off">
                         <span class="input-group-btn">
                                 <button type="submit" class="btn btn-default btn-search">搜索</button>
                             </span>
                     </div>
                 </form>
                 <ul class="nav navbar-nav navbar-left">
-                    <li><a href="/">首页</a></li>
-                    <li><a href="/tag">标签</a></li>
-                    <li><a href="/page/read">阅读</a></li>
-                    <li><a href="/page/about">关于</a></li>
+                    {{range .navigation}}<li><a href="{{.URL}}">{{.Label}}</a></li>{{end}}
                 </ul>
             </div>
         </div>
     </nav>
 </header>
+<main id="main-content">
 {{template "content" .}}
+</main>
 <div class="footer">
     <div class="container">
-        <p>Copyright &copy; 2021.convee All rights reserved</p>
+        <p>&copy; {{.year}} {{.name}}</p>
     </div>
 </div>
 
-<link rel="stylesheet" href="{{.cdn}}/css/gitalk.css">
-<script src="{{.cdn}}/js/gitalk.min.js"></script>
-<script src="{{.cdn}}/js/jquery.min.js"></script>
-<script src="{{.cdn}}/js/bootstrap.min.js"></script>
-<script src="{{.cdn}}/md/lib/marked.min.js"></script>
-<script src="{{.cdn}}/md/lib/prettify.min.js"></script>
-
-<script src="{{.cdn}}/md/lib/raphael.min.js"></script>
-<script src="{{.cdn}}/md/lib/underscore.min.js"></script>
-<script src="{{.cdn}}/md/lib/sequence-diagram.min.js"></script>
-<script src="{{.cdn}}/md/lib/flowchart.min.js"></script>
-<script src="{{.cdn}}/md/lib/jquery.flowchart.min.js"></script>
-
-<script src="{{.cdn}}/md/editormd.js"></script>
-<script type="text/javascript">
-    $(function () {
-        var testEditormdView2;
-        testEditormdView2 = editormd.markdownToHTML("test-editormd-view2", {
-            htmlDecode: "style,script,iframe",  // you can filter tags decode
-            emoji: true,
-            taskList: true,
-            tex: true,  // 默认不解析
-            flowChart: true,  // 默认不解析
-            sequenceDiagram: true,  // 默认不解析
-        });
-    });
-    const gitalk = new Gitalk({
-        clientID: 'f06fcb10638b615401a1',
-        clientSecret: '63c47044ce93a5af5e2fff498bc94317ff04d12e',
-        repo: 'goblog',      // The repository of store comments,
-        owner: 'convee',
-        admin: ['convee'],
-        distractionFreeMode: false  // Facebook-like distraction free mode
-    })
-
-    gitalk.render('gitalk-container')
-</script>
+<script src="{{.cdn}}/js/site.js"></script>
 </body>
 
 </html>

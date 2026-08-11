@@ -1,11 +1,21 @@
 app:
   name: 柚子吧
-  version: true
+  description: Go Markdown 博客系统
+  keywords: go,golang,markdown,blog
   mode: debug
   addr: localhost:9091
-  host: http://localhost:9091
-  cdn: "http://localhost:9091/static"
+  cdn: /static
   DisableDingDing: true
+  TrustedProxies: []
+  Navigation:
+    - Label: 首页
+      URL: /
+    - Label: 标签
+      URL: /tag
+    - Label: 阅读
+      URL: /page/read
+    - Label: 关于
+      URL: /page/about
 
 mysql:
   Dsn: "root:root@tcp(127.0.0.1:3306)/blog?timeout=2s&readTimeout=5s&writeTimeout=5s&parseTime=true&loc=Local&charset=utf8,utf8mb4"
@@ -13,10 +23,6 @@ mysql:
   MaxIdleConn: 10                 # 最大闲置的连接数，0意味着使用默认的大小2， 小于0表示不使用连接池
   MaxOpenConn: 60                 # 最大打开的连接数, 需要小于数据库配置中的max_connections数
   ConnMaxLifeTime: 4000           # 单个连接最大存活时间，建议设置比数据库超时时长(wait_timeout)稍小一些
-
-elasticsearch:
-  Disable: true
-  Urls: "http://127.0.0.1:9200"
 
 logger:
   Development: false
@@ -33,26 +39,3 @@ logger:
   LogRotateDate: 1
   LogRotateSize: 1
   LogBackupCount: 7
-
-orm:
-  Name: blog          # 数据库名称
-  Addr: 127.0.0.1:3306        # 如果是 docker,可以替换为 对应的服务名称，eg: db:3306
-  UserName: root
-  Password: root
-  ShowLog: true                   # 是否打印所有SQL日志
-  MaxIdleConn: 10                 # 最大闲置的连接数，0意味着使用默认的大小2， 小于0表示不使用连接池
-  MaxOpenConn: 60                 # 最大打开的连接数, 需要小于数据库配置中的max_connections数
-  ConnMaxLifeTime: 4h             # 单个连接最大存活时间，建议设置比数据库超时时长(wait_timeout)稍小一些
-  SlowThreshold: 0                # 慢查询阈值，设置后只打印慢查询日志，默认为500ms
-
-redis:
-  Addr: 127.0.0.1:6379
-  Password: ""
-  DB: 0
-  MinIdleConn: 200
-  DialTimeout: 60s
-  ReadTimeout: 500ms
-  WriteTimeout: 500ms
-  PoolSize: 100
-  PoolTimeout: 240s
-  IsTrace: true

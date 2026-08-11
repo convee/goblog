@@ -1,6 +1,7 @@
 package mysql
 
 import (
+	"context"
 	"database/sql"
 	"time"
 
@@ -36,6 +37,12 @@ func connect(c *Config, dataSourceName string) (*sql.DB, error) {
 	}
 	d.SetMaxOpenConns(c.MaxOpenConn)
 	d.SetMaxIdleConns(c.MaxIdleConn)
-	d.SetConnMaxLifetime(time.Duration(c.ConnMaxLifeTime))
+	d.SetConnMaxLifetime(time.Duration(c.ConnMaxLifeTime) * time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := d.PingContext(ctx); err != nil {
+		_ = d.Close()
+		return nil, errors.WithStack(err)
+	}
 	return d, nil
 }

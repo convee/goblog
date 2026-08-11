@@ -3,18 +3,17 @@ package pkg
 import (
 	"fmt"
 	"github.com/convee/artgo"
+	"github.com/convee/goblog/internal/security"
 	"html/template"
 	"log"
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/convee/goblog/conf"
 )
 
 var FuncMap = template.FuncMap{
-	"noescape": func(s string) template.HTML {
-		return template.HTML(s)
-	},
 	"formatTime": func(t time.Time, layout string) string {
 		return t.Format(layout)
 	},
@@ -47,29 +46,71 @@ var FuncMap = template.FuncMap{
 	},
 }
 
+var (
+	frontTemplates     map[string]*template.Template
+	frontTemplatesErr  error
+	frontTemplatesOnce sync.Once
+)
+
+func loadFrontTemplates() error {
+	frontTemplatesOnce.Do(func() {
+		frontTemplates = make(map[string]*template.Template)
+		for _, name := range []string{"index", "post", "page", "tag", "404"} {
+			tpl, err := template.New("layout.html").Funcs(FuncMap).ParseFiles(
+				"templates/default/layout.html",
+				"templates/default/"+name+".html",
+			)
+			if err != nil {
+				frontTemplatesErr = fmt.Errorf("parse front template %s: %w", name, err)
+				return
+			}
+			frontTemplates[name] = tpl
+		}
+	})
+	return frontTemplatesErr
+}
+
 func Render(data map[string]interface{}, c *artgo.Context, tpl string) {
-	var tplPaths []string
-	tplPaths = append(tplPaths, "templates/default/layout.html")
-	tplPaths = append(tplPaths, "templates/default/"+tpl+".html")
-	t, err := template.New("layout.html").Funcs(FuncMap).ParseFiles(tplPaths...)
-	if err != nil {
-		log.Println("posts template err:", err)
+	if err := loadFrontTemplates(); err != nil {
+		log.Println("front template error:", err)
+		c.Error(http.StatusInternalServerError, "页面暂时不可用")
 		return
 	}
 	data["name"] = conf.Conf.App.Name
 	data["cdn"] = conf.Conf.App.Cdn
+	data["keywords"] = conf.Conf.App.Keywords
+	data["navigation"] = conf.Conf.App.Navigation
+	data["year"] = time.Now().Year()
 	// seo title
 	if _, ok := data["title"]; !ok {
 		data["title"] = "Go Markdown 博客系统"
 	}
 	// seo description
 	if _, ok := data["description"]; !ok {
-		data["description"] = "Go Markdown 博客系统"
+		data["description"] = conf.Conf.App.Description
 	}
-	t.Execute(c.Writer, data)
+	t, ok := frontTemplates[tpl]
+	if !ok {
+		c.Error(http.StatusInternalServerError, "页面暂时不可用")
+		return
+	}
+	if err := t.ExecuteTemplate(c.Writer, "layout.html", data); err != nil {
+		log.Println("execute front template:", err)
+	}
 }
 
-func AdminRender(data map[string]interface{}, c *artgo.Context, template string) {
+func AdminRender(data map[string]interface{}, c *artgo.Context, template string, statuses ...int) {
 	data["cdn"] = conf.Conf.App.Cdn
-	c.HTML(http.StatusOK, template+".html", data)
+	data["name"] = conf.Conf.App.Name
+	csrfToken, err := security.EnsureCSRFToken(c.Writer, c.Req)
+	if err != nil {
+		c.Error(http.StatusInternalServerError, "页面暂时不可用")
+		return
+	}
+	data["csrf_token"] = csrfToken
+	status := http.StatusOK
+	if len(statuses) > 0 {
+		status = statuses[0]
+	}
+	c.HTML(status, template+".html", data)
 }

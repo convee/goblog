@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <meta name="description" content=""/>
     <meta name="author" content=""/>
-    <title>401 Error - Admin</title>
+    <title>请求未完成 - goblog</title>
     <link href="{{.cdn}}/admin/css/styles.css" rel="stylesheet"/>
     <script src="{{.cdn}}/admin/js/all.min.js" crossorigin="anonymous"></script>
 </head>
@@ -18,12 +18,12 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-6">
                         <div class="text-center mt-4">
-                            <h1 class="display-1">401</h1>
-                            <p class="lead">Unauthorized</p>
-                            <p>{{.msg}}.</p>
-                            <a href="/admin">
+                            <h1 class="display-1">{{.status}}</h1>
+                            <p class="lead">请求未完成</p>
+                            <p role="alert">{{.msg}}</p>
+                            <a href="{{.back_url}}">
                                 <i class="fas fa-arrow-left me-1"></i>
-                                Return to Dashboard
+                                返回管理后台
                             </a>
                         </div>
                     </div>
@@ -35,12 +35,7 @@
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid px-4">
                 <div class="d-flex align-items-center justify-content-between small">
-                    <div class="text-muted">Copyright &copy; Your Website 2021</div>
-                    <div>
-                        <a href="#">Privacy Policy</a>
-                        &middot;
-                        <a href="#">Terms &amp; Conditions</a>
-                    </div>
+                    <div class="text-muted">goblog 管理后台</div>
                 </div>
             </div>
         </footer>

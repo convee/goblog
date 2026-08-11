@@ -2,8 +2,7 @@ package daos
 
 import (
 	"github.com/convee/goblog/internal/model"
-	"github.com/convee/goblog/pkg/logger"
-	"go.uber.org/zap"
+	"strconv"
 )
 
 func GetTags() (tags []model.Tag, err error) {
@@ -14,10 +13,12 @@ func GetTags() (tags []model.Tag, err error) {
 	defer rows.Close()
 	for rows.Next() {
 		var tag model.Tag
-		rows.Scan(&tag.Id, &tag.Name, &tag.Count)
+		if err := rows.Scan(&tag.Id, &tag.Name, &tag.Count); err != nil {
+			return nil, err
+		}
 		tags = append(tags, tag)
 	}
-	return
+	return tags, rows.Err()
 }
 
 func GetTagIdsByName(name string) (tagIds []string, err error) {
@@ -28,10 +29,17 @@ func GetTagIdsByName(name string) (tagIds []string, err error) {
 	defer rs.Close()
 	for rs.Next() {
 		var tagId string
-		rs.Scan(&tagId)
+		if err := rs.Scan(&tagId); err != nil {
+			return nil, err
+		}
 		tagIds = append(tagIds, tagId)
 	}
-	return
+	return tagIds, rs.Err()
+}
+
+func GetTagByName(name string) (tag model.Tag, err error) {
+	err = db.QueryRow("select id,name,count from tag where name=? limit 1", name).Scan(&tag.Id, &tag.Name, &tag.Count)
+	return tag, err
 }
 
 func AddTag(tag model.Tag) (id int, err error) {
@@ -43,11 +51,11 @@ func AddTag(tag model.Tag) (id int, err error) {
 	return int(id64), err
 }
 
-func IncrTagCount(id string) {
-	count, err := GetPostCountByTagId(id)
+func RefreshTagCount(id int) error {
+	count, err := GetPostCountByTagID(strconv.Itoa(id))
 	if err != nil {
-		logger.Error("incr_tag_count_err", zap.Error(err))
-		return
+		return err
 	}
-	db.Exec("update tag set count=? where id = ?", count, id)
+	_, err = db.Exec("update tag set count=? where id=?", count, id)
+	return err
 }

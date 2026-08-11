@@ -1,17 +1,15 @@
-#!/bin/sh
+#!/usr/bin/env bash
+set -euo pipefail
 
-COMMIT=$(git rev-parse --short HEAD)
-TIME=$(date +%Y%m%d%H)
-
-case "$1" in
-'build')
-  GOOS=linux GOARCH=amd64 go build -v -ldflags "-X main.Commit=$COMMIT"
+case "${1:-}" in
+build)
+  exec make build
   ;;
-'tar')
-  tar zcvf  blog"$TIME".tar.gz ./blog ./templates ./static ./conf
+tar)
+  exec make tar
   ;;
 *)
-  echo "usage: $0 {build|tar}"
+  echo "usage: $0 {build|tar}" >&2
   exit 1
   ;;
 esac

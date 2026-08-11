@@ -1,0 +1,39 @@
+app:
+  name: "My Blog"
+  description: "A lightweight Markdown blog"
+  keywords: "go,markdown,blog"
+  mode: release
+  addr: 0.0.0.0:9091
+  cdn: /static
+  DisableDingDing: true
+  TrustedProxies: []
+  Navigation:
+    - Label: Home
+      URL: /
+    - Label: Tags
+      URL: /tag
+    - Label: About
+      URL: /page/about
+
+mysql:
+  Dsn: "goblog:change-me@tcp(127.0.0.1:3306)/blog?timeout=2s&readTimeout=5s&writeTimeout=5s&parseTime=true&loc=Local&charset=utf8mb4"
+  ShowLog: false
+  MaxIdleConn: 10
+  MaxOpenConn: 60
+  ConnMaxLifeTime: 4000
+
+logger:
+  Development: false
+  DisableCaller: false
+  DisableStacktrace: false
+  Encoding: json
+  Level: info
+  Name: goblog
+  Writers: console
+  LoggerFile: logs/access.log
+  LoggerWarnFile: logs/warn.log
+  LoggerErrorFile: logs/error.log
+  LogRollingPolicy: daily
+  LogRotateDate: 1
+  LogRotateSize: 1
+  LogBackupCount: 7

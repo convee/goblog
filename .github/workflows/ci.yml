@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
+        with:
+          go-version: '1.26.5'
+          cache: true
+      - name: Verify formatting
+        run: test -z "$(gofmt -l .)" || { gofmt -l .; exit 1; }
+      - name: Vet
+        run: go vet ./...
+      - name: Test with race detector
+        run: go test -race ./...
+      - name: Build
+        run: go build ./...
+      - name: Vulnerability scan
+        uses: golang/govulncheck-action@032d45514ae346b1db93c04b0c90b841c370344f # v1
+        with:
+          go-version-input: '1.26.5'
+          go-package: ./...
+
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_DATABASE: blog
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot --silent"
+          --health-interval=5s
+          --health-timeout=3s
+          --health-retries=20
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
+        with:
+          go-version: '1.26.5'
+          cache: true
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: tests/requirements-e2e.txt
+      - name: Install browser
+        run: |
+          python -m pip install --requirement tests/requirements-e2e.txt
+          python -m playwright install --with-deps chromium
+      - name: Initialize database and administrator
+        env:
+          GOBLOG_CONFIG: conf/config.example.yml
+          GOBLOG_MYSQL_DSN: root:root@tcp(127.0.0.1:3306)/blog?timeout=2s&readTimeout=5s&writeTimeout=5s&parseTime=true&loc=Local&charset=utf8mb4
+          GOBLOG_ADMIN_PASSWORD: e2e-password-at-least-12
+        run: |
+          mysql --protocol TCP -h 127.0.0.1 -uroot -proot blog < blog.sql
+          go run ./cmd/admin --email e2e@example.com
+      - name: Run browser end-to-end tests
+        env:
+          GOBLOG_CONFIG: conf/config.example.yml
+          GOBLOG_MYSQL_DSN: root:root@tcp(127.0.0.1:3306)/blog?timeout=2s&readTimeout=5s&writeTimeout=5s&parseTime=true&loc=Local&charset=utf8mb4
+        run: |
+          go build -o /tmp/goblog-e2e ./
+          export GOBLOG_SESSION_SECRET="$(openssl rand -hex 32)"
+          /tmp/goblog-e2e >/tmp/goblog-e2e.log 2>&1 &
+          app_pid=$!
+          trap 'kill "$app_pid" 2>/dev/null || true; cat /tmp/goblog-e2e.log' EXIT
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:9091/readyz >/dev/null && break
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:9091/readyz >/dev/null
+          python tests/e2e.py --email e2e@example.com --password e2e-password-at-least-12

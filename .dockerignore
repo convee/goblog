@@ -1,0 +1,13 @@
+.git
+.github
+.idea
+.planning
+.vscode
+bin
+dist
+logs
+conf/dev.yml
+conf/local.yml
+conf/prod.yml
+*.tar.gz
+*.sha256

@@ -27,45 +27,39 @@ func GetPages(params PageParams) (pages []model.Page, err error) {
 		logger.Error("GetPagesError", zap.Error(err))
 		return
 	}
-	if rows.Err() != nil {
-		logger.Error("GetPagesError", zap.Error(rows.Err()))
-		return
-	}
 	defer rows.Close()
 	for rows.Next() {
 		var page model.Page
-		_ = rows.Scan(&page.Id, &page.Title, &page.Ident, &page.Content)
+		if err = rows.Scan(&page.Id, &page.Title, &page.Ident, &page.Content); err != nil {
+			logger.Error("GetPagesError", zap.Error(err))
+			return nil, err
+		}
 		pages = append(pages, page)
 	}
-	return
+	if err = rows.Err(); err != nil {
+		logger.Error("GetPagesError", zap.Error(err))
+	}
+	return pages, err
 }
 
-func GetPage(id string) (page model.Page) {
+func GetPage(id string) (page model.Page, err error) {
 	row := db.QueryRow("select id,title,ident,content from page  where id=? limit 1", id)
-	if row.Err() != nil {
-		logger.Error("GetPageError", zap.Error(row.Err()))
-		return
-	}
-	err := row.Scan(&page.Id, &page.Title, &page.Ident, &page.Content)
+	err = row.Scan(&page.Id, &page.Title, &page.Ident, &page.Content)
 	if err != nil {
 		logger.Error("GetPageError", zap.Error(err))
-		return
+		return page, err
 	}
-	return
+	return page, nil
 }
 
-func GetPageByIdent(ident string) (page model.Page) {
+func GetPageByIdent(ident string) (page model.Page, err error) {
 	row := db.QueryRow("select id,title,content from page  where ident=? limit 1", ident)
-	if row.Err() != nil {
-		logger.Error("GetPageError", zap.Error(row.Err()))
-		return
-	}
-	err := row.Scan(&page.Id, &page.Title, &page.Content)
+	err = row.Scan(&page.Id, &page.Title, &page.Content)
 	if err != nil {
 		logger.Error("GetPageError", zap.Error(err))
-		return
+		return page, err
 	}
-	return
+	return page, nil
 }
 
 func PageDelete(page model.Page) (id int, err error) {
@@ -93,7 +87,10 @@ func PageSave(page model.Page) (id int, err error) {
 			logger.Error("PageSaveError", zap.Error(err))
 			return
 		}
-		id64, _ := rs.LastInsertId()
+		id64, lastIDErr := rs.LastInsertId()
+		if lastIDErr != nil {
+			return 0, lastIDErr
+		}
 		id = int(id64)
 
 	}

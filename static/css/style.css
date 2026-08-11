@@ -5,6 +5,59 @@ li {
     padding: 0;
 }
 
+:root {
+    --color-text: #172033;
+    --color-muted: #5f6b7a;
+    --color-border: #e5e9f0;
+    --color-surface: #ffffff;
+    --color-background: #f6f8fb;
+    --color-primary: #2457d6;
+    --color-primary-dark: #173d9c;
+    --focus-ring: rgba(36, 87, 214, .28);
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    color: var(--color-text);
+    background: var(--color-background);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+}
+
+a,
+button,
+input {
+    touch-action: manipulation;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+.skip-link {
+    position: fixed;
+    left: 16px;
+    top: 8px;
+    z-index: 2000;
+    padding: 10px 14px;
+    color: #fff;
+    background: var(--color-primary-dark);
+    border-radius: 6px;
+    transform: translateY(-150%);
+}
+
+.skip-link:focus {
+    color: #fff;
+    transform: translateY(0);
+}
+
 a {
     text-decoration: none;
 }
@@ -23,12 +76,12 @@ a:hover {
     position: relative;
     margin: 0 auto;
     max-width: 900px;
-    padding: 0;
+    padding: 0 16px;
 }
 
 @media (max-width: 1240px) {
     .container {
-        margin: 0 15px;
+        margin: 0 auto;
     }
 }
 
@@ -45,7 +98,8 @@ a:hover {
 }
 
 .navbar-default {
-    background-color: #fff;
+    background-color: var(--color-surface);
+    border-color: var(--color-border);
 }
 
 .navbar-nav > li > a {
@@ -61,7 +115,7 @@ a:hover {
 .content-wrap {
     width: 100%;
     float: left;
-    min-height: 1000px;
+    min-height: 60vh;
 }
 
 .content {
@@ -122,16 +176,18 @@ a:hover {
 
 .excerpt {
     clear: both;
-    border: 1px solid #fff;
-    padding: 10px;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 20px;
     overflow: hidden;
     background-color: #fff;
-    margin-bottom: -1px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 18px rgba(26, 38, 64, .04);
 }
 
 .excerpt:hover {
-    background-color: #FBFDFF;
-    border-color: #fff;
+    background-color: #fff;
+    border-color: #ccd6eb;
     position: relative;
 }
 
@@ -141,7 +197,7 @@ a:hover {
 
 .excerpt .cat {
     color: #FFF;
-    background-color: #161209;
+    background-color: var(--color-primary-dark);
     padding: 3px 6px;
     font-size: 12px;
     display: inline-block;
@@ -177,7 +233,7 @@ a:hover {
 }
 
 .excerpt h2 a {
-    color: #161209;
+    color: var(--color-text);
 }
 
 .excerpt h2 a:hover {
@@ -185,8 +241,8 @@ a:hover {
 }
 
 .excerpt .meta {
-    color: #999;
-    font-size: 12px;
+    color: var(--color-muted);
+    font-size: 14px;
     margin-top: 5px;
 }
 
@@ -217,11 +273,59 @@ a:hover {
 }
 
 .excerpt .meta a {
-    color: #999;
+    color: var(--color-muted);
 }
 
 .pagination li a {
-    color: #555555;
+    color: var(--color-primary-dark);
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.article-content {
+    max-width: 75ch;
+    font-size: 17px;
+    line-height: 1.75;
+}
+
+.article-content img {
+    max-width: 100%;
+    height: auto;
+}
+
+@media (max-width: 767px) {
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .navbar > .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .navbar-nav > li > a {
+        min-height: 44px;
+        line-height: 44px;
+    }
+
+    .search-nav .form-control,
+    .search-nav .btn {
+        min-height: 44px;
+        font-size: 16px;
+    }
+
+    .excerpt {
+        padding: 16px;
+    }
+
+    .excerpt .meta > * {
+        display: inline-block;
+        margin-bottom: 6px;
+    }
 }
 
 

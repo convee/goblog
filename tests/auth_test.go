@@ -5,7 +5,12 @@ import (
 	"testing"
 )
 
-func TestName(t *testing.T) {
-	password, _ := bcrypt.GenerateFromPassword([]byte("123456"), 8)
-	t.Log(string(password))
+func TestGeneratedPasswordCanBeVerified(t *testing.T) {
+	password, err := bcrypt.GenerateFromPassword([]byte("a-test-password"), bcrypt.MinCost)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := bcrypt.CompareHashAndPassword(password, []byte("a-test-password")); err != nil {
+		t.Fatalf("generated password hash cannot be verified: %v", err)
+	}
 }

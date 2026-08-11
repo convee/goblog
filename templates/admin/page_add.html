@@ -1,59 +1,42 @@
 <!DOCTYPE html>
-<html lang="zh">
-
+<html lang="zh-CN">
 <head>
     <meta charset="utf-8"/>
-    <title>Dashboard - Admin</title>
-    <link rel="stylesheet" type="text/css" media="screen" href="{{.cdn}}/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="{{.cdn}}/md/css/style.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>编辑页面 - goblog</title>
+    <link rel="stylesheet" href="{{.cdn}}/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="{{.cdn}}/md/css/editormd.css"/>
+    <link rel="stylesheet" href="{{.cdn}}/css/admin-editor.css"/>
 </head>
-
 <body>
-<div id="layout">
-    <header>
-        <h1>添加页面 <a href="/admin">返回列表</a></h1>
+<main class="admin-editor">
+    <header class="admin-editor__header">
+        <h1>{{if .id}}编辑页面{{else}}添加页面{{end}}</h1>
+        <a class="btn btn-default" href="/admin/page">返回列表</a>
     </header>
-    <form class="navbar-form nav navbar-form" action="/admin/page/save" method="POST">
+    <form action="/admin/page/save" method="POST">
+        <input type="hidden" name="_csrf" value="{{.csrf_token}}">
         <input type="hidden" name="id" value="{{.id}}">
-        <label style="margin-left: 75px;">
-            标题：<input class="form-control" type="text" name="title" value="{{.title}}">
-        </label>
-        <label style="margin-left: 75px;">
-            标识：<input class="form-control" type="text" name="ident" value="{{.ident}}">
-        </label>
-        <div id="test-editormd">
+        <div class="form-group">
+            <label for="page-title">标题</label>
+            <input id="page-title" class="form-control" type="text" name="title" value="{{.title}}" maxlength="100" required autofocus>
+        </div>
+        <div class="form-group">
+            <label for="page-ident">页面标识</label>
+            <input id="page-ident" class="form-control" type="text" name="ident" value="{{.ident}}" maxlength="20" pattern="[A-Za-z0-9_\-]+" aria-describedby="page-ident-help" required>
+            <small id="page-ident-help" class="admin-editor__help">只允许字母、数字、下划线和连字符，将用于 `/page/标识`。</small>
+        </div>
+        <div id="test-editormd" data-editor-path="{{.cdn}}/md/lib/">
             <textarea style="display:none;" name="content">{{.content}}</textarea>
         </div>
-        <div class="btns">
-            <button id="append-btn" type="submit">提交</button>
+        <div class="admin-editor__actions">
+            <button class="btn btn-primary" type="submit">保存</button>
+            <a class="btn btn-default" href="/admin/page">取消</a>
         </div>
     </form>
-</div>
+</main>
 <script src="{{.cdn}}/md/js/jquery.min.js"></script>
 <script src="{{.cdn}}/md/editormd.min.js"></script>
-<script type="text/javascript">
-    var testEditor;
-
-    $(function () {
-        testEditor = editormd("test-editormd", {
-            width: "90%",
-            height: 640,
-            syncScrolling: "single",
-            path: "{{.cdn}}/md/lib/"
-        });
-
-        /*
-        // or
-        testEditor = editormd({
-            id      : "test-editormd",
-            width   : "90%",
-            height  : 640,
-            path    : "../lib/"
-        });
-        */
-    });
-</script>
+<script src="{{.cdn}}/js/editor.js"></script>
 </body>
-
 </html>

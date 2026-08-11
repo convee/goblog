@@ -1,117 +1,94 @@
 package front
 
 import (
-	"fmt"
-	"github.com/convee/artgo"
-	"github.com/convee/goblog/internal/daos"
-	"github.com/convee/goblog/internal/model"
-	"github.com/convee/goblog/internal/pkg"
+	"database/sql"
+	"errors"
+	"net/http"
 	"strconv"
 	"strings"
 
-	"github.com/convee/goblog/conf"
+	"github.com/convee/artgo"
+	"github.com/convee/goblog/internal/daos"
+	"github.com/convee/goblog/internal/pkg"
+	"github.com/convee/goblog/internal/service"
 )
 
+var frontService = service.NewFrontService()
+
 func Index(c *artgo.Context) {
-	categoryId := c.Query("category_id")
-	tagId := c.Query("tag_id")
-	perPage, _ := strconv.Atoi(c.Query("per_page"))
-	page, _ := strconv.Atoi(c.Query("page"))
-	keyword := c.Query("keyword")
-	if perPage <= 0 {
-		perPage = 20
+	categoryID := c.Query("category_id")
+	tagID := c.Query("tag_id")
+	keyword := strings.TrimSpace(c.Query("keyword"))
+	if len([]rune(keyword)) > 100 {
+		keyword = string([]rune(keyword)[:100])
 	}
-	if page <= 1 {
+	page, _ := strconv.Atoi(c.Query("page"))
+	perPage, _ := strconv.Atoi(c.Query("per_page"))
+	if page < 1 {
 		page = 1
 	}
-	prePage := page - 1
-	nextPage := page + 1
-	if prePage <= 1 {
-		prePage = 1
+	if perPage < 1 {
+		perPage = 20
 	}
-	params := daos.PostParams{
-		CategoryId: categoryId,
-		TagId:      tagId,
-		PerPage:    perPage,
-		Page:       page,
-	}
-	// 关键词搜索：标题、描述、内容、分类、标签等
-	// todo es search
-	if len(keyword) > 0 {
-		params.Keyword = keyword
-		params.Ids = make(map[string][]string)
-		postIds, err := daos.GetPostIdsByContent(keyword)
-		if err == nil {
-			params.Ids["ids"] = postIds
-		}
-		categoryIds, err := daos.GetCategoryIdsByName(keyword)
-		if err == nil {
-			params.Ids["category_ids"] = categoryIds
-		}
-		tagIds, err := daos.GetTagIdsByName(keyword)
-		if err == nil {
-			params.Ids["tag_ids"] = tagIds
-		}
+	if perPage > 50 {
+		perPage = 50
 	}
 
-	posts, err := daos.GetPosts(params)
+	posts, err := frontService.GetHomePosts(categoryID, tagID, keyword, page, perPage+1)
 	if err != nil {
-		fmt.Println("get posts err:", err)
+		c.Error(http.StatusInternalServerError, "文章列表暂时不可用")
 		return
+	}
+	hasNext := len(posts) > perPage
+	if hasNext {
+		posts = posts[:perPage]
 	}
 	categories, err := daos.GetCategories()
 	if err != nil {
-		fmt.Println("get categories err:", err)
+		c.Error(http.StatusInternalServerError, "分类列表暂时不可用")
 		return
 	}
-	categoryMap := make(map[int]model.Category)
-	for _, category := range categories {
-		categoryMap[category.Id] = category
-	}
-	for index, post := range posts {
-		posts[index].CategoryName = categoryMap[post.CategoryId].Name
-	}
-	data := make(map[string]interface{})
-	data["posts"] = posts
-	data["categories"] = categories
-	data["page"] = page
-	data["pre_url"] = getPageUrl(categoryId, tagId, strconv.Itoa(prePage))
-	data["next_url"] = getPageUrl(categoryId, tagId, strconv.Itoa(nextPage))
-	pkg.Render(data, c, "index")
-}
 
-func getPageUrl(categoryId string, tagId string, page string) string {
-	var params []string
-	if len(categoryId) > 0 {
-		params = append(params, "category_id="+categoryId)
+	data := map[string]interface{}{
+		"posts":      posts,
+		"categories": categories,
+		"keyword":    keyword,
+		"page":       page,
+		"has_pre":    page > 1,
+		"has_next":   hasNext,
+		"pre_url":    frontService.GetPageURL(categoryID, tagID, keyword, page-1),
+		"next_url":   frontService.GetPageURL(categoryID, tagID, keyword, page+1),
 	}
-	if len(tagId) > 0 {
-		params = append(params, "tag_id="+tagId)
-	}
-	params = append(params, "page="+page)
-	return conf.Conf.App.Host + "?" + strings.Join(params, "&")
+	pkg.Render(data, c, "index")
 }
 
 func PostInfo(c *artgo.Context) {
 	id := c.Param("id")
-	post := daos.GetPost(id)
-	category := daos.GetCategory(post.CategoryId)
-	allTags, _ := daos.GetTags()
-	tagIds := post.TagIds
-	tagsById := make(map[int]model.Tag)
-	for _, tag := range allTags {
-		tagsById[tag.Id] = tag
+	postID, err := strconv.Atoi(id)
+	if err != nil || postID < 1 {
+		c.Error(http.StatusNotFound, "文章不存在")
+		return
 	}
-	var tags []model.Tag
-	for _, tagId := range tagIds {
-		tags = append(tags, tagsById[tagId])
+	post, tags, err := frontService.GetPostDetail(id)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			c.Error(http.StatusNotFound, "文章不存在")
+			return
+		}
+		c.Error(http.StatusInternalServerError, "文章暂时不可用")
+		return
 	}
-	daos.IncrView(id)
-	post.CategoryName = category.Name
-	data := make(map[string]interface{})
-	data["post"] = post
-	data["tags"] = tags
-	data["title"] = post.Title
-	data["description"] = post.Description
+	contentHTML, err := pkg.RenderMarkdown(post.Content)
+	if err != nil {
+		c.Error(http.StatusInternalServerError, "文章暂时不可用")
+		return
+	}
+	data := map[string]interface{}{
+		"post":         post,
+		"tags":         tags,
+		"content_html": contentHTML,
+		"title":        post.Title,
+		"description":  post.Description,
+	}
 	pkg.Render(data, c, "post")
 }

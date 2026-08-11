@@ -1,0 +1,39 @@
+name: Bug report
+description: 报告可复现的 goblog 缺陷
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: 安全漏洞请不要在此报告，请阅读 SECURITY.md。
+  - type: input
+    id: version
+    attributes:
+      label: goblog 版本
+      placeholder: v1.3.0 或 commit SHA
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: 环境
+      description: 操作系统、Go、MySQL、浏览器和部署方式
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期与实际结果
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: 脱敏日志
+      render: shell

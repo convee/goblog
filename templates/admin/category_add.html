@@ -1,28 +1,30 @@
 <!DOCTYPE html>
-<html lang="zh">
-
+<html lang="zh-CN">
 <head>
     <meta charset="utf-8"/>
-    <title>Dashboard - Admin</title>
-    <link rel="stylesheet" type="text/css" media="screen" href="{{.cdn}}/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="{{.cdn}}/md/css/style.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>编辑分类 - goblog</title>
+    <link rel="stylesheet" href="{{.cdn}}/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="{{.cdn}}/css/admin-editor.css"/>
 </head>
-
 <body>
-<div id="layout">
-    <header>
-        <h1>添加分类 <a href="/admin">返回列表</a></h1>
+<main class="admin-editor">
+    <header class="admin-editor__header">
+        <h1>{{if .id}}编辑分类{{else}}添加分类{{end}}</h1>
+        <a class="btn btn-default" href="/admin/category">返回列表</a>
     </header>
-    <form class="navbar-form nav navbar-form" action="/admin/category/save" method="POST">
+    <form action="/admin/category/save" method="POST">
+        <input type="hidden" name="_csrf" value="{{.csrf_token}}">
         <input type="hidden" name="id" value="{{.id}}">
-        <label style="margin-left: 75px;">
-            分类名称：<input class="form-control" type="text" name="name" value="{{.name}}">
-        </label>
-        <div class="btns">
-            <button id="append-btn" type="submit">提交</button>
+        <div class="form-group">
+            <label for="category-name">分类名称</label>
+            <input id="category-name" class="form-control" type="text" name="name" value="{{.name}}" maxlength="100" required autofocus>
+        </div>
+        <div class="admin-editor__actions">
+            <button class="btn btn-primary" type="submit">保存</button>
+            <a class="btn btn-default" href="/admin/category">取消</a>
         </div>
     </form>
-</div>
+</main>
 </body>
-
 </html>
