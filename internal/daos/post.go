@@ -56,8 +56,8 @@ func (qb *PostQueryBuilder) WithKeyword(keyword string, ids map[string][]string)
 		return qb
 	}
 
-	keywordSQL := "title like ? or description like ?"
-	qb.args = append(qb.args, "%"+keyword+"%", "%"+keyword+"%")
+	keywordSQL := "title like ? escape '|' or description like ? escape '|'"
+	qb.args = append(qb.args, likePattern(keyword), likePattern(keyword))
 	if ids != nil {
 		keywordSQL = qb.appendIn(keywordSQL, "id", ids["ids"])
 		keywordSQL = qb.appendIn(keywordSQL, "category_id", ids["category_ids"])
@@ -86,6 +86,11 @@ func (qb *PostQueryBuilder) appendIn(query, field string, values []string) strin
 		return query
 	}
 	return query + " or " + field + " in (" + strings.Join(placeholders, ",") + ")"
+}
+
+func likePattern(value string) string {
+	replacer := strings.NewReplacer("|", "||", "%", "|%", "_", "|_")
+	return "%" + replacer.Replace(value) + "%"
 }
 
 func (qb *PostQueryBuilder) WithStatus(status int) *PostQueryBuilder {
@@ -249,7 +254,7 @@ func GetPostCountByTagID(id string) (int, error) {
 }
 
 func GetPostIdsByContent(content string) ([]string, error) {
-	rows, err := db.Query("select post_id from post_content where content like ?", "%"+content+"%")
+	rows, err := db.Query("select post_id from post_content where content like ? escape '|'", likePattern(content))
 	if err != nil {
 		return nil, err
 	}

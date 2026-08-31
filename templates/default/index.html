@@ -2,57 +2,113 @@
 <div class="container">
     <div class="content-wrap">
         <div class="content center">
-            <div class="title">
-                <div class="more">
-                    {{range .categories}}
-                    <a href="/?category_id={{.Id}}">{{.Name}}</a>
+            <section class="filter-panel" aria-label="文章筛选">
+                <div class="filter-heading">
+                    <div>
+                        <p class="filter-eyebrow">文章目录</p>
+                        <h2>找到你想读的内容</h2>
+                    </div>
+                    {{if .has_active_filters}}
+                    <a class="clear-filters" href="{{.clear_url}}">重置全部</a>
                     {{end}}
                 </div>
-            </div>
-            {{if .posts}}
-            {{range .posts}}
-            <div class="excerpt">
-                <header>
-                    <a class="cat" href="/?category_id={{.CategoryId}}">{{.CategoryName}}<i></i></a>
-                    <h2><a href="/post/{{.Id}}">{{.Title}}</a></h2>
-                </header>
-                {{.Description}}
-                <p class="meta">
-                    <span class="category"><i class="glyphicon glyphicon-folder-open"></i> {{.CategoryName}}</span>
-                    <time class="time" datetime="{{.UpdatedAt.Format "2006-01-02T15:04:05Z07:00"}}"><i class="glyphicon glyphicon-time"></i> {{.UpdatedAt.Format "2006-01-02"}}</time>
-                    <span class="views"><i class="glyphicon glyphicon-eye-open"></i> {{.Views}}</span>
-                </p>
+                <form class="filter-form" action="/" method="GET">
+                    <div class="filter-field filter-field-keyword">
+                        <label for="post-keyword">搜索关键词</label>
+                        <input id="post-keyword" type="search" name="keyword" class="form-control"
+                               placeholder="标题、摘要或正文" maxlength="100" value="{{.keyword}}"
+                               autocomplete="off">
+                    </div>
+                    <div class="filter-field">
+                        <label for="post-category">文章分类</label>
+                        <select id="post-category" name="category_id" class="form-control">
+                            <option value="">全部分类</option>
+                            {{range .categories}}
+                            <option value="{{.Id}}" {{if .Cur}}selected{{end}}>{{.Name}}</option>
+                            {{end}}
+                        </select>
+                    </div>
+                    <div class="filter-field filter-field-per-page">
+                        <label for="post-per-page">每页显示</label>
+                        <select id="post-per-page" name="per_page" class="form-control">
+                            <option value="10" {{if eq .per_page 10}}selected{{end}}>10 篇</option>
+                            <option value="20" {{if eq .per_page 20}}selected{{end}}>20 篇</option>
+                            <option value="50" {{if eq .per_page 50}}selected{{end}}>50 篇</option>
+                        </select>
+                    </div>
+                    {{if .tag_id}}
+                    <input type="hidden" name="tag_id" value="{{.tag_id}}">
+                    {{end}}
+                    <div class="filter-actions">
+                        <button type="submit" class="btn btn-primary">筛选</button>
+                    </div>
+                </form>
+                {{if .has_active_filters}}
+                <div class="filter-summary" aria-live="polite">
+                    <span class="result-count">本页显示 {{len .posts}} 篇</span>
+                    {{if .keyword}}<span class="filter-chip">关键词：{{.keyword}}</span>{{end}}
+                    {{if .category_name}}<span class="filter-chip">分类：{{.category_name}}</span>{{end}}
+                    {{if .tag_id}}<span class="filter-chip">标签 #{{.tag_id}}</span>{{end}}
+                    {{if ne .per_page 20}}<span class="filter-chip">每页 {{.per_page}} 篇</span>{{end}}
+                </div>
+                {{end}}
+            </section>
 
-            </div>
-            {{end}}
-            {{else}}
-            <div class="text-center">
-                <h3>
-                    <stong>暂无内容</stong>
-                </h3>
-            </div>
-            {{end}}
-            <nav aria-label="Page navigation">
+            <section class="post-list" aria-label="文章列表">
+                {{if .posts}}
+                {{range .posts}}
+                <article class="excerpt">
+                    <header>
+                        <a class="cat" href="/?category_id={{.CategoryId}}">{{.CategoryName}}<i></i></a>
+                        <h2><a href="/post/{{.Id}}">{{.Title}}</a></h2>
+                    </header>
+                    <p class="excerpt-description">{{.Description}}</p>
+                    <p class="meta">
+                        <span class="category"><i class="glyphicon glyphicon-folder-open"></i> {{.CategoryName}}</span>
+                        <time class="time"
+                              datetime="{{.UpdatedAt.Format "2006-01-02T15:04:05Z07:00"}}"><i
+                                class="glyphicon glyphicon-time"></i> {{.UpdatedAt.Format "2006-01-02"}}</time>
+                        <span class="views"><i class="glyphicon glyphicon-eye-open"></i> {{.Views}}</span>
+                    </p>
+                </article>
+                {{end}}
+                {{else}}
+                <div class="empty-state">
+                    <h2>{{if .has_filters}}没有找到符合条件的文章{{else}}暂无内容{{end}}</h2>
+                    <p>{{if .has_filters}}可以调整关键词和分类，或者清空当前筛选条件。{{else}}文章发布后会显示在这里。{{end}}</p>
+                    {{if .has_filters}}
+                    <a class="btn btn-default" href="{{.clear_url}}">清空筛选条件</a>
+                    {{end}}
+                </div>
+                {{end}}
+            </section>
+
+            {{if or .posts .has_pre .has_next}}
+            <nav class="post-pagination" aria-label="文章分页">
                 <ul class="pagination">
                     {{if .has_pre}}
                     <li>
-                        <a href="{{.pre_url}}" aria-label="Previous">
+                        <a href="{{.pre_url}}" aria-label="上一页">
                             <span aria-hidden="true">上一页</span>
                         </a>
                     </li>
+                    {{else}}
+                    <li class="disabled"><span aria-disabled="true">上一页</span></li>
                     {{end}}
-                    <li class="active"><span aria-current="page">第 {{.page}} 页</span></li>
+                    <li class="active"><span aria-current="page">第 {{.page}} 页 / 每页 {{.per_page}} 篇</span></li>
                     {{if .has_next}}
                     <li>
-                        <a href="{{.next_url}}" aria-label="Next">
+                        <a href="{{.next_url}}" aria-label="下一页">
                             <span aria-hidden="true">下一页</span>
                         </a>
                     </li>
+                    {{else}}
+                    <li class="disabled"><span aria-disabled="true">下一页</span></li>
                     {{end}}
                 </ul>
             </nav>
+            {{end}}
         </div>
-
     </div>
 </div>
 {{end}}

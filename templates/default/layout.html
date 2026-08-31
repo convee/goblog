@@ -8,9 +8,9 @@
     <meta name="keywords" content="{{.keywords}}"/>
     <meta name="description" content="{{.description}}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="{{.cdn}}/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="{{.cdn}}/css/style.css">
-    <link rel="stylesheet" href="{{.cdn}}/md/css/editormd.preview.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="{{.cdn}}/css/bootstrap.min.css?v={{.asset_version}}"/>
+    <link rel="stylesheet" href="{{.cdn}}/css/style.css?v={{.asset_version}}">
+    <link rel="stylesheet" href="{{.cdn}}/md/css/editormd.preview.css?v={{.asset_version}}"/>
 </head>
 
 <body>
@@ -31,16 +31,21 @@
                 </h1>
             </div>
             <div class="collapse navbar-collapse" id="header-navbar">
-                <form class="navbar-form nav navbar-form navbar-right search-nav" action="/" method="GET">
+                {{if .show_nav_search}}
+                <form class="navbar-form nav navbar-form navbar-right search-nav" action="/" method="GET" role="search">
                     <div class="input-group">
                         <label class="sr-only" for="site-search">搜索文章</label>
                         <input id="site-search" type="search" name="keyword" class="form-control" placeholder="搜索文章"
                                maxlength="100" value="{{.keyword}}" autocomplete="off">
+                        {{if .category_id}}<input type="hidden" name="category_id" value="{{.category_id}}">{{end}}
+                        {{if .tag_id}}<input type="hidden" name="tag_id" value="{{.tag_id}}">{{end}}
+                        {{if .per_page}}<input type="hidden" name="per_page" value="{{.per_page}}">{{end}}
                         <span class="input-group-btn">
                                 <button type="submit" class="btn btn-default btn-search">搜索</button>
                             </span>
                     </div>
                 </form>
+                {{end}}
                 <ul class="nav navbar-nav navbar-left">
                     {{range .navigation}}<li><a href="{{.URL}}">{{.Label}}</a></li>{{end}}
                 </ul>
@@ -57,7 +62,7 @@
     </div>
 </div>
 
-<script src="{{.cdn}}/js/site.js"></script>
+<script src="{{.cdn}}/js/site.js?v={{.asset_version}}"></script>
 </body>
 
 </html>

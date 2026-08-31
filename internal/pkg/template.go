@@ -50,6 +50,7 @@ var (
 	frontTemplates     map[string]*template.Template
 	frontTemplatesErr  error
 	frontTemplatesOnce sync.Once
+	assetVersion       = fmt.Sprintf("%x", time.Now().Unix())
 )
 
 func loadFrontTemplates() error {
@@ -81,6 +82,8 @@ func Render(data map[string]interface{}, c *artgo.Context, tpl string) {
 	data["keywords"] = conf.Conf.App.Keywords
 	data["navigation"] = conf.Conf.App.Navigation
 	data["year"] = time.Now().Year()
+	data["asset_version"] = assetVersion
+	data["show_nav_search"] = tpl != "index"
 	// seo title
 	if _, ok := data["title"]; !ok {
 		data["title"] = "Go Markdown 博客系统"

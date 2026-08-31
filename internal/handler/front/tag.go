@@ -1,14 +1,18 @@
 package front
 
 import (
-	"github.com/convee/artgo"
-	"github.com/convee/goblog/internal/daos"
-	"github.com/convee/goblog/internal/pkg"
 	"net/http"
+
+	"github.com/convee/artgo"
+	"github.com/convee/goblog/internal/pkg"
 )
 
 func Tag(c *artgo.Context) {
-	tags, err := daos.GetTags()
+	defaultFrontHandler.Tag(c)
+}
+
+func (h *FrontHandler) Tag(c *artgo.Context) {
+	tags, err := h.frontService.GetTags()
 	if err != nil {
 		c.Error(http.StatusInternalServerError, "标签列表暂时不可用")
 		return

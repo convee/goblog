@@ -30,13 +30,19 @@ body {
 
 a,
 button,
-input {
+input,
+select {
     touch-action: manipulation;
 }
 
 a:focus-visible,
 button:focus-visible,
 input:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+select:focus-visible {
     outline: 3px solid var(--focus-ring);
     outline-offset: 2px;
 }
@@ -169,6 +175,110 @@ a:hover {
     color: #555555;
 }
 
+.filter-panel {
+    margin-bottom: 20px;
+    padding: 16px;
+    background: linear-gradient(135deg, #ffffff 0%, #f7f9ff 100%);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    box-shadow: 0 4px 18px rgba(26, 38, 64, .04);
+}
+
+.filter-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.filter-heading h2 {
+    margin: 0;
+    font-size: 22px;
+    line-height: 1.35;
+}
+
+.filter-eyebrow {
+    margin: 0 0 2px;
+    color: var(--color-primary);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.clear-filters {
+    flex: 0 0 auto;
+    min-height: 40px;
+    padding: 9px 4px;
+    color: var(--color-primary-dark);
+    font-weight: 600;
+}
+
+.filter-form {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) minmax(140px, 180px) minmax(110px, 130px) auto;
+    gap: 12px;
+    align-items: end;
+}
+
+.filter-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.filter-field label {
+    color: var(--color-muted);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.filter-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+}
+
+.filter-actions .btn {
+    min-height: 40px;
+    min-width: 88px;
+    border-radius: 7px;
+    font-weight: 600;
+}
+
+.filter-summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--color-border);
+}
+
+.result-count {
+    color: var(--color-muted);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.filter-chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 3px 9px;
+    color: var(--color-primary-dark);
+    background: #eaf0ff;
+    border-radius: 999px;
+    font-size: 13px;
+}
+
+.post-list {
+    min-height: 240px;
+}
+
 .introBanner {
     padding: 10px;
     margin-bottom: 15px;
@@ -276,6 +386,29 @@ a:hover {
     color: var(--color-muted);
 }
 
+.excerpt-description {
+    margin: 0 0 8px;
+}
+
+.empty-state {
+    padding: 48px 20px;
+    text-align: center;
+    color: var(--color-muted);
+    background-color: var(--color-surface);
+    border: 1px dashed var(--color-border);
+    border-radius: 10px;
+}
+
+.empty-state h2 {
+    color: var(--color-text);
+    font-size: 20px;
+    margin: 0 0 8px;
+}
+
+.empty-state p {
+    margin: 0 0 16px;
+}
+
 .pagination li a {
     color: var(--color-primary-dark);
     min-width: 44px;
@@ -283,6 +416,10 @@ a:hover {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+}
+
+.post-pagination {
+    margin-top: 8px;
 }
 
 .article-content {
@@ -313,9 +450,27 @@ a:hover {
     }
 
     .search-nav .form-control,
-    .search-nav .btn {
+    .search-nav .btn,
+    .filter-form .form-control,
+    .filter-form .btn {
         min-height: 44px;
         font-size: 16px;
+    }
+
+    .filter-form {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-heading h2 {
+        font-size: 20px;
+    }
+
+    .filter-actions {
+        justify-content: stretch;
+    }
+
+    .filter-actions .btn {
+        flex: 1;
     }
 
     .excerpt {

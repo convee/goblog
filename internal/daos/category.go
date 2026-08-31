@@ -26,7 +26,7 @@ func GetCategories() (categories []model.Category, err error) {
 }
 
 func GetCategoryIdsByName(name string) (categoryIds []string, err error) {
-	rs, err := db.Query("select id from category where name like ?", "%"+name+"%")
+	rs, err := db.Query("select id from category where name like ? escape '|'", likePattern(name))
 	if err != nil {
 		return nil, err
 	}

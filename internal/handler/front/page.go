@@ -3,16 +3,19 @@ package front
 import (
 	"database/sql"
 	"errors"
-	"github.com/convee/artgo"
-	"github.com/convee/goblog/internal/daos"
-	"github.com/convee/goblog/internal/pkg"
 	"net/http"
+
+	"github.com/convee/artgo"
+	"github.com/convee/goblog/internal/pkg"
 )
 
 func Page(c *artgo.Context) {
-	ident := c.Param("ident")
+	defaultFrontHandler.Page(c)
+}
 
-	page, err := daos.GetPageByIdent(ident)
+func (h *FrontHandler) Page(c *artgo.Context) {
+	ident := c.Param("ident")
+	page, err := h.frontService.GetPage(ident)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			c.Error(http.StatusNotFound, "页面不存在")

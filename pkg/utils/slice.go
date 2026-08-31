@@ -89,8 +89,8 @@ func IsInSlice(value interface{}, sli interface{}) bool {
 
 // Uint64ShuffleSlice 对slice进行随机
 func Uint64ShuffleSlice(a []uint64) []uint64 {
-	rand.Seed(time.Now().UnixNano())
-	rand.Shuffle(len(a), func(i, j int) {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	r.Shuffle(len(a), func(i, j int) {
 		a[i], a[j] = a[j], a[i]
 	})
 	return a

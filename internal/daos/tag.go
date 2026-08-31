@@ -22,7 +22,7 @@ func GetTags() (tags []model.Tag, err error) {
 }
 
 func GetTagIdsByName(name string) (tagIds []string, err error) {
-	rs, err := db.Query("select id from tag where name like ?", "%"+name+"%")
+	rs, err := db.Query("select id from tag where name like ? escape '|'", likePattern(name))
 	if err != nil {
 		return nil, err
 	}

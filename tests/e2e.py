@@ -142,10 +142,44 @@ def run(base_url: str, email: str, password: str) -> None:
         wait_path(page, "/admin")
         expect(page.get_by_text(post_title, exact=True)).to_be_visible()
 
+        page.goto(url(base_url, "/?per_page=10"))
+        expect(page.get_by_role("search")).to_have_count(0)
+        page.get_by_label("搜索关键词").fill("端到端搜索摘要")
+        page.get_by_label("文章分类").select_option(label=category)
+        page.get_by_role("button", name="筛选").click()
+        filtered_url = urlparse(page.url)
+        assert filtered_url.query.count("per_page=10") == 1
+        assert "keyword" in filtered_url.query
+        assert "category_id" in filtered_url.query
+        expect(page.get_by_text(post_title, exact=True)).to_be_visible()
+        expect(page.get_by_text("本页显示 1 篇", exact=True)).to_be_visible()
+        expect(page.get_by_text(f"分类：{category}", exact=True)).to_be_visible()
+
+        page.goto(url(base_url, "/"))
+        page.get_by_label("搜索关键词").fill("不存在的端到端内容")
+        page.get_by_role("button", name="筛选").click()
+        filtered_empty_url = urlparse(page.url)
+        assert "category_id=" not in filtered_empty_url.query
+        assert "per_page=20" not in filtered_empty_url.query
+        expect(page.get_by_text("没有找到符合条件的文章")).to_be_visible()
+        expect(page.get_by_role("link", name="重置全部")).to_have_attribute(
+            "href", "/"
+        )
+
+        page.goto(url(base_url, f"/?keyword=端到端搜索摘要&page=9&per_page=10"))
+        previous = page.get_by_role("link", name="上一页")
+        expect(previous).to_be_visible()
+        previous_href = previous.get_attribute("href")
+        assert previous_href
+        assert "keyword" in previous_href
+        assert "page=8" in previous_href
+        assert "per_page=10" in previous_href
+
         page.goto(url(base_url, "/"))
         page.get_by_role("link", name=post_title).click()
         page.wait_for_url("**/post/*")
         post_url = page.url
+        expect(page.get_by_role("search")).to_be_visible()
         expect(page.get_by_role("heading", name="安全正文")).to_be_visible()
         assert not page.evaluate("Boolean(window.__goblog_post_xss)")
         expect(page.locator('a[href^="javascript:"]')).to_have_count(0)
