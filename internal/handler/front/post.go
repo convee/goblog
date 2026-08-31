@@ -5,71 +5,95 @@ import (
 	"errors"
 	"net/http"
 	"strconv"
-	"strings"
 
 	"github.com/convee/artgo"
-	"github.com/convee/goblog/internal/daos"
+	"github.com/convee/goblog/internal/model"
 	"github.com/convee/goblog/internal/pkg"
 	"github.com/convee/goblog/internal/service"
 )
 
-var frontService = service.NewFrontService()
+// FrontService keeps HTTP handlers independent of DAO and template details and
+// makes page composition testable with a small fake service.
+type FrontService interface {
+	GetPostList(query service.PostListQuery) (service.PostList, error)
+	GetCategories() ([]model.Category, error)
+	GetTags() ([]model.Tag, error)
+	GetPostDetail(id string) (model.Post, []model.Tag, error)
+	GetPage(ident string) (model.Page, error)
+}
+
+type FrontHandler struct {
+	frontService FrontService
+}
+
+func NewFrontHandler(frontService FrontService) *FrontHandler {
+	return &FrontHandler{frontService: frontService}
+}
+
+var defaultFrontHandler = NewFrontHandler(service.NewFrontService())
 
 func Index(c *artgo.Context) {
-	categoryID := c.Query("category_id")
-	tagID := c.Query("tag_id")
-	keyword := strings.TrimSpace(c.Query("keyword"))
-	if len([]rune(keyword)) > 100 {
-		keyword = string([]rune(keyword)[:100])
-	}
-	page, _ := strconv.Atoi(c.Query("page"))
-	perPage, _ := strconv.Atoi(c.Query("per_page"))
-	if page < 1 {
-		page = 1
-	}
-	if perPage < 1 {
-		perPage = 20
-	}
-	if perPage > 50 {
-		perPage = 50
-	}
+	defaultFrontHandler.Index(c)
+}
 
-	posts, err := frontService.GetHomePosts(categoryID, tagID, keyword, page, perPage+1)
+func (h *FrontHandler) Index(c *artgo.Context) {
+	query := postListQueryFromRequest(c)
+	postList, err := h.frontService.GetPostList(query)
 	if err != nil {
 		c.Error(http.StatusInternalServerError, "文章列表暂时不可用")
 		return
 	}
-	hasNext := len(posts) > perPage
-	if hasNext {
-		posts = posts[:perPage]
-	}
-	categories, err := daos.GetCategories()
+	categories, err := h.frontService.GetCategories()
 	if err != nil {
 		c.Error(http.StatusInternalServerError, "分类列表暂时不可用")
 		return
 	}
 
-	data := map[string]interface{}{
-		"posts":      posts,
-		"categories": categories,
-		"keyword":    keyword,
-		"page":       page,
-		"has_pre":    page > 1,
-		"has_next":   hasNext,
-		"pre_url":    frontService.GetPageURL(categoryID, tagID, keyword, page-1),
-		"next_url":   frontService.GetPageURL(categoryID, tagID, keyword, page+1),
+	pkg.Render(indexViewData(query, postList, categories), c, "index")
+}
+
+func indexViewData(query service.PostListQuery, postList service.PostList, categories []model.Category) map[string]interface{} {
+	categoryName := ""
+	for i := range categories {
+		categories[i].Cur = 0
+		if strconv.Itoa(categories[i].Id) == query.CategoryID {
+			categories[i].Cur = 1
+			categoryName = categories[i].Name
+		}
 	}
-	pkg.Render(data, c, "index")
+	hasContentFilters := query.CategoryID != "" || query.TagID != "" || query.Keyword != ""
+
+	return map[string]interface{}{
+		"posts":              postList.Posts,
+		"categories":         categories,
+		"keyword":            query.Keyword,
+		"category_id":        query.CategoryID,
+		"category_name":      categoryName,
+		"tag_id":             query.TagID,
+		"per_page":           postList.PerPage,
+		"page":               postList.Page,
+		"has_filters":        hasContentFilters,
+		"has_active_filters": hasContentFilters || postList.PerPage != 20,
+		"has_pre":            postList.HasPrevious,
+		"has_next":           postList.HasNext,
+		"pre_url":            pageURL(query, postList.Page-1),
+		"next_url":           pageURL(query, postList.Page+1),
+		"clear_url":          clearFilterURL(),
+	}
 }
 
 func PostInfo(c *artgo.Context) {
+	defaultFrontHandler.PostInfo(c)
+}
+
+func (h *FrontHandler) PostInfo(c *artgo.Context) {
 	id := c.Param("id")
 	postID, err := strconv.Atoi(id)
 	if err != nil || postID < 1 {
 		c.Error(http.StatusNotFound, "文章不存在")
 		return
 	}
-	post, tags, err := frontService.GetPostDetail(id)
+	post, tags, err := h.frontService.GetPostDetail(id)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			c.Error(http.StatusNotFound, "文章不存在")

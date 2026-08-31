@@ -2,6 +2,7 @@ package utils
 
 import (
 	"reflect"
+	"runtime"
 	"strconv"
 	"sync"
 	"testing"
@@ -266,6 +267,7 @@ func BenchmarkDefaultSlice(b *testing.B) {
 					roomID:   i,
 					roomName: strconv.Itoa(i),
 				})
+				runtime.KeepAlive(output)
 			}
 			wg.Done()
 		}(&wg)
@@ -288,6 +290,7 @@ func BenchmarkPreAllocSlice(b *testing.B) {
 					roomName: strconv.Itoa(i),
 				})
 			}
+			runtime.KeepAlive(output)
 			wg.Done()
 		}(&wg)
 	}

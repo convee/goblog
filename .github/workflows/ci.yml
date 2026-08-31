@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
-          go-version: '1.26.5'
+          go-version: '1.26.7'
           cache: true
       - name: Verify formatting
         run: test -z "$(gofmt -l .)" || { gofmt -l .; exit 1; }
@@ -28,7 +28,7 @@ jobs:
       - name: Vulnerability scan
         uses: golang/govulncheck-action@032d45514ae346b1db93c04b0c90b841c370344f # v1
         with:
-          go-version-input: '1.26.5'
+          go-version-input: '1.26.7'
           go-package: ./...
 
   e2e:
@@ -51,7 +51,7 @@ jobs:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
-          go-version: '1.26.5'
+          go-version: '1.26.7'
           cache: true
       - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
