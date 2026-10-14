@@ -1,6 +1,6 @@
 module github.com/convee/goblog
 
-go 1.25.0
+go 1.26.0
 
 toolchain go1.26.7
 
@@ -16,8 +16,8 @@ require (
 	github.com/toolkits/net v0.0.0-20160910085801-3f39ab6fe3ce
 	github.com/yuin/goldmark v1.8.5
 	go.uber.org/zap v1.28.0
-	golang.org/x/crypto v0.54.0
-	golang.org/x/term v0.45.0
+	golang.org/x/crypto v0.58.0
+	golang.org/x/term v0.47.0
 )
 
 require (
@@ -27,8 +27,8 @@ require (
 	github.com/spf13/cast v1.10.0 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	go.uber.org/multierr v1.10.0 // indirect
-	golang.org/x/sys v0.47.0 // indirect
-	golang.org/x/text v0.40.0 // indirect
+	golang.org/x/sys v0.49.0 // indirect
+	golang.org/x/text v0.43.0 // indirect
 )
 
 require (
